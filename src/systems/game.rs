@@ -1,9 +1,9 @@
 use bevy::ecs::Query;
 use bevy::prelude::*;
-use crate::components::{State, Thing};
+use crate::components::{Player, State, Thing};
 
-pub fn game(mut query: Query<&mut State>, time:Res<Time>) {
-    let state = &mut query.iter_mut().next().unwrap();
+pub fn game(mut state_query: Query<&mut State>, time:Res<Time>, mut player_query:Query<&mut Player>) {
+   /* let state = &mut state_query.iter_mut().next().unwrap();
     
     state.timer = state.timer + time.delta_seconds();
 
@@ -13,5 +13,8 @@ pub fn game(mut query: Query<&mut State>, time:Res<Time>) {
             state.timer = 0.0;
         }
     }
+    else {
+        
+    }*/
 
 }
