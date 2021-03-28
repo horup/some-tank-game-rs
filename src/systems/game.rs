@@ -17,4 +17,5 @@ pub fn game(mut state_query: Query<&mut State>, time:Res<Time>, mut player_query
         
     }*/
 
+    println!("{}", time.delta_seconds() * 1000.0);
 }
