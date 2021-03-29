@@ -3,4 +3,4 @@ devlog:
 2021-03-28  15min written a bit on a blog post.
 2021-03-28  45min played around with sprite sheet
 2021-03-29  15min blog skrivning
-2021-03-30  ??
+2021-03-30  15min played around with 3d api
