@@ -1,4 +1,4 @@
-The last months I have been focusing on using the Rust programming language in relation to game development.
+The path months I have been focusing on using the Rust programming language in relation to game development.
 I wanted a setup where I could implement a game that could build for both native, such as Windows, and WASM, for the browsers.
 
 For this I have been working on a pet project called Blueprint.
