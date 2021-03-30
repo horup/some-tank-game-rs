@@ -4,3 +4,5 @@ devlog:
 2021-03-28  45min played around with sprite sheet
 2021-03-29  15min blog skrivning
 2021-03-30  15min played around with 3d api
+2021-03-30  30min implemented very simple hardcoded tilemap
+2021-03-31  
