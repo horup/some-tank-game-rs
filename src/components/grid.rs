@@ -13,14 +13,18 @@ impl Default for Cell {
 
 pub struct Grid {
     pub size:usize,
-    pub cells:Vec<Cell>
+    pub cells:Vec<Cell>,
+    pub sheet_width:u32,
+    pub sheet_height:u32
 }
 
 impl Grid {
     pub fn new(size:usize) -> Grid {
         Grid {
             size:size,
-            cells:vec![Cell::default(); size * size]
+            cells:vec![Cell::default(); size * size],
+            sheet_width:2,
+            sheet_height:2
         }
     }
 }

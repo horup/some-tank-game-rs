@@ -13,31 +13,44 @@ pub fn grid_renderer(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<(&Grid, 
         let mut i = 0;
         for y in 0..size {
             for x in 0..size {
+
+                let index = y * size + x;
+
+                let cell = grid.cells.get(index).expect("grid was out of bounds");
+                
+
                 let north_west = vec2(x as f32 * scale, y as f32 * scale + scale);
                 let north_east = vec2(x as f32 * scale + scale, y as f32 * scale + scale);
                 let south_west = vec2(x as f32 * scale,  y as f32 * scale);
                 let south_east = vec2(x as f32 * scale + scale, y as f32 * scale);
 
+                let tex_w = 1.0 / grid.sheet_width as f32;
+                let tex_h = 1.0 / grid.sheet_height as f32;
+                let x = (cell.index % grid.sheet_width) as f32; 
+                let y = (cell.index / grid.sheet_height) as f32;
+                let u = x * tex_w;
+                let v = y * tex_h;
+
                 let vertices = [
                     (
                         [south_west.x, south_west.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [0.0, 1.0],
+                        [u, v+tex_h],
                     ),
                     (
                         [north_west.x, north_west.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [0.0, 0.0],
+                        [u, v],
                     ),
                     (
                         [north_east.x, north_east.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [1.0, 0.0],
+                        [u+tex_w, v],
                     ),
                     (
                         [south_east.x, south_east.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [1.0, 1.0],
+                        [u+tex_w, v+tex_h],
                     ),
                 ];
             

@@ -14,7 +14,7 @@ fn init_grid(mut commands: &mut Commands, asset_server: Res<AssetServer>, mut ma
     let size = 16;
     let scale = 32.0;
 
-    let texture_handle:Handle<Texture> = asset_server.load("icon.png");
+    let texture_handle:Handle<Texture> = asset_server.load("spritesheet2.png");
     let spritesheet = TextureAtlas::from_grid(texture_handle.clone(), Vec2::new(16.0, 16.0), 16, 16);
     let spritesheet_handle = texture_atlases.add(spritesheet);
     let mut m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);//shape::Quad::new(quad_width);
@@ -38,7 +38,14 @@ fn init_grid(mut commands: &mut Commands, asset_server: Res<AssetServer>, mut ma
     });
 
     let mut e = commands.spawn();
-    e.insert(Grid::new(size));
+    let mut g = Grid::new(size);
+    let mut test = 0;
+    for i in &mut g.cells {
+        i.index = test % 4;
+        test = test + 1;
+    }
+
+    e.insert(g);
     e.insert_bundle(PbrBundle {
         mesh:m.clone(),
         material:material_handle,
