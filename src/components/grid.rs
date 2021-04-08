@@ -1,3 +1,4 @@
+#[derive(Copy, Clone)]
 pub struct Cell {
     pub index:u32
 }
@@ -11,15 +12,15 @@ impl Default for Cell {
 }
 
 pub struct Grid {
-    pub size:u32,
+    pub size:usize,
     pub cells:Vec<Cell>
 }
 
 impl Grid {
-    pub fn new(size:u32) -> Grid {
+    pub fn new(size:usize) -> Grid {
         Grid {
             size:size,
-            cells:vec![]
+            cells:vec![Cell::default(); size * size]
         }
     }
 }

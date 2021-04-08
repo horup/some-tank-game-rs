@@ -1,4 +1,3 @@
-use bevy::ecs::Query;
 use bevy::prelude::*;
 use crate::components::{Player, State, Thing};
 
