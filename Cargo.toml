@@ -1,5 +1,5 @@
 [package]
-name = "rustman"
+name = "blueprint3"
 version = "0.1.0"
 authors = ["Horup <sah@sah.dk>"]
 edition = "2018"
