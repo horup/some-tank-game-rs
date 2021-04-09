@@ -3,7 +3,7 @@ use crate::components::Tilemap;
 
 pub fn tilemap_renderer(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<(&Tilemap, &mut Handle<Mesh>,)>) {
     query.for_each_mut(|(grid, mesh)| {
-        let mut m = meshes.get_mut(mesh.id).expect("mesh was not found for grid, panic!!!!");
+        let mut m = meshes.get_mut(mesh.id).expect("mesh was not found for grid");
         let scale = 32.0;
         let mut positions = Vec::<[f32; 3]>::new();
         let mut normals = Vec::<[f32; 3]>::new();
@@ -13,12 +13,8 @@ pub fn tilemap_renderer(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<(&Til
         let mut i = 0;
         for y in 0..size {
             for x in 0..size {
-
                 let index = y * size + x;
-
                 let cell = grid.cells.get(index).expect("grid was out of bounds");
-                
-
                 let north_west = vec2(x as f32 * scale, y as f32 * scale + scale);
                 let north_east = vec2(x as f32 * scale + scale, y as f32 * scale + scale);
                 let south_west = vec2(x as f32 * scale,  y as f32 * scale);
