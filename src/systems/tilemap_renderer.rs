@@ -1,7 +1,7 @@
 use bevy::{math::vec2, prelude::*, render::mesh::Indices};
-use crate::components::Grid;
+use crate::components::Tilemap;
 
-pub fn grid_renderer(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<(&Grid, &mut Handle<Mesh>,)>) {
+pub fn tilemap_renderer(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<(&Tilemap, &mut Handle<Mesh>,)>) {
     query.for_each_mut(|(grid, mesh)| {
         let mut m = meshes.get_mut(mesh.id).expect("mesh was not found for grid, panic!!!!");
         let scale = 32.0;

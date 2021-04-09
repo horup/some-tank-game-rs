@@ -1,5 +1,5 @@
 use bevy::{math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
-use crate::components::{Player, State, Thing, Grid};
+use crate::components::{Player, State, Thing, Tilemap};
 
 pub fn init(mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>) {
     println!("initializing game by spawning non optional entities");
@@ -38,7 +38,7 @@ fn init_grid(mut commands: &mut Commands, asset_server: Res<AssetServer>, mut ma
     });
 
     let mut e = commands.spawn();
-    let mut g = Grid::new(size);
+    let mut g = Tilemap::new(size);
     g.randomize();
 
     e.insert(g);

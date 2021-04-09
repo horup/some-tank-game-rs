@@ -1,30 +1,30 @@
 use rand::prelude::*;
 
 #[derive(Copy, Clone)]
-pub struct Cell {
+pub struct Tile {
     pub index:u32
 }
 
-impl Default for Cell {
+impl Default for Tile {
     fn default() -> Self {
-        Cell {
+        Tile {
             index:0
         }
     }
 }
 
-pub struct Grid {
+pub struct Tilemap {
     pub size:usize,
-    pub cells:Vec<Cell>,
+    pub cells:Vec<Tile>,
     pub sheet_width:u32,
     pub sheet_height:u32
 }
 
-impl Grid {
-    pub fn new(size:usize) -> Grid {
-        let mut g = Grid {
+impl Tilemap {
+    pub fn new(size:usize) -> Tilemap {
+        let mut g = Tilemap {
             size:size,
-            cells:vec![Cell::default(); size * size],
+            cells:vec![Tile::default(); size * size],
             sheet_width:2,
             sheet_height:2
         };
