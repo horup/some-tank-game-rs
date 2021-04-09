@@ -1,4 +1,5 @@
 use rand::prelude::*;
+use bevy::{prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
 
 #[derive(Copy, Clone)]
 pub struct Tile {
@@ -21,12 +22,12 @@ pub struct Tilemap {
 }
 
 impl Tilemap {
-    pub fn new(size:usize) -> Tilemap {
+    pub fn new(size:usize, sheet_width:u32, sheet_height:u32) -> Tilemap {
         let mut g = Tilemap {
             size:size,
             cells:vec![Tile::default(); size * size],
-            sheet_width:2,
-            sheet_height:2
+            sheet_width,
+            sheet_height
         };
 
         return g;
@@ -39,5 +40,41 @@ impl Tilemap {
             let index:u32 = rng.gen();
             cell.index = index % max;
         }
+    }
+
+    pub fn insert_entity(tilemap:Tilemap, texture_path:&str, mut commands: &mut Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>) -> Entity
+    {
+        let size = 16;
+    
+        let texture_handle:Handle<Texture> = asset_server.load(texture_path);
+        let mut m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);
+        let positions = Vec::<[f32; 3]>::new();
+        let normals = Vec::<[f32; 3]>::new();
+        let uvs = Vec::<[f32; 2]>::new();
+        let indicies:Vec<u32> = Vec::new();
+    
+        m.set_attribute(Mesh::ATTRIBUTE_POSITION, positions);
+        m.set_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+        m.set_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+    
+        m.set_indices(Some(Indices::U32(indicies)));
+    
+        let m = meshes.add(m);
+    
+        let material_handle = materials.add(StandardMaterial {
+            base_color_texture: Some(texture_handle.clone()),
+            unlit:true,
+            ..Default::default()
+        });
+    
+        let mut e = commands.spawn();
+        e.insert(tilemap);
+        e.insert_bundle(PbrBundle {
+            mesh:m.clone(),
+            material:material_handle,
+            ..Default::default()
+        });
+
+        e.id()
     }
 }
