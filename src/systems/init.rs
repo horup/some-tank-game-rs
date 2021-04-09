@@ -39,11 +39,7 @@ fn init_grid(mut commands: &mut Commands, asset_server: Res<AssetServer>, mut ma
 
     let mut e = commands.spawn();
     let mut g = Grid::new(size);
-    let mut test = 0;
-    for i in &mut g.cells {
-        i.index = test % 4;
-        test = test + 1;
-    }
+    g.randomize();
 
     e.insert(g);
     e.insert_bundle(PbrBundle {
