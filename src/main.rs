@@ -11,6 +11,7 @@ fn main() {
     .add_plugins(DefaultPlugins)
     .add_startup_system(init.system())
     .add_system(tilemap_renderer.system())
+    .add_system(movement_system.system())
     .add_system(game.system())
     .run();
 }

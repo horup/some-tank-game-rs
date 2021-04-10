@@ -33,6 +33,10 @@ impl Tilemap {
         return g;
     }
 
+    pub fn set_tile(&mut self, tile:Tile, x:usize, y:usize) {
+        self.cells[y * self.size + x] = tile;
+    }
+
     pub fn randomize(&mut self) {
         let max =self.sheet_height * self.sheet_width;
         let mut rng = rand::thread_rng();
@@ -42,7 +46,7 @@ impl Tilemap {
         }
     }
 
-    pub fn insert_entity(tilemap:Tilemap, texture_path:&str, mut commands: &mut Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>) -> Entity
+    pub fn insert_entity(tilemap:Tilemap, texture_path:&str, mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, mut meshes: &mut ResMut<Assets<Mesh>>) -> Entity
     {
         let size = 16;
     

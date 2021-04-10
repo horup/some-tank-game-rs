@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::components::{Player, State, Thing};
+use crate::components::{Player, State};
 
 pub fn game(mut state_query: Query<&mut State>, time:Res<Time>, mut player_query:Query<&mut Player>) {
    /* let state = &mut state_query.iter_mut().next().unwrap();
