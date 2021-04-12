@@ -9,12 +9,19 @@ pub fn init_system(mut commands: Commands, asset_server: Res<AssetServer>, mut m
 }
 
 fn init_player(mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, texture_atlases:&mut ResMut<Assets<TextureAtlas>>) {
+    let tile_size = Vec2::new(8.0, 8.0);
     let texture_handle = asset_server.load("tanks.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(8.0, 8.0), 4, 4);
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, tile_size, 4, 4);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
+    let transform = Transform { 
+        scale:Vec3::splat(1.0 / tile_size.x),
+        ..Default::default()
+    };
 
     commands.spawn_bundle(SpriteSheetBundle {
         texture_atlas:texture_atlas_handle,
+        transform,
         ..Default::default()
     }).insert(Thrust { 
         x:1.0,
@@ -49,5 +56,5 @@ fn init_map(mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut ma
 
 fn init_camera(mut commands: &mut Commands)
 {
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    let e = commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 }

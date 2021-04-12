@@ -4,7 +4,7 @@ use crate::components::Tilemap;
 pub fn tilemap_render_system(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<(&Tilemap, &mut Handle<Mesh>,)>) {
     query.for_each_mut(|(grid, mesh)| {
         let mut m = meshes.get_mut(mesh.id).expect("mesh was not found for grid");
-        let scale = 32.0;
+        let scale = 1.0;
         let mut positions = Vec::<[f32; 3]>::new();
         let mut normals = Vec::<[f32; 3]>::new();
         let mut uvs = Vec::<[f32; 2]>::new();
