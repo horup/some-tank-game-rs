@@ -1,11 +1,8 @@
-mod game;
-pub use game::*;
+mod init_system;
+pub use init_system::*;
 
-mod init;
-pub use init::*;
-
-mod tilemap_renderer;
-pub use tilemap_renderer::*;
+mod tilemap_render_system;
+pub use tilemap_render_system::*;
 
 mod movement_system;
 pub use movement_system::*;

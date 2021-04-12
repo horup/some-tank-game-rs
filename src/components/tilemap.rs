@@ -23,7 +23,7 @@ pub struct Tilemap {
 
 impl Tilemap {
     pub fn new(size:usize, sheet_width:u32, sheet_height:u32) -> Tilemap {
-        let mut g = Tilemap {
+        let g = Tilemap {
             size:size,
             cells:vec![Tile::default(); size * size],
             sheet_width,
@@ -46,7 +46,7 @@ impl Tilemap {
         }
     }
 
-    pub fn insert_entity(tilemap:Tilemap, texture_path:&str, mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, mut meshes: &mut ResMut<Assets<Mesh>>) -> Entity
+    pub fn insert_entity(tilemap:Tilemap, texture_path:&str, commands: &mut Commands, asset_server: &Res<AssetServer>, materials: &mut ResMut<Assets<StandardMaterial>>, meshes: &mut ResMut<Assets<Mesh>>) -> Entity
     {
         let size = 16;
     

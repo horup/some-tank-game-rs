@@ -1,7 +1,7 @@
 use bevy::{math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
 use crate::components::{Player, State, Thrust, Tile, Tilemap};
 
-pub fn init(mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>) {
+pub fn init_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>) {
     println!("initializing game by spawning non optional entities");
     init_camera(&mut commands);
     init_map(&mut commands, &asset_server, &mut materials, &mut meshes);
