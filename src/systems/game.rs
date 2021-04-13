@@ -1,12 +1,14 @@
-use bevy::{math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
-use crate::components::{Player, State, Thrust, Tile, Tilemap};
+use bevy::prelude::*;
+use crate::{NewGameEvent, Thrust, Tile, Tilemap};
 
-pub fn init_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>) {
-    println!("initializing game by spawning non optional entities");
-    init_camera(&mut commands);
-    init_map(&mut commands, &asset_server, &mut materials, &mut meshes);
-    init_player(&mut commands, &asset_server, &mut materials, &mut texture_atlases);
+pub fn game_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>) {
+    for e in new_game_reader.iter() {
+        init_map(&mut commands, &asset_server, &mut materials, &mut meshes);
+        init_player(&mut commands, &asset_server, &mut materials, &mut texture_atlases);
+    }
 }
+
+
 
 fn init_player(mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, texture_atlases:&mut ResMut<Assets<TextureAtlas>>) {
     let tile_size = Vec2::new(8.0, 8.0);
@@ -52,9 +54,4 @@ fn init_map(mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut ma
         }, x, size - 1);
     }
     Tilemap::insert_entity(tilemap, "tiles.png", commands, &asset_server, &mut materials, &mut meshes);
-}
-
-fn init_camera(mut commands: &mut Commands)
-{
-    let e = commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 }

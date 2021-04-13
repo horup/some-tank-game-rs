@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-04-13  2h worked on intorducing error handling into systems using anyhow, dropped anyhow since i was not able to put it into main, worked on removing unwraps, worked on getting projection to update without resize
 - 2021-04-12  1h reversed readme, refactored name of tilemap render system, refactored a bit, cleaned up some stuff, tilemap tiles are now 1x1 in size, added camera system to control camera and align it to center
 - 2021-04-10  40m made a square map with walls, cleaned up unused components, worked on introduction of player, worked on movement_system
 - 2021-04-09  1h  played with tilemap, renamed grid to tilemap, renamed project to blueprint3, made a simple tank spritesheet, refactored tiemap construction
