@@ -9,3 +9,6 @@ pub use camera_system::*;
 
 mod game;
 pub use game::*;
+
+mod input;
+pub use input::*;

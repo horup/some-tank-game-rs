@@ -14,7 +14,7 @@ fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGame
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
     new_game_writer.send(NewGameEvent {
-        map_size:8
+        map_size:16
     });
 }
 
@@ -29,10 +29,11 @@ fn main() {
 
     // add systems
     builder.add_startup_system(startup_system.system())
+    .add_system(input_system.system())
     .add_system(game_system.system())
     .add_system(tilemap_render_system.system())
     .add_system(movement_system.system())
-    .add_system_to_stage(CoreStage::PreUpdate, camera_system.system());
+    .add_system(camera_system.system());
 
     builder.run();
 }
