@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{NewGameEvent, Thrust, Tile, Tilemap};
+use crate::{NewGameEvent, Player, Thrust, Tile, Tilemap};
 
 pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tilemap)>, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>) {
     for e in new_game_reader.iter() {
@@ -14,7 +14,7 @@ pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tile
 
 
 
-fn init_player(new_game:&NewGameEvent, tile_map_entity:Entity, mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, texture_atlases:&mut ResMut<Assets<TextureAtlas>>) {
+fn init_player(_new_game:&NewGameEvent, tile_map_entity:Entity, commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, texture_atlases:&mut ResMut<Assets<TextureAtlas>>) {
     let tile_size = Vec2::new(8.0, 8.0);
     let texture_handle = asset_server.load("tanks.png");
     let texture_atlas = TextureAtlas::from_grid(texture_handle, tile_size, 4, 4);
@@ -31,14 +31,14 @@ fn init_player(new_game:&NewGameEvent, tile_map_entity:Entity, mut commands: &mu
         texture_atlas:texture_atlas_handle,
         transform,
         ..Default::default()
-    }).insert(Thrust { 
-        x:1.0,
-        y:0.0
-    }).insert(Parent(tile_map_entity));
+    })
+    .insert(Player::default())
+    .insert(Thrust::default())
+    .insert(Parent(tile_map_entity));
 }
 
 
-fn create_tilemap(new_game:&NewGameEvent, mut commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, mut meshes: &mut ResMut<Assets<Mesh>>) -> Entity
+fn create_tilemap(new_game:&NewGameEvent, commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, mut meshes: &mut ResMut<Assets<Mesh>>) -> Entity
 {
     let size = new_game.map_size;
     let mut tilemap = Tilemap::new(size, 4, 4);

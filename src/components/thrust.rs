@@ -1,5 +1,6 @@
+use bevy::math::Vec2;
+
 #[derive(Default, Clone, Copy)]
 pub struct Thrust {
-    pub x:f32,
-    pub y:f32
+    pub force:Vec2
 }

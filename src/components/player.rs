@@ -1,3 +1,4 @@
+#[derive(Clone, Copy, Default)]
 pub struct Player {
-    pub is_alive:bool
+
 }

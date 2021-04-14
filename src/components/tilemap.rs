@@ -48,8 +48,6 @@ impl Tilemap {
 
     pub fn insert_entity(tilemap:Tilemap, texture_path:&str, commands: &mut Commands, asset_server: &Res<AssetServer>, materials: &mut ResMut<Assets<StandardMaterial>>, meshes: &mut ResMut<Assets<Mesh>>) -> Entity
     {
-        let size = 16;
-    
         let texture_handle:Handle<Texture> = asset_server.load(texture_path);
         let mut m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);
         let positions = Vec::<[f32; 3]>::new();
