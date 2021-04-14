@@ -1,11 +1,11 @@
-mod tilemap_render_system;
-pub use tilemap_render_system::*;
+mod tilemap_render;
+pub use tilemap_render::*;
 
-mod movement_system;
-pub use movement_system::*;
+mod movement;
+pub use movement::*;
 
-mod camera_system;
-pub use camera_system::*;
+mod camera;
+pub use camera::*;
 
 mod game;
 pub use game::*;
