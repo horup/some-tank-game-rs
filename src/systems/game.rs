@@ -11,7 +11,7 @@ pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tile
         init_player(e, tile_map, &mut commands, &asset_server, &mut materials, &mut texture_atlases);
     }
 }
-
+ 
 
 
 fn init_player(_new_game:&NewGameEvent, tile_map_entity:Entity, commands: &mut Commands, asset_server: &Res<AssetServer>, mut materials: &mut ResMut<Assets<StandardMaterial>>, texture_atlases:&mut ResMut<Assets<TextureAtlas>>) {
@@ -26,7 +26,7 @@ fn init_player(_new_game:&NewGameEvent, tile_map_entity:Entity, commands: &mut C
         scale:Vec3::splat(1.0 / 8.0),
         ..Default::default()
     };
-
+  
     commands.spawn_bundle(SpriteSheetBundle {
         texture_atlas:texture_atlas_handle,
         transform,

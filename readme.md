@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-04-15  1h worked on improving build speed through dylib, worked on pixel perfect scaling
 - 2021-04-14  1h worked on parent / child ecs, worked on input system, refactored, made movable tank
 - 2021-04-13  2h worked on intorducing error handling into systems using anyhow, dropped anyhow since i was not able to put it into main, worked on removing unwraps, worked on getting projection to update without resize
 - 2021-04-12  1h reversed readme, refactored name of tilemap render system, refactored a bit, cleaned up some stuff, tilemap tiles are now 1x1 in size, added camera system to control camera and align it to center

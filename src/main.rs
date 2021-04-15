@@ -13,9 +13,7 @@ use systems::*;
 fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
-    new_game_writer.send(NewGameEvent {
-        map_size:16
-    });
+    new_game_writer.send(NewGameEvent::default());
 }
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d

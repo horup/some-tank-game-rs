@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "cargo",
-			"command": "run",
+			"command": "run --features bevy/dynamic",
 			"problemMatcher": [
 				"$rustc"
 			],
