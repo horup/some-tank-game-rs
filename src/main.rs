@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin}, prelude::*};
 
 mod components;
 pub use components::*;
@@ -20,7 +20,9 @@ fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGame
 fn main() {
     let mut builder = App::build();
     // add plugins
-    builder.add_plugins(DefaultPlugins);
+    builder.add_plugins(DefaultPlugins)
+    .add_plugin(LogDiagnosticsPlugin::default())
+    .add_plugin(FrameTimeDiagnosticsPlugin::default());
 
     // add events
     builder.add_event::<NewGameEvent>();
