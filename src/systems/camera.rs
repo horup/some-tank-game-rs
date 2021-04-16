@@ -43,8 +43,6 @@ pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera,
             // force update projection matrix without resize
             projection.update(primary.width(), primary.height());
             camera.projection_matrix = projection.get_projection_matrix();
-
-            println!("{}", fraction_x);
         },
         _ =>{}
     }
