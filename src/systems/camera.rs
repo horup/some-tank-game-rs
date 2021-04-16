@@ -8,28 +8,29 @@ pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera,
     match (camera, tilemap, primary) {
         (Ok(camera), Ok(tilemap), Some(primary)) => {
             let (mut projection, mut camera, mut transform) = camera;
-            //projection.scaling_mode = bevy::render::camera::ScalingMode::FixedVertical;
+            
             projection.scaling_mode = bevy::render::camera::ScalingMode::None;
 
-            let width = primary.width() as usize;
-            let height = primary.height() as usize;
-            let aspect = width / height;
+            // calculate pixel perfect integer scaling
+            let tile_size = 8;
+            let area_width = primary.width() as u32;
+            let area_height = primary.height() as u32;
+            let tilemap_width = tilemap.size as u32;
+            let tilemap_height = tilemap.size as u32;
+            let tilemap_width_px = (tilemap.size * tile_size) as u32;
+            let tilemap_height_px = (tilemap.size * tile_size) as u32;
 
-            let f = 8;
-            let s = tilemap.size * f;
+            let tilemap_integer_size = integer_scaling::calculate_size(area_width, area_height, tilemap_width_px, tilemap_height_px);
+            projection.right = tilemap_width as f32 * area_width as f32 / tilemap_integer_size.width as f32;
+            projection.top = tilemap_height as f32 * area_height as f32 / tilemap_integer_size.height as f32;
+            
+            // shift optimum projection
+            projection.left = -projection.right / 2.0;
+            projection.bottom = -projection.top / 2.0;
+            projection.right /= 2.0;
+            projection.top /= 2.0;
 
-            let s = height / s * f;
-            let s = s as f32;
-
-            projection.left = -s/2 as f32;
-            projection.right = s/2 as f32;
-            projection.top = s/2 as f32;
-            projection.bottom = -s/2 as f32;
-
-           
-            //projection.scale = tilemap.size as f32;
-         
-            println!("{}", primary.height() );
+            // move the camera to the center of the tilemap
             transform.translation.x = tilemap.size as f32 / 2.0;
             transform.translation.y = tilemap.size as f32 / 2.0;
 
