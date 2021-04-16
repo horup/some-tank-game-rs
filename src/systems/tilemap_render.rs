@@ -24,6 +24,10 @@ pub fn tilemap_render_system(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<
                 let tex_h = 1.0 / grid.sheet_height as f32;
                 let x = (cell.index % grid.sheet_width) as f32; 
                 let y = (cell.index / grid.sheet_height) as f32;
+
+                // alpha is used to shift the texture samples 'a bit inwards' to avoid artifacts when rendering
+                // different resolutions now power of 2
+                let alpha = 0.001;
                 let u = x * tex_w;
                 let v = y * tex_h;
 
@@ -31,22 +35,22 @@ pub fn tilemap_render_system(mut meshes: ResMut<Assets<Mesh>>, mut query: Query<
                     (
                         [south_west.x, south_west.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [u, v+tex_h],
+                        [u + alpha, v+tex_h - alpha],
                     ),
                     (
                         [north_west.x, north_west.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [u, v],
+                        [u + alpha, v + alpha],
                     ),
                     (
                         [north_east.x, north_east.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [u+tex_w, v],
+                        [u+tex_w - alpha, v + alpha],
                     ),
                     (
                         [south_east.x, south_east.y, 0.0],
                         [0.0, 0.0, 1.0],
-                        [u+tex_w, v+tex_h],
+                        [u+tex_w - alpha, v+tex_h - alpha],
                     ),
                 ];
             
