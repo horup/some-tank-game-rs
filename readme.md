@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-04-19  1.5h worked on textures resource, worked on entity factory
 - 2021-04-16  1h worked on pixel perfect scaling, fixed resize artifacts, worked on performance measurements and dev optimization for speed
 - 2021-04-15  1h worked on improving build speed through dylib, worked on pixel perfect scaling
 - 2021-04-14  1h worked on parent / child ecs, worked on input system, refactored, made movable tank
