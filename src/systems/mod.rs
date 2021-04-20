@@ -1,5 +1,3 @@
-mod tilemap_render;
-pub use tilemap_render::*;
 
 mod movement;
 pub use movement::*;
