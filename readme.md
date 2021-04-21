@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-04-21  30m worked on tank movement, fixed issue with scale propagation
+- 2021-04-21  30m worked on tank movement, fixed issue with scale propagation, moved factory to file
 - 2021-04-20  5m merged tilemap component and system in same mod
 - 2021-04-19  1.5h worked on textures resource, worked on entity factory
 - 2021-04-16  1h worked on pixel perfect scaling, fixed resize artifacts, worked on performance measurements and dev optimization for speed
