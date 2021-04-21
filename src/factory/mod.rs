@@ -34,13 +34,18 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
             ..Default::default()
         };
     
-        self.commands.spawn_bundle(SpriteSheetBundle {
+        let e = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle,
             transform,
             ..Default::default()
         })
         .insert(Thrust::default())
-        .insert(Parent(parent))
-        .id()
+        .id();
+
+        // adding Parent component to the entity above does not work correct due to scale
+        // is not properly propagated: https://github.com/bevyengine/bevy/issues/1807
+        // can be fixed by doing this instead
+        self.commands.entity(parent).push_children(&[e]);
+        e
     }
 }
