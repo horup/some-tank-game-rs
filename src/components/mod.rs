@@ -9,3 +9,6 @@ pub use tilemap::*;
 
 mod thrust;
 pub use thrust::*;
+
+mod turret;
+pub use turret::*;
