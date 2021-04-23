@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use bevy::prelude::*;
 
-use crate::components::{Player, Thrust};
+use crate::components::{Thrust};
 
 pub fn movement_system(query:Query<(&mut Thrust, &mut Transform, &mut TextureAtlasSprite)>, time:Res<Time>) {
     query.for_each_mut(|(thrust, mut transform, mut sprite)| {

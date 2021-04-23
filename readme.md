@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-04-23  60m got to compile on new p15 laptop, fixed rotation of turret, worked on getting QuerySets for turret system
+- 2021-04-23  65m got to compile on new p15 laptop, fixed rotation of turret, worked on getting QuerySets for turret system, fixed some warnings
 - 2021-04-22  40m worked on tank turret, fixed issue related to down direction, added simple animation of tracks
 - 2021-04-21  40m worked on tank movement, fixed issue with scale propagation, moved factory to file, worked on turret support for tank
 - 2021-04-20  5m merged tilemap component and system in same mod

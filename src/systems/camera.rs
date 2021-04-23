@@ -17,10 +17,6 @@ pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera,
             let area_width = primary.width() as u32;
             let area_height = primary.height() as u32;
 
-            let fraction_x = (area_width as f32 / 2.0).fract();
-            let fraction_y = (area_width as f32 / 2.0).fract() > 0.0;
-
-
             let tilemap_width = tilemap.size as u32;
             let tilemap_height = tilemap.size as u32;
             let tilemap_width_px = (tilemap.size * tile_size) as u32;

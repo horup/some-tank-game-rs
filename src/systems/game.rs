@@ -1,10 +1,10 @@
 use bevy::prelude::*;
-use crate::{Factory, NewGameEvent, Player, Thrust, Tile, Tilemap, resources::Textures};
+use crate::{Factory, NewGameEvent, Tile, Tilemap, resources::Textures};
 
-pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tilemap)>, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut texture_atlases: ResMut<Assets<TextureAtlas>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
+pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tilemap)>, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
     for e in new_game_reader.iter() {
         // desspawn any existing tilemap and children
-        for tile_map in tilemaps.iter_mut() {
+        for _tile_map in tilemaps.iter_mut() {
             //commands.entity(tile_map.0).despawn_recursive();
         }
         let tile_map = create_tilemap(e, &mut commands, &asset_server, &mut materials, &mut meshes);
