@@ -16,7 +16,7 @@ pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tile
 
 
 
-        factory.spawn_tank(5.5, 3.5, tile_map);
+      //  factory.spawn_tank(5.5, 3.5, tile_map);
         //let f = Factory::new(&mut commands, &asset_server);
     }
 }

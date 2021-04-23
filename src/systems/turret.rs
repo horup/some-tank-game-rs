@@ -1,24 +1,32 @@
+
 use bevy::prelude::*;
 
-use crate::{Thrust, Turret};
+use crate::{Turret};
 
-pub fn turret_system(turrets:Query<(&Turret, &mut Transform, &Parent)>, transforms:Query<(Entity, &GlobalTransform, &Thrust)>) {
-    turrets.for_each_mut(|(turret, mut transform, parent)| {
-        let parent = parent.0;
-        if let Ok(parent_transform) = transforms.get_component::<GlobalTransform>(parent) {
-            let facing = parent_transform.rotation.
-            
-            //
-            let target = turret.target;
-            let pos = parent_transform.translation;
+
+pub fn turret_system(turrets:Query<(Entity, &Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>)
+{
+    turrets.for_each(|turret| {
+        let mut parent_translation = Vec3::default();
+        let mut parent_rotation = Quat::default();
+        if let Ok(transform) = transforms.get_component::<Transform>(turret.2.0) {
+            parent_translation = transform.translation;
+            parent_rotation = transform.rotation;
+        }
+
+        if let Ok(mut turret_transform) = transforms.get_component_mut::<Transform>(turret.0) {
+           
+            let target = turret.1.target;
+            let pos = parent_translation;
             let v = target - pos;
+
             if v.length() > 0.0 {
-                let v = v.normalize();
+                let b = v.normalize();
+                let a = Vec3::new(1.0, 0.0, 0.0);
+                let a = parent_rotation.mul_vec3(a);
+                let rot = Quat::from_rotation_arc(a, b);
 
-                let rot = Quat::from_rotation_arc(, to)
-                //transform.rotation = Quat::from_axis_angle(Vec3::new(0.0, 0.0, 1.0), )
-
-                transform.rotation = parent_transform.rotation;
+                turret_transform.rotation = rot;
             }
         }
     });
