@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{Player, Textures, Thrust, Turret};
+use crate::{Bot, Player, Tank, Textures, Thrust, Turret};
 
 pub struct Factory<'a, 'b: 'a, 'c : 'a> {
     pub commands:&'a mut Commands<'b>,
@@ -15,13 +15,17 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         }
     }
 
+    pub fn spawn_bot(&mut self, x:f32, y:f32, parent:Entity) -> Entity {
+        let tank = self.spawn_tank(x, y, parent);
+        self.commands.entity(tank)
+        .insert(Bot::default())
+        .id()
+    }
 
     pub fn spawn_player(&mut self, x:f32, y:f32, parent:Entity) -> Entity {
         let tank = self.spawn_tank(x, y, parent);
         self.commands.entity(tank)
-        .insert(Player { 
-
-        })
+        .insert(Player::default())
         .id()
     }
 
@@ -43,9 +47,9 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
             },
             ..Default::default()
         })
+        .insert(Tank::default())
         .insert(Thrust::default())
         .id();
-
 
         let turret = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),

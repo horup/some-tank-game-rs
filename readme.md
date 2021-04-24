@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-04-24  30m worked on ai system, added tank component, added ramdom bot movement
 - 2021-04-23  65m got to compile on new p15 laptop, fixed rotation of turret, worked on getting QuerySets for turret system, fixed some warnings
 - 2021-04-22  40m worked on tank turret, fixed issue related to down direction, added simple animation of tracks
 - 2021-04-21  40m worked on tank movement, fixed issue with scale propagation, moved factory to file, worked on turret support for tank

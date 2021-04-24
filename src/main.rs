@@ -39,12 +39,13 @@ fn main() {
     // add systems
     builder.add_startup_system(startup_system.system())
     .add_startup_system(load_textures_system.system())
-    .add_system(input_system.system())
+    .add_system(input_system.system().before("movement"))
     .add_system(game_system.system())
     .add_system(tilemap_render_system.system())
     .add_system(movement_system.system().label("movement"))
     .add_system(turret_system.system().after("movement"))
-    .add_system(camera_system.system());
+    .add_system(camera_system.system().after("movement"))
+    .add_system(bot_system.system().before("movement"));
 
     builder.run();
 }

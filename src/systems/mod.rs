@@ -13,3 +13,6 @@ pub use input::*;
 
 mod turret;
 pub use turret::*;
+
+mod bot;
+pub use bot::*;

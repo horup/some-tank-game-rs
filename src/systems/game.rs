@@ -12,9 +12,14 @@ pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tile
 
         let mut factory = Factory::new(&mut commands, &textures);
 
+        // spawn a player
         factory.spawn_player(2.5, 2.5, tile_map);
 
 
+        // spawn some bots
+        for y in 0..10 {
+            factory.spawn_bot(10.5, y as f32 + 2.5, tile_map);
+        }
 
       //  factory.spawn_tank(5.5, 3.5, tile_map);
         //let f = Factory::new(&mut commands, &asset_server);
