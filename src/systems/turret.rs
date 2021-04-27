@@ -1,22 +1,22 @@
 
 use bevy::prelude::*;
 
-use crate::{Turret};
+use crate::{Factory, Turret, resources::Textures};
 
 
-pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>)
+pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>, textures:Res<Textures>)
 {
-    turrets.for_each_mut(|turret| {
+    turrets.for_each_mut(|(turret_entity, turret, tank_parent), | {
         let mut parent_translation = Vec3::default();
         let mut parent_rotation = Quat::default();
-        if let Ok(transform) = transforms.get_component::<Transform>(turret.2.0) {
+        if let Ok(transform) = transforms.get_component::<Transform>(tank_parent.0) {
             parent_translation = transform.translation;
             parent_rotation = transform.rotation;
         }
 
-        if let Ok(mut turret_transform) = transforms.get_component_mut::<Transform>(turret.0) {
+        if let Ok(mut turret_transform) = transforms.get_component_mut::<Transform>(turret_entity) {
            
-            let target = turret.1.target;
+            let target = turret.target;
             let pos = parent_translation;
             let v = target - pos;
 
@@ -31,7 +31,7 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
         }
 
         {
-            let mut turret = turret.1;
+            let mut turret = turret;
             turret.cooldown -= time.delta_seconds();
             if turret.cooldown <= 0.0 {
                 turret.cooldown = 0.0;
@@ -39,9 +39,10 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
 
             if turret.cooldown == 0.0 && turret.trigger {
                 turret.cooldown = 1.0;
-                Fac
+
+                let mut factory = Factory::new(&mut commands, &textures);
+                factory.spawn_projectile(parent_translation.x, parent_translation.y, tank_parent.0);
             }
         }
-        
     });
 }

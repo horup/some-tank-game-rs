@@ -29,7 +29,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .id()
     }
 
-    pub fn spawn_projectile(&mut self, x:f32, y:f32, map:Entity, owner:Entity) -> Entity {
+    pub fn spawn_projectile(&mut self, x:f32, y:f32, owner:Entity) -> Entity {
         let texture_atlas_handle = self.textures.tank_atlas.clone();
         let transform = Transform { 
             translation:Vec3::new(x, y, 0.0),
@@ -50,7 +50,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .insert(Owner {owner:owner})
         .id();
 
-        self.commands.entity(map).push_children(&[projectile]);
         projectile
     }
 
