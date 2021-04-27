@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{Bot, Health, Player, Tank, Textures, Thrust, Turret};
+use crate::{Bot, Health, Owner, Player, Projectile, Tank, Textures, Thrust, Turret};
 
 pub struct Factory<'a, 'b: 'a, 'c : 'a> {
     pub commands:&'a mut Commands<'b>,
@@ -27,6 +27,31 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         self.commands.entity(tank)
         .insert(Player::default())
         .id()
+    }
+
+    pub fn spawn_projectile(&mut self, x:f32, y:f32, map:Entity, owner:Entity) -> Entity {
+        let texture_atlas_handle = self.textures.tank_atlas.clone();
+        let transform = Transform { 
+            translation:Vec3::new(x, y, 0.0),
+            scale:Vec3::splat(1.0 / 8.0),
+            ..Default::default()
+        };
+
+        let projectile = self.commands.spawn_bundle(SpriteSheetBundle {
+            texture_atlas:texture_atlas_handle.clone(),
+            transform,
+            sprite:TextureAtlasSprite {
+                index:0,
+                ..Default::default()
+            },
+            ..Default::default()
+        })
+        .insert(Projectile::default())
+        .insert(Owner {owner:owner})
+        .id();
+
+        self.commands.entity(map).push_children(&[projectile]);
+        projectile
     }
 
     pub fn spawn_tank(&mut self, x:f32, y:f32, parent:Entity) -> Entity {
