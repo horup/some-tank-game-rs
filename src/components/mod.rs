@@ -15,3 +15,12 @@ pub use bot::*;
 
 mod tank;
 pub use tank::*;
+
+mod projectile;
+pub use projectile::*;
+
+mod owner;
+pub use owner::*;
+
+mod health;
+pub use health::*;

@@ -4,9 +4,9 @@ use bevy::prelude::*;
 use crate::{Turret};
 
 
-pub fn turret_system(turrets:Query<(Entity, &Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>)
+pub fn turret_system(turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>)
 {
-    turrets.for_each(|turret| {
+    turrets.for_each_mut(|turret| {
         let mut parent_translation = Vec3::default();
         let mut parent_rotation = Quat::default();
         if let Ok(transform) = transforms.get_component::<Transform>(turret.2.0) {
@@ -29,5 +29,19 @@ pub fn turret_system(turrets:Query<(Entity, &Turret, &Parent)>, mut transforms:Q
                 turret_transform.rotation = rot;
             }
         }
+
+        {
+            let mut turret = turret.1;
+            turret.cooldown -= time.delta_seconds();
+            if turret.cooldown <= 0.0 {
+                turret.cooldown = 0.0;
+            }
+
+            if turret.cooldown == 0.0 && turret.trigger {
+                turret.cooldown = 1.0;
+                println!("fire!");
+            }
+        }
+        
     });
 }

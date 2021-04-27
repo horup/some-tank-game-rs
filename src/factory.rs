@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{Bot, Player, Tank, Textures, Thrust, Turret};
+use crate::{Bot, Health, Player, Tank, Textures, Thrust, Turret};
 
 pub struct Factory<'a, 'b: 'a, 'c : 'a> {
     pub commands:&'a mut Commands<'b>,
@@ -48,6 +48,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
             ..Default::default()
         })
         .insert(Tank::default())
+        .insert(Health::default())
         .insert(Thrust::default())
         .id();
 
