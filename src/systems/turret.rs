@@ -41,7 +41,7 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
                 turret.cooldown = 1.0;
 
                 let mut factory = Factory::new(&mut commands, &textures);
-                factory.spawn_projectile(parent_translation.x, parent_translation.y, tank_parent.0);
+                factory.spawn_projectile(parent_translation, parent_rotation, tank_parent.0);
             }
         }
     });

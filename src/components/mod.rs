@@ -4,8 +4,8 @@ pub use player::*;
 mod tilemap;
 pub use tilemap::*;
 
-mod thrust;
-pub use thrust::*;
+mod velocity;
+pub use velocity::*;
 
 mod turret;
 pub use turret::*;

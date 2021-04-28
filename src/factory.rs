@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{Bot, Health, Owner, Player, Projectile, Tank, Textures, Thrust, Turret};
+use crate::{Bot, Health, Owner, Player, Projectile, Tank, Textures, Velocity, Turret};
 
 pub struct Factory<'a, 'b: 'a, 'c : 'a> {
     pub commands:&'a mut Commands<'b>,
@@ -29,24 +29,30 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .id()
     }
 
-    pub fn spawn_projectile(&mut self, x:f32, y:f32, owner:Entity) -> Entity {
+    pub fn spawn_projectile(&mut self, pos:Vec3, dir:Quat, owner:Entity) -> Entity {
         let texture_atlas_handle = self.textures.tank_atlas.clone();
         let transform = Transform { 
-            translation:Vec3::new(x, y, 0.0),
+            translation:pos,
             scale:Vec3::splat(1.0 / 8.0),
             ..Default::default()
         };
+
+        let muzzle_speed = 10.0;
+        let speed = dir * Vec3::new(muzzle_speed, 0.0, 0.0);
 
         let projectile = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),
             transform,
             sprite:TextureAtlasSprite {
-                index:0,
+                index:2,
                 ..Default::default()
             },
             ..Default::default()
         })
         .insert(Projectile::default())
+        .insert(Velocity {
+            velocity:speed
+        })
         .insert(Owner {owner:owner})
         .id();
 
@@ -73,7 +79,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         })
         .insert(Tank::default())
         .insert(Health::default())
-        .insert(Thrust::default())
+        .insert(Velocity::default())
         .id();
 
         let turret = self.commands.spawn_bundle(SpriteSheetBundle {

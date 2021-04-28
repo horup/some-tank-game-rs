@@ -2,20 +2,12 @@ use std::f32::consts::PI;
 
 use bevy::prelude::*;
 
-use crate::components::{Thrust};
+use crate::components::{Velocity};
 
-pub fn movement_system(query:Query<(&mut Thrust, &mut Transform, &mut TextureAtlasSprite)>, time:Res<Time>) {
+pub fn movement_system(query:Query<(&mut Velocity, &mut Transform, &mut TextureAtlasSprite)>, time:Res<Time>) {
     query.for_each_mut(|(thrust, mut transform, mut sprite)| {
 
-        let mut v = thrust.force;
-
-        if thrust.constrained {
-            if thrust.force.x.abs() > 0.0 {
-                v.y = 0.0;
-            } else if thrust.force.y.abs() > 0.0 {
-                v.x = 0.0;
-            }
-        }
+        let mut v = thrust.velocity;
 
         if v.length() > 0.0 {
             transform.translation += v * time.delta_seconds();
