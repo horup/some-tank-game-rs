@@ -1,24 +1,30 @@
 use bevy::prelude::*;
 use crate::{Factory, NewGameEvent, Tile, Tilemap, resources::Textures};
 
-pub fn game_system(mut commands: Commands, mut tilemaps:Query<(Entity, &mut Tilemap)>, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
+pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
     for e in new_game_reader.iter() {
-        // desspawn any existing tilemap and children
-        for _tile_map in tilemaps.iter_mut() {
-            //commands.entity(tile_map.0).despawn_recursive();
-        }
+     
+        // cleanup existing entities
+        entities.for_each_mut(|e| {
+            let mut e = commands.entity(e);
+            e.despawn_recursive();
+        });
+
+        // create new entities
+        commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+
         let tile_map = create_tilemap(e, &mut commands, &asset_server, &mut materials, &mut meshes);
 
 
         let mut factory = Factory::new(&mut commands, &textures);
 
         // spawn a player
-        factory.spawn_player(2.5, 2.5, tile_map);
+        factory.spawn_player(2.5, 2.5);
 
 
         // spawn some bots
         for y in 0..10 {
-            factory.spawn_bot(10.5, y as f32 + 2.5, tile_map);
+            factory.spawn_bot(10.5, y as f32 + 2.5);
         }
 
       //  factory.spawn_tank(5.5, 3.5, tile_map);

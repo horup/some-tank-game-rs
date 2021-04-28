@@ -17,8 +17,6 @@ pub use factory::*;
 
 
 fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>) {
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-
     new_game_writer.send(NewGameEvent::default());
 }
 

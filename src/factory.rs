@@ -15,15 +15,15 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         }
     }
 
-    pub fn spawn_bot(&mut self, x:f32, y:f32, parent:Entity) -> Entity {
-        let tank = self.spawn_tank(x, y, parent);
+    pub fn spawn_bot(&mut self, x:f32, y:f32) -> Entity {
+        let tank = self.spawn_tank(x, y);
         self.commands.entity(tank)
         .insert(Bot::default())
         .id()
     }
 
-    pub fn spawn_player(&mut self, x:f32, y:f32, parent:Entity) -> Entity {
-        let tank = self.spawn_tank(x, y, parent);
+    pub fn spawn_player(&mut self, x:f32, y:f32) -> Entity {
+        let tank = self.spawn_tank(x, y);
         self.commands.entity(tank)
         .insert(Player::default())
         .id()
@@ -53,7 +53,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         projectile
     }
 
-    pub fn spawn_tank(&mut self, x:f32, y:f32, parent:Entity) -> Entity {
+    pub fn spawn_tank(&mut self, x:f32, y:f32) -> Entity {
         let texture_atlas_handle = self.textures.tank_atlas.clone();
 
         let transform = Transform { 
@@ -95,7 +95,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         // is not properly propagated: https://github.com/bevyengine/bevy/issues/1807
         // can be fixed by doing this instead
         self.commands.entity(body).push_children(&[turret]);
-        self.commands.entity(parent).push_children(&[body]);
         body
     }
 }
