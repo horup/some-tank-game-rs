@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-04-28  30m worked on shooting, refactored tilemap as parent
+- 2021-04-28  20m worked on shooting, refactored tilemap as parent
 - 2021-04-27  45m worked on shooting
 - 2021-04-24  30m worked on ai system, added tank component, added ramdom bot movement
 - 2021-04-23  65m got to compile on new p15 laptop, fixed rotation of turret, worked on getting QuerySets for turret system, fixed some warnings
