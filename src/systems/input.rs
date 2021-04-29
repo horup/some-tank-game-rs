@@ -1,7 +1,9 @@
-use bevy::prelude::*;
+use std::ops::Mul;
+
+use bevy::{math::vec2, prelude::*, render::camera::Camera};
 use crate::{NewGameEvent, Player, Tank, Velocity, Turret};
 
-pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &Tank, &mut Velocity, &Children)>, mut turrets:Query<(&mut Turret)>) {
+pub fn input_system(mut camera:Query<(&Camera,&Transform)>, mouse_button_input:Res<Input<MouseButton>>, mut mouse_moved_events:EventReader<CursorMoved>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &Tank, &mut Velocity, &Children)>, mut turrets:Query<(&mut Turret)>, windows:Res<Windows>) {
     if keyboard_input.just_pressed(KeyCode::F5) {
         new_game.send(NewGameEvent::default());
     }
@@ -34,7 +36,24 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, keyboard_input:R
         for e in children.iter() {
             if let Ok(mut turret) = turrets.get_component_mut::<Turret>(*e) {
                 turret.trigger = mouse_button_input.pressed(MouseButton::Left);
+                turret.trigger = true;
+
+                if let Ok(camera) = camera.single() {
+                    for e in mouse_moved_events.iter() {
+                        let wnd = windows.get_primary().expect("could not get primary monitor");
+                        let wnd_size = Vec2::new(wnd.width(), wnd.height());
+                        let transform = camera.1;
+                        let camera = camera.0;
+                        let ndc_pos = e.position / wnd_size * 2.0 - Vec2::new(1.0, 1.0);
+                        
+                        let pos_wld = camera.projection_matrix.inverse() * ndc_pos.extend(0.0).extend(1.0);
+                        //let pos_wld = camera.projection_matrix.inverse() * pos.extend(0.0).extend(1.0);// transform.compute_matrix().inverse() * pos.extend(0.0).extend(1.0);
+                        println!("{:?}", pos_wld);
+                    }
+                }
             }
         }
+
+
     }
 }
