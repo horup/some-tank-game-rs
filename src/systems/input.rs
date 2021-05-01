@@ -38,17 +38,17 @@ pub fn input_system(mut camera:Query<(&Camera,&Transform)>, mouse_button_input:R
                 turret.trigger = mouse_button_input.pressed(MouseButton::Left);
                 turret.trigger = true;
 
-                if let Ok(camera) = camera.single() {
+                if let Ok((camera, transform)) = camera.single() {
                     for e in mouse_moved_events.iter() {
                         let wnd = windows.get_primary().expect("could not get primary monitor");
                         let wnd_size = Vec2::new(wnd.width(), wnd.height());
-                        let transform = camera.1;
-                        let camera = camera.0;
                         let ndc_pos = e.position / wnd_size * 2.0 - Vec2::new(1.0, 1.0);
-                        
-                        let pos_wld = camera.projection_matrix.inverse() * ndc_pos.extend(0.0).extend(1.0);
-                        //let pos_wld = camera.projection_matrix.inverse() * pos.extend(0.0).extend(1.0);// transform.compute_matrix().inverse() * pos.extend(0.0).extend(1.0);
-                        println!("{:?}", pos_wld);
+
+                        let projection_matrix = camera.projection_matrix;
+                        let transform_matrix = transform.compute_matrix();
+
+                        let pos_world = (transform_matrix * (projection_matrix.inverse() * ndc_pos.extend(0.0).extend(1.0))).truncate();
+                        println!("{:?}", pos_world);
                     }
                 }
             }
