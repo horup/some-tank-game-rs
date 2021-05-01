@@ -30,6 +30,7 @@ fn main() {
 
     // add resources
     builder.insert_resource(Textures::default());
+    builder.insert_resource(Mouse::default());
 
     // add events
     builder.add_event::<NewGameEvent>();
@@ -38,6 +39,7 @@ fn main() {
     builder.add_startup_system(startup_system.system())
     .add_startup_system(load_textures_system.system())
     .add_system(input_system.system().before("movement"))
+    .add_system(mouse_input_system.system().before("movement"))
     .add_system(game_system.system())
     .add_system(tilemap_render_system.system())
     .add_system(movement_system.system().label("movement"))
