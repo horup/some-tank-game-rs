@@ -29,7 +29,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .id()
     }
 
-    pub fn spawn_projectile(&mut self, pos:Vec3, dir:Quat, owner:Entity) -> Entity {
+    pub fn spawn_projectile(&mut self, pos:Vec3, dir:Quat, initial_velocity:&Velocity, owner:Entity) -> Entity {
         let texture_atlas_handle = self.textures.tank_atlas.clone();
         let transform = Transform { 
             translation:pos,
@@ -38,7 +38,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         };
 
         let muzzle_speed = 10.0;
-        let speed = dir * Vec3::new(muzzle_speed, 0.0, 0.0);
+        let velocity = dir * Vec3::new(muzzle_speed, 0.0, 0.0) + initial_velocity.velocity;
 
         let projectile = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),
@@ -51,7 +51,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         })
         .insert(Projectile::default())
         .insert(Velocity {
-            velocity:speed
+            velocity
         })
         .insert(Owner {owner:owner})
         .id();
