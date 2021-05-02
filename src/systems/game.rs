@@ -40,19 +40,23 @@ fn create_tilemap(new_game:&NewGameEvent, commands: &mut Commands, asset_server:
     let mut tilemap = Tilemap::new(size, 4, 4);
     for y in 0..size {
         tilemap.set_tile(Tile {
-            index:1
+            index:1,
+            ..Default::default()
         }, 0, y);
         tilemap.set_tile(Tile {
-            index:1
+            index:1,
+            ..Default::default()
         }, size-1, y);
     }
 
     for x in 0..size {
         tilemap.set_tile(Tile {
-            index:1
+            index:1,
+            ..Default::default()
         }, x, 0);
         tilemap.set_tile(Tile {
-            index:1
+            index:1,
+            ..Default::default()
         }, x, size - 1);
     }
 

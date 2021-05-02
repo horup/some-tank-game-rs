@@ -3,13 +3,15 @@ use bevy::{math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTo
 
 #[derive(Copy, Clone)]
 pub struct Tile {
-    pub index:u32
+    pub index:u32,
+    pub solid:bool
 }
 
 impl Default for Tile {
     fn default() -> Self {
         Tile {
-            index:0
+            index:0,
+            solid:false
         }
     }
 }
