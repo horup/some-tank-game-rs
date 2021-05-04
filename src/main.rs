@@ -1,6 +1,7 @@
 use bevy::{diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin}, prelude::*};
 
 mod components;
+use bevy_rapier2d::physics::RapierPhysicsPlugin;
 pub use components::*;
 
 mod events;
@@ -25,6 +26,7 @@ fn main() {
     let mut builder = App::build();
     // add plugins
     builder.add_plugins(DefaultPlugins)
+    .add_plugin(RapierPhysicsPlugin)
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(FrameTimeDiagnosticsPlugin::default());
 

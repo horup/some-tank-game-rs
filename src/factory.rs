@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
 
 use crate::{Body, Bot, Health, Owner, Player, Projectile, Tank, Textures, Turret, Velocity};
 
@@ -50,7 +51,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
             ..Default::default()
         })
         .insert(Projectile::default())
-        .insert(Body::default())
         .insert(Velocity {
             velocity
         })
@@ -68,6 +68,10 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
             scale:Vec3::splat(1.0 / 8.0),
             ..Default::default()
         };
+
+        let rigid_body = RigidBodyBuilder::new_dynamic().translation(x, y);
+        let collider = ColliderBuilder::ball(0.5);
+
     
         let body = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),
@@ -80,7 +84,9 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         })
         .insert(Tank::default())
         .insert(Health::default())
-        .insert(Velocity::default())
+        //.insert(Velocity::default())
+        .insert(rigid_body)
+        .insert(collider)
         .id();
 
         let turret = self.commands.spawn_bundle(SpriteSheetBundle {
