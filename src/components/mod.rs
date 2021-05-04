@@ -24,3 +24,6 @@ pub use owner::*;
 
 mod health;
 pub use health::*;
+
+mod body;
+pub use body::*;

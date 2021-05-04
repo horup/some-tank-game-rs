@@ -1,6 +1,6 @@
 
-mod movement;
-pub use movement::*;
+mod physics;
+pub use physics::*;
 
 mod camera;
 pub use camera::*;
@@ -16,3 +16,6 @@ pub use turret::*;
 
 mod bot;
 pub use bot::*;
+
+mod movement;
+pub use movement::*;
