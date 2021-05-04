@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-05-04  60m worked on introduction of bevy_rapier2d
+- 2021-05-04  85m worked on introduction of bevy_rapier2d
 - 2021-05-03  10m started working on collision detection
 - 2021-05-02  25m projectile now follows the turret
 - 2021-05-01  35m worked on mouse system and screen to world, moved cursor support into own system and resource, worked on turret follows mouse pos
