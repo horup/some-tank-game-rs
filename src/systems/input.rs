@@ -1,7 +1,7 @@
 use bevy::{ prelude::*, render::camera::Camera};
-use crate::{NewGameEvent, Player, Tank, Turret, Velocity, resources::Mouse};
+use crate::{NewGameEvent, Player, Tank, Thrust, Turret, resources::Mouse};
 
-pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &Tank, &mut Velocity, &Children)>, mut turrets:Query<(&mut Turret)>) {
+pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &Tank, &mut Thrust, &Children)>, mut turrets:Query<(&mut Turret)>) {
     if keyboard_input.just_pressed(KeyCode::F5) {
         new_game.send(NewGameEvent::default());
     }
@@ -28,7 +28,8 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
         if v.length() > 0.0 {
             v = v.normalize() * speed;
         }
-        thrust.velocity = v;
+        
+        thrust.impulse = v;
 
         // turret input
         for e in children.iter() {

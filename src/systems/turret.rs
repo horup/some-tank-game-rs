@@ -1,9 +1,13 @@
 
 use bevy::prelude::*;
 
-use crate::{Factory, Turret, Velocity, resources::Textures};
+use crate::{Factory, Turret, resources::Textures};
 
 
+pub fn turret_system() {
+    
+}
+/*
 pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, mut velocities:Query<(&Velocity)>, time:Res<Time>, textures:Res<Textures>)
 {
     turrets.for_each_mut(|(turret_entity, turret, tank_parent), | {
@@ -47,4 +51,4 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
         }
 
     });
-}
+}*/

@@ -1,7 +1,7 @@
 use bevy::{diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin}, prelude::*};
 
 mod components;
-use bevy_rapier2d::physics::RapierPhysicsPlugin;
+use bevy_rapier2d::physics::{RapierConfiguration, RapierPhysicsPlugin};
 pub use components::*;
 
 mod events;
@@ -17,7 +17,9 @@ mod factory;
 pub use factory::*;
 
 
-fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>) {
+fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
+    rapier.gravity.x = 0.0;
+    rapier.gravity.y = 0.0;
     new_game_writer.send(NewGameEvent::default());
 }
 
@@ -40,16 +42,14 @@ fn main() {
     // add systems
     builder.add_startup_system(startup_system.system())
     .add_startup_system(load_textures_system.system())
-    .add_system(input_system.system().before("physics"))
-    .add_system(mouse_input_system.system().before("physics"))
+    .add_system(input_system.system())
+    .add_system(mouse_input_system.system())
     .add_system(game_system.system())
     .add_system(tilemap_render_system.system())
-    
-    .add_system(physics_system.system().label("physics"))
-    .add_system(movement_system.system().after("physics"))
-    .add_system(turret_system.system().after("physics"))
-    .add_system(camera_system.system().after("physics"))
-    .add_system(bot_system.system().before("physics"));
+    .add_system(movement_system.system())
+    .add_system(turret_system.system())
+    .add_system(camera_system.system())
+    .add_system(bot_system.system());
 
     builder.run();
 }

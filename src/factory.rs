@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
 
-use crate::{Body, Bot, Health, Owner, Player, Projectile, Tank, Textures, Turret, Velocity};
+use crate::{Bot, Health, Owner, Player, Projectile, Tank, Textures, Turret};
 
 pub struct Factory<'a, 'b: 'a, 'c : 'a> {
     pub commands:&'a mut Commands<'b>,
@@ -30,7 +30,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .id()
     }
 
-    pub fn spawn_projectile(&mut self, pos:Vec3, dir:Quat, initial_velocity:&Velocity, owner:Entity) -> Entity {
+    pub fn spawn_projectile(&mut self, pos:Vec3, dir:Quat, initial_velocity:Vec3, owner:Entity) -> Entity {
         let texture_atlas_handle = self.textures.tank_atlas.clone();
         let transform = Transform { 
             translation:pos,
@@ -39,7 +39,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         };
 
         let muzzle_speed = 10.0;
-        let velocity = dir * Vec3::new(muzzle_speed, 0.0, 0.0) + initial_velocity.velocity;
+        let velocity = dir * Vec3::new(muzzle_speed, 0.0, 0.0) + initial_velocity;
 
         let projectile = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),
@@ -51,9 +51,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
             ..Default::default()
         })
         .insert(Projectile::default())
-        .insert(Velocity {
-            velocity
-        })
         .insert(Owner {owner:owner})
         .id();
 
@@ -64,7 +61,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         let texture_atlas_handle = self.textures.tank_atlas.clone();
 
         let transform = Transform { 
-            translation:Vec3::new(x, y, 0.0),
             scale:Vec3::splat(1.0 / 8.0),
             ..Default::default()
         };
@@ -72,7 +68,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         let rigid_body = RigidBodyBuilder::new_dynamic().translation(x, y);
         let collider = ColliderBuilder::ball(0.5);
 
-    
         let body = self.commands.spawn_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),
             transform,
@@ -84,7 +79,6 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         })
         .insert(Tank::default())
         .insert(Health::default())
-        //.insert(Velocity::default())
         .insert(rigid_body)
         .insert(collider)
         .id();

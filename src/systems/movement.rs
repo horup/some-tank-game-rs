@@ -1,10 +1,14 @@
 use bevy::prelude::*;
+use bevy_rapier2d::{physics::RigidBodyHandleComponent, rapier::dynamics::{RigidBodySet}};
 
-use crate::Velocity;
+use crate::{Thrust};
 
-pub fn movement_system(mut query:Query<(&mut Transform, &Velocity)>, time:Res<Time>) {
+type Thrustable<'a> = (&'a Thrust, &'a RigidBodyHandleComponent);
 
-    /*query.for_each_mut(|(mut transform, velocity)| {
-        transform.translation += velocity.velocity * time.delta_seconds();
-    });*/
+pub fn movement_system(mut query:Query<Thrustable>, mut rigid_body_set:ResMut<RigidBodySet>) {
+    query.for_each_mut(|(thrust, rigid_body)| {
+        let rigid_body = rigid_body_set.get_mut(rigid_body.handle()).unwrap();
+        rigid_body.apply_impulse([thrust.impulse.x, thrust.impulse.y].into(), true);
+        println!("lol");
+    });
 }

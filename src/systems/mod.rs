@@ -1,7 +1,4 @@
 
-mod physics;
-pub use physics::*;
-
 mod camera;
 pub use camera::*;
 

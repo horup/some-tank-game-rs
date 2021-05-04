@@ -3,10 +3,6 @@ pub use player::*;
 
 mod tilemap;
 pub use tilemap::*;
-
-mod velocity;
-pub use velocity::*;
-
 mod turret;
 pub use turret::*;
 
@@ -25,5 +21,5 @@ pub use owner::*;
 mod health;
 pub use health::*;
 
-mod body;
-pub use body::*;
+mod thrust;
+pub use thrust::*;
