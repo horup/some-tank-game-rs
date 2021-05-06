@@ -1,4 +1,6 @@
 ## Devlog
+- 2021-05-06  20m tilemap now has an invalidate which forces updates to collisions
+- 2021-05-05  25m worked on static colliders for tilemap
 - 2021-05-04  85m worked on introduction of bevy_rapier2d
 - 2021-05-03  10m started working on collision detection
 - 2021-05-02  25m projectile now follows the turret

@@ -41,10 +41,12 @@ fn create_tilemap(new_game:&NewGameEvent, commands: &mut Commands, asset_server:
     for y in 0..size {
         tilemap.set_tile(Tile {
             index:1,
+            solid:true,
             ..Default::default()
         }, 0, y);
         tilemap.set_tile(Tile {
             index:1,
+            solid:true,
             ..Default::default()
         }, size-1, y);
     }
@@ -52,10 +54,12 @@ fn create_tilemap(new_game:&NewGameEvent, commands: &mut Commands, asset_server:
     for x in 0..size {
         tilemap.set_tile(Tile {
             index:1,
+            solid:true,
             ..Default::default()
         }, x, 0);
         tilemap.set_tile(Tile {
             index:1,
+            solid:true,
             ..Default::default()
         }, x, size - 1);
     }
