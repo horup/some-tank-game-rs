@@ -78,5 +78,6 @@ fn create_tilemap(new_game:&NewGameEvent, commands: &mut Commands, asset_server:
         }
     }
 
-    Tilemap::insert_entity(tilemap, "tiles.png", commands, &asset_server, &mut materials, &mut meshes)
+    Entity::new(0)
+    //Tilemap::insert_entity(tilemap, "tiles.png", commands, &asset_server, &mut materials, &mut meshes)
 }

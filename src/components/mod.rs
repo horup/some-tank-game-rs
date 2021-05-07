@@ -1,8 +1,6 @@
 mod player;
 pub use player::*;
 
-mod tilemap;
-pub use tilemap::*;
 mod turret;
 pub use turret::*;
 

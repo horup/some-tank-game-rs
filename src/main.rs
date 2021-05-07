@@ -16,6 +16,9 @@ use resources::*;
 mod factory;
 pub use factory::*;
 
+mod plugins;
+pub use plugins::*;
+
 
 fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
     rapier.gravity.x = 0.0;
@@ -30,7 +33,8 @@ fn main() {
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPlugin)
     .add_plugin(LogDiagnosticsPlugin::default())
-    .add_plugin(FrameTimeDiagnosticsPlugin::default());
+    .add_plugin(FrameTimeDiagnosticsPlugin::default())
+    .add_plugin(TilemapPlugin::default());
 
     // add resources
     builder.insert_resource(Textures::default());
@@ -45,7 +49,6 @@ fn main() {
     .add_system(input_system.system())
     .add_system(mouse_input_system.system())
     .add_system(game_system.system())
-    .add_system(tilemap_render_system.system())
     .add_system(movement_system.system())
     .add_system(turret_system.system())
     .add_system(camera_system.system())
