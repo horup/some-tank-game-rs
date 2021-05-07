@@ -64,5 +64,19 @@ fn create_tilemap(new_game:&NewGameEvent, commands: &mut Commands, asset_server:
         }, x, size - 1);
     }
 
+    for y in 0..size {
+        for x in 0..size {
+            if y %3 == 0 {
+                if x % (1 + y) == 0 {
+                    tilemap.set_tile(Tile {
+                        index:1,
+                        solid:true,
+                        ..Default::default()
+                    }, x, y);
+                }
+            }
+        }
+    }
+
     Tilemap::insert_entity(tilemap, "tiles.png", commands, &asset_server, &mut materials, &mut meshes)
 }
