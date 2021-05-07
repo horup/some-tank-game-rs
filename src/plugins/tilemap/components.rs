@@ -18,18 +18,20 @@ pub struct Tilemap {
     pub tiles:Vec<Tile>,
     pub sheet_width:u32,
     pub sheet_height:u32,
-    pub invalidate:bool
+    pub invalidate:bool,
+    pub texture:String
 }
 
 
 impl Tilemap {
-    pub fn new(size:usize, sheet_width:u32, sheet_height:u32) -> Tilemap {
+    pub fn new(size:usize, sheet_width:u32, sheet_height:u32, texture:&str) -> Tilemap {
         let g = Tilemap {
             size:size,
             tiles:vec![Tile::default(); size * size],
             sheet_width,
             sheet_height,
-            invalidate:true
+            invalidate:true,
+            texture:texture.into()
         };
 
         return g;
@@ -47,9 +49,4 @@ impl Tilemap {
         let c = self.tiles.get(y * self.size + x);
         return c;
     }
-}
-
-
-pub struct TilemapBuilder {
-    
 }
