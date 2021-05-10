@@ -1,9 +1,120 @@
-use bevy::{math::vec2, prelude::*, render::mesh::Indices};
+use bevy::{math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
 use bevy_rapier2d::{na::Isometry2, rapier::{dynamics::RigidBodyBuilder, geometry::{ColliderBuilder, SharedShape}}};
 
 use super::Tilemap;
 
+pub fn tilemap_added_system(
+    mut commands:Commands, 
+    tilemaps: Query<(Entity,&mut Tilemap), Added<Tilemap>>,
+    asset_server:ResMut<AssetServer>,
+    mut meshes:ResMut<Assets<Mesh>>,
+    mut materials:ResMut<Assets<StandardMaterial>>
 
+) {
+    tilemaps.for_each_mut(|(e, tilemap)| {
+        let texture_handle:Handle<Texture> = asset_server.load(tilemap.texture_path());
+        let material_handle = materials.add(StandardMaterial {
+            base_color_texture: Some(texture_handle.clone()),
+            unlit:true,
+            ..Default::default()
+        });
+
+
+        let mut m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);
+        let m = meshes.add(m);
+        update_tilemap_mesh(meshes.get_mut(m).unwrap(), &mut tilemap);
+       
+
+
+    });
+}
+
+fn update_tilemap_mesh(m:&mut Mesh, tilemap:&Tilemap) {
+    let positions = Vec::<[f32; 3]>::new();
+    let normals = Vec::<[f32; 3]>::new();
+    let uvs = Vec::<[f32; 2]>::new();
+    let indicies:Vec<u32> = Vec::new();
+
+    m.set_attribute(Mesh::ATTRIBUTE_POSITION, positions);
+    m.set_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+    m.set_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+
+    let size = tilemap.size();
+    let mut i = 0;
+    let scale = 1.0;
+    for y in 0..size {
+        for x in 0..size {
+            let index = y * size + x;
+            let cell = tilemap.tiles().get(index).expect("grid was out of bounds");
+            let north_west = vec2(x as f32 * scale, y as f32 * scale + scale);
+            let north_east = vec2(x as f32 * scale + scale, y as f32 * scale + scale);
+            let south_west = vec2(x as f32 * scale,  y as f32 * scale);
+            let south_east = vec2(x as f32 * scale + scale, y as f32 * scale);
+
+            let sheet_size = tilemap.sheet_size();
+            let tex_w = 1.0 / sheet_size as f32;
+            let tex_h = 1.0 / sheet_size as f32;
+            let x = (cell.index % sheet_size) as f32; 
+            let y = (cell.index / sheet_size) as f32;
+
+            // alpha is used to shift the texture samples 'a bit inwards' to avoid artifacts when rendering
+            // different resolutions now power of 2
+            let alpha = 0.001;
+            let u = x * tex_w;
+            let v = y * tex_h;
+
+            let vertices = [
+                (
+                    [south_west.x, south_west.y, 0.0],
+                    [0.0, 0.0, 1.0],
+                    [u + alpha, v+tex_h - alpha],
+                ),
+                (
+                    [north_west.x, north_west.y, 0.0],
+                    [0.0, 0.0, 1.0],
+                    [u + alpha, v + alpha],
+                ),
+                (
+                    [north_east.x, north_east.y, 0.0],
+                    [0.0, 0.0, 1.0],
+                    [u+tex_w - alpha, v + alpha],
+                ),
+                (
+                    [south_east.x, south_east.y, 0.0],
+                    [0.0, 0.0, 1.0],
+                    [u+tex_w - alpha, v+tex_h - alpha],
+                ),
+            ];
+        
+            for (position, normal, uv) in vertices.iter() {
+                positions.push(*position);
+                normals.push(*normal);
+                uvs.push(*uv);
+            }
+
+            indicies.push(i + 0);
+            indicies.push(i + 2);
+            indicies.push(i + 1);
+            indicies.push(i + 0);
+            indicies.push(i + 3);
+            indicies.push(i + 2);
+
+            i += 4;
+        }
+    }
+
+    m.set_attribute(Mesh::ATTRIBUTE_POSITION, positions);
+    m.set_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+    m.set_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+    m.set_indices(Some(Indices::U32(indicies)));
+}
+
+pub fn tilemap_update_system(tilemaps: Query<(Entity,&mut Tilemap), Changed<Tilemap>>) {
+    tilemaps.for_each_mut(|tilemap| {
+        println!("tilemap updated")
+    });
+}
+/*
 pub fn tilemap_render_system(mut meshes: ResMut<Assets<Mesh>>, query: Query<(&mut Tilemap, &mut Handle<Mesh>, Entity)>, mut commands:Commands) {
     query.for_each_mut(|(mut tilemap, mesh, entity)| {
         let m = meshes.get_mut(mesh.id).expect("mesh was not found for grid");
@@ -102,4 +213,4 @@ pub fn tilemap_render_system(mut meshes: ResMut<Assets<Mesh>>, query: Query<(&mu
             }
         }
     });
-}
+}*/

@@ -15,7 +15,7 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
 
         // create tilemap
         let size = e.map_size;
-        let mut tilemap = Tilemap::new(size, 4, 4, "tiles.png");
+        let mut tilemap = Tilemap::new(size, 4, "tiles.png");
         for y in 0..size {
             tilemap.set_tile(Tile {
                 index:1,
@@ -55,6 +55,8 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
                 }
             }
         }
+
+        commands.spawn().insert(tilemap);
 
 
         //let tiles:Vec<Tile> = vec![e.map_size * e.map_size];

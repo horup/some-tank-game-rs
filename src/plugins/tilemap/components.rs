@@ -1,3 +1,5 @@
+use std::usize;
+
 #[derive(Copy, Clone)]
 pub struct Tile {
     pub index:u32,
@@ -14,39 +16,50 @@ impl Default for Tile {
 }
 
 pub struct Tilemap {
-    pub size:usize,
-    pub tiles:Vec<Tile>,
-    pub sheet_width:u32,
-    pub sheet_height:u32,
-    pub invalidate:bool,
-    pub texture:String
+    tiles:Vec<Tile>,
+    sheet_size:u32,
+    texture_path:String
 }
 
 
 impl Tilemap {
-    pub fn new(size:usize, sheet_width:u32, sheet_height:u32, texture:&str) -> Tilemap {
+    pub fn new(size:usize, sheet_size:u32, texture_name:&str) -> Tilemap {
         let g = Tilemap {
-            size:size,
             tiles:vec![Tile::default(); size * size],
-            sheet_width,
-            sheet_height,
-            invalidate:true,
-            texture:texture.into()
+            sheet_size,
+            texture_path:texture_name.into()
         };
 
         return g;
     }
 
-    pub fn invalidate(&mut self) {
-        self.invalidate = true;
+    pub fn tiles_mut(&mut self) -> &mut[Tile] {
+        &mut self.tiles
+    }
+
+    pub fn tiles(&mut self) -> &[Tile] {
+        &self.tiles
+    }
+
+    pub fn size(&self) -> usize {
+        f32::sqrt(self.tiles.len() as f32) as usize
     }
 
     pub fn set_tile(&mut self, tile:Tile, x:usize, y:usize) {
-        self.tiles[y * self.size + x] = tile;
+        let size = self.size();
+        self.tiles[y * size + x] = tile;
     }
 
     pub fn get_tile(&mut self, x:usize, y:usize) -> Option<&Tile> {
-        let c = self.tiles.get(y * self.size + x);
+        let c = self.tiles.get(y * self.size() + x);
         return c;
+    }
+
+    pub fn texture_path(&self) -> &str {
+        &self.texture_path
+    }
+
+    pub fn sheet_size(&self) -> u32 {
+        self.sheet_size
     }
 }

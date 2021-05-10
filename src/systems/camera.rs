@@ -17,10 +17,11 @@ pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera,
             let area_width = primary.width() as u32;
             let area_height = primary.height() as u32;
 
-            let tilemap_width = tilemap.size as u32;
-            let tilemap_height = tilemap.size as u32;
-            let tilemap_width_px = (tilemap.size * tile_size) as u32;
-            let tilemap_height_px = (tilemap.size * tile_size) as u32;
+            let size = tilemap.size();
+            let tilemap_width = size as u32;
+            let tilemap_height = size as u32;
+            let tilemap_width_px = (size * tile_size) as u32;
+            let tilemap_height_px = (size * tile_size) as u32;
 
             let tilemap_integer_size = integer_scaling::calculate_size(area_width, area_height, tilemap_width_px, tilemap_height_px);
             projection.right = tilemap_width as f32 * area_width as f32 / tilemap_integer_size.width as f32;
@@ -33,8 +34,8 @@ pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera,
             projection.top /= 2.0;
 
             // move the camera to the center of the tilemap
-            transform.translation.x = tilemap.size as f32 / 2.0;
-            transform.translation.y = tilemap.size as f32 / 2.0;
+            transform.translation.x = size as f32 / 2.0;
+            transform.translation.y = size as f32 / 2.0;
 
             // force update projection matrix without resize
             projection.update(primary.width(), primary.height());

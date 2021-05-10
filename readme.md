@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-05-10  35m worked on tilemap plugin
 - 2021-05-07  60m worked on collision, started refactored tilemap to use Builder pattern
 - 2021-05-06  20m tilemap now has an invalidate which forces updates to collisions
 - 2021-05-05  25m worked on static colliders for tilemap
