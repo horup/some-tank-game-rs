@@ -59,13 +59,6 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
         commands.spawn().insert(tilemap);
 
 
-        //let tiles:Vec<Tile> = vec![e.map_size * e.map_size];
-       /* commands.spawn().insert(TilemapBuilder {
-            sheet_height:
-        })*/
-        //let tile_map = create_tilemap(e, &mut commands, &asset_server, &mut materials, &mut meshes);
-
-
         let mut factory = Factory::new(&mut commands, &textures);
 
         // spawn a player

@@ -29,6 +29,7 @@ fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGame
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() {
     let mut builder = App::build();
+    
     // add plugins
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPlugin)
@@ -52,7 +53,8 @@ fn main() {
     .add_system(movement_system.system())
     .add_system(turret_system.system())
     .add_system(camera_system.system())
-    .add_system(bot_system.system());
+    .add_system(bot_system.system())
+    .add_system(test_system.system());
 
     builder.run();
 }
