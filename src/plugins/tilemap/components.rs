@@ -37,7 +37,7 @@ impl Tilemap {
         &mut self.tiles
     }
 
-    pub fn tiles(&mut self) -> &[Tile] {
+    pub fn tiles(&self) -> &[Tile] {
         &self.tiles
     }
 

@@ -11,7 +11,7 @@ pub fn tilemap_added_system(
     mut materials:ResMut<Assets<StandardMaterial>>
 
 ) {
-    tilemaps.for_each_mut(|(e, tilemap)| {
+    tilemaps.for_each_mut(|(e, mut tilemap)| {
         let texture_handle:Handle<Texture> = asset_server.load(tilemap.texture_path());
         let material_handle = materials.add(StandardMaterial {
             base_color_texture: Some(texture_handle.clone()),
@@ -22,22 +22,22 @@ pub fn tilemap_added_system(
 
         let mut m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);
         let m = meshes.add(m);
-        update_tilemap_mesh(meshes.get_mut(m).unwrap(), &mut tilemap);
-       
+        update_tilemap_mesh(meshes.get_mut(m.clone()).unwrap(), &mut tilemap);
 
-
+        let mut e = commands.entity(e);
+        e.insert_bundle(PbrBundle {
+            mesh:m.clone(),
+            material:material_handle,
+            ..Default::default()
+        });
     });
 }
 
 fn update_tilemap_mesh(m:&mut Mesh, tilemap:&Tilemap) {
-    let positions = Vec::<[f32; 3]>::new();
-    let normals = Vec::<[f32; 3]>::new();
-    let uvs = Vec::<[f32; 2]>::new();
-    let indicies:Vec<u32> = Vec::new();
-
-    m.set_attribute(Mesh::ATTRIBUTE_POSITION, positions);
-    m.set_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
-    m.set_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+    let mut positions = Vec::<[f32; 3]>::new();
+    let mut normals = Vec::<[f32; 3]>::new();
+    let mut uvs = Vec::<[f32; 2]>::new();
+    let mut indicies:Vec<u32> = Vec::new();
 
     let size = tilemap.size();
     let mut i = 0;
@@ -45,7 +45,7 @@ fn update_tilemap_mesh(m:&mut Mesh, tilemap:&Tilemap) {
     for y in 0..size {
         for x in 0..size {
             let index = y * size + x;
-            let cell = tilemap.tiles().get(index).expect("grid was out of bounds");
+            let cell = tilemap.tiles().get(index).expect("tilemap was out of bounds");
             let north_west = vec2(x as f32 * scale, y as f32 * scale + scale);
             let north_east = vec2(x as f32 * scale + scale, y as f32 * scale + scale);
             let south_west = vec2(x as f32 * scale,  y as f32 * scale);
