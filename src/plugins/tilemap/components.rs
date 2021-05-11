@@ -50,7 +50,7 @@ impl Tilemap {
         self.tiles[y * size + x] = tile;
     }
 
-    pub fn get_tile(&mut self, x:usize, y:usize) -> Option<&Tile> {
+    pub fn get_tile(&self, x:usize, y:usize) -> Option<&Tile> {
         let c = self.tiles.get(y * self.size() + x);
         return c;
     }

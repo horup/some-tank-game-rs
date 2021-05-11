@@ -1,4 +1,4 @@
-use bevy::{math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
+use bevy::{ecs::system::EntityCommands, math::vec2, prelude::*, render::{mesh::Indices, pipeline::PrimitiveTopology}};
 use bevy_rapier2d::{na::Isometry2, rapier::{dynamics::RigidBodyBuilder, geometry::{ColliderBuilder, SharedShape}}};
 
 use super::Tilemap;
@@ -30,7 +30,29 @@ pub fn tilemap_added_system(
             material:material_handle,
             ..Default::default()
         });
+
+        update_tilemap_collisions(&mut tilemap, &mut e);
     });
+}
+
+fn update_tilemap_collisions(tilemap:&Tilemap, e:&mut EntityCommands) {
+    let size = tilemap.size();
+    let mut shapes = Vec::new();
+    for y in 0..size {
+        for x in 0..size {
+            if tilemap.get_tile(x, y).unwrap().solid {
+                shapes.push((Isometry2::new([x as f32 + 0.5, y as f32 + 0.5].into(), 0.0), SharedShape::cuboid(0.5, 0.5)));
+            }
+        }
+    }
+
+    if shapes.len() > 0 {
+        let compound = SharedShape::compound(shapes);
+        let collider = ColliderBuilder::new(compound);
+        let rigid_body = RigidBodyBuilder::new_static();
+        e.insert(rigid_body);
+        e.insert(collider);
+    }
 }
 
 fn update_tilemap_mesh(m:&mut Mesh, tilemap:&Tilemap) {
