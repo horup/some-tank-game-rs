@@ -131,9 +131,12 @@ fn update_tilemap_mesh(m:&mut Mesh, tilemap:&Tilemap) {
     m.set_indices(Some(Indices::U32(indicies)));
 }
 
-pub fn tilemap_update_system(tilemaps: Query<(Entity,&mut Tilemap), Changed<Tilemap>>) {
-    tilemaps.for_each_mut(|tilemap| {
-        println!("tilemap updated")
+pub fn tilemap_update_system(tilemaps: Query<(Entity,&mut Tilemap, &Handle<Mesh>), Changed<Tilemap>>, mut commands:Commands, mut meshes:ResMut<Assets<Mesh>>) {
+    tilemaps.for_each_mut(|(e, tilemap, mesh)| {
+        let mut e = commands.entity(e);
+        update_tilemap_collisions(&tilemap, &mut e);
+        let mesh = meshes.get_mut(mesh).expect("mesh was not found for tilemap");
+        update_tilemap_mesh(mesh, &tilemap);
     });
 }
 /*
