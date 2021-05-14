@@ -1,10 +1,10 @@
 
 use bevy::prelude::*;
 
-use crate::{Factory, Turret, resources::Textures};
+use crate::{Factory, ThingBuilder, Turret, resources::Textures};
 
 
-pub fn turret_system(turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>) {
+pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>) {
     turrets.for_each_mut(|(turret_entity, turret, parent_entity), | {
         let mut parent_translation = Vec3::default();
         let mut parent_rotation = Quat::default();
@@ -34,9 +34,13 @@ pub fn turret_system(turrets:Query<(Entity, &mut Turret, &Parent)>, mut transfor
 
                 if turret.cooldown == 0.0 && turret.trigger {
                     turret.cooldown = 1.0;
-
-                  //  let mut factory = Factory::new(&mut commands, &textures);
-                  //  factory.spawn_projectile(parent_translation, rot_global, &velocity,tank_parent.0);
+                    let mut e = commands.spawn();
+                    e.insert(ThingBuilder {
+                        translation:parent_translation,
+                        rotation:rot_global,
+                        thing_type:crate::ThingType::Bullet,
+                        ..Default::default()
+                    });
                 }
             }
         }

@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-05-14  70m worked on turret system and bullet spawning
 - 2021-05-12  15m worked on turret system
 - 2021-05-11  35m worked on tilemap plugin
 - 2021-05-10  35m worked on tilemap plugin
