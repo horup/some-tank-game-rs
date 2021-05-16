@@ -1,26 +1,60 @@
 use bevy::prelude::*;
+use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
+use crate::Owner;
+
 use super::*;
 
-pub fn sprite_builder_added_system(mut commands:Commands, mut query:Query<(Entity, &ThingBuilder), Added<ThingBuilder>>, texture_atlases:Res<TextureAtlases>) {
-    query.for_each_mut(|(e, sb)| {
+pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity, &ThingBuilder), Added<ThingBuilder>>, texture_atlases:Res<TextureAtlases>) {
+    query.for_each_mut(|(e, tb)| {
         let mut e = commands.entity(e);
         let transform = Transform {
-            translation:sb.translation,
-            rotation:sb.rotation,
+            translation:tb.translation,
+            rotation:tb.rotation,
             scale:Vec3::splat(1.0 / 8.0)
         };
         
         let sprite_sheet_bundle = SpriteSheetBundle {
-            texture_atlas:texture_atlases.get_atlas(sb.thing_type),
+            texture_atlas:texture_atlases.get_atlas(tb.thing_type),
             transform,
             sprite:TextureAtlasSprite {
-                index:texture_atlases.get_index(sb.thing_type),
+                index:texture_atlases.get_index(tb.thing_type),
                 ..Default::default()
             },
             ..Default::default()
         };
 
         e.insert_bundle(sprite_sheet_bundle);
+
+        if let Some(entity) = tb.owner {
+            e.insert(Owner::from(entity));
+        }
+
+        let x = tb.translation.x;
+        let y = tb.translation.y;
+
+        match tb.thing_type {
+            ThingType::Unknown => {}
+            ThingType::Tank => {}
+            ThingType::Bullet => {
+                let speed = 10.0;
+                let v = Vec3::new(speed, 0.0, 0.0);
+                let v = tb.rotation * v;
+                let a = v.angle_between(Vec3::new(1.0, 0.0, 0.0));
+                let rigid_body = RigidBodyBuilder::new_dynamic()
+                .translation(x, y)
+                //.linear_damping(1.5)
+                //.angular_damping(1.5)
+                .linvel(v.x, v.y)
+                .angvel(10.0)
+                .rotation(a);
+
+                e.insert(rigid_body);
+                
+                let collider = ColliderBuilder::cuboid(1.0/8.0, 1.0/8.0);
+                e.insert(collider);
+            }
+
+        }
     });
 }
 

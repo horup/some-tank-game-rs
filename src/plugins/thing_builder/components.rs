@@ -1,7 +1,7 @@
 use bevy::{math::{Quat, Vec3}, prelude::Entity};
 
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ThingType {
     Unknown,
     Tank,

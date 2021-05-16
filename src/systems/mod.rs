@@ -19,3 +19,6 @@ pub use movement::*;
 
 mod test;
 pub use test::*;
+
+mod projectile;
+pub use projectile::*;

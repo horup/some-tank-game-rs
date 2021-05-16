@@ -18,7 +18,7 @@ impl Plugin for SpriteBuilderPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app
         .insert_resource(TextureAtlases::default())
-        .add_system_to_stage(CoreStage::PreUpdate, sprite_builder_added_system.system())
+        .add_system_to_stage(CoreStage::PostUpdate, thing_builder_added_system.system())
         .add_startup_system(thing_builder_init_system.system());
     }
 }

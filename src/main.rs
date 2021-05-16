@@ -55,7 +55,8 @@ fn main() {
     .add_system(turret_system.system())
     .add_system(camera_system.system())
     .add_system(bot_system.system())
-    .add_system(test_system.system());
+    .add_system(test_system.system())
+    .add_system(projectile_system.system());
 
     builder.run();
 }
