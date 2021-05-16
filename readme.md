@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-05-16  30m worked on bullet spawning and hitting, started working on collision events
+- 2021-05-16  55m worked on bullet spawning and hitting, started working on collision events
 - 2021-05-14  70m worked on turret system and bullet spawning
 - 2021-05-12  15m worked on turret system
 - 2021-05-11  35m worked on tilemap plugin

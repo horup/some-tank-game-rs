@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
-use crate::Owner;
+use crate::{Owner, Projectile};
 
 use super::*;
 
@@ -50,8 +50,11 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
 
                 e.insert(rigid_body);
                 
-                let collider = ColliderBuilder::cuboid(1.0/8.0, 1.0/8.0);
+                let collider = ColliderBuilder::cuboid(1.0/8.0, 1.0/8.0)
+                .user_data(e.id().to_bits() as u128);
                 e.insert(collider);
+
+                e.insert(Projectile::default());
             }
 
         }
