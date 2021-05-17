@@ -36,7 +36,8 @@ fn main() {
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(FrameTimeDiagnosticsPlugin::default())
     .add_plugin(TilemapPlugin::default())
-    .add_plugin(SpriteBuilderPlugin::default());
+    .add_plugin(SpriteBuilderPlugin::default())
+    .add_plugin(EventsPlugin::default());
 
     // add resources
     builder.insert_resource(Textures::default());
@@ -56,7 +57,8 @@ fn main() {
     .add_system(camera_system.system())
     .add_system(bot_system.system())
     .add_system(test_system.system())
-    .add_system(projectile_system.system());
+    .add_system(projectile_system.system())
+    .add_system(physics_system.system());
 
     builder.run();
 }

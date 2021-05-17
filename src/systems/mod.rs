@@ -22,3 +22,6 @@ pub use test::*;
 
 mod projectile;
 pub use projectile::*;
+
+mod physics;
+pub use physics::*;
