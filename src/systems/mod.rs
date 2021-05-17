@@ -25,3 +25,6 @@ pub use projectile::*;
 
 mod physics;
 pub use physics::*;
+
+mod health;
+pub use health::*;

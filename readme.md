@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-05-17  50m worked on physics system, event plugin and tried to fix/circumvent issue with RustC nightly failing to build sometimes, added functional gun
+- 2021-05-17  60m worked on physics system, event plugin and tried to fix/circumvent issue with RustC nightly failing to build sometimes, added functional gun, added health system
 - 2021-05-16  55m worked on bullet spawning and hitting, started working on collision events
 - 2021-05-14  70m worked on turret system and bullet spawning
 - 2021-05-12  15m worked on turret system

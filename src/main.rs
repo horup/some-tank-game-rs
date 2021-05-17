@@ -58,7 +58,8 @@ fn main() {
     .add_system(bot_system.system())
     .add_system(test_system.system())
     .add_system(projectile_system.system())
-    .add_system(physics_system.system());
+    .add_system(physics_system.system())
+    .add_system(health_system.system());
 
     builder.run();
 }

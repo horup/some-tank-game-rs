@@ -26,7 +26,6 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
         e.insert_bundle(sprite_sheet_bundle);
 
         if let Some(entity) = tb.owner {
-           println!("owner");
             e.insert(Owner::from(entity));
         }
 
