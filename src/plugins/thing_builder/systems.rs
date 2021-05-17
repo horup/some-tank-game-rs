@@ -26,6 +26,7 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
         e.insert_bundle(sprite_sheet_bundle);
 
         if let Some(entity) = tb.owner {
+           println!("owner");
             e.insert(Owner::from(entity));
         }
 
@@ -51,10 +52,12 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
                 e.insert(rigid_body);
                 
                 let collider = ColliderBuilder::cuboid(1.0/8.0, 1.0/8.0)
-                .user_data(e.id().to_bits() as u128);
+                .user_data(e.id().to_bits() as u128)
+                .modify_solver_contacts(true);
                 e.insert(collider);
 
                 e.insert(Projectile::default());
+
             }
 
         }

@@ -58,6 +58,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
     }
 
     pub fn spawn_tank(&mut self, x:f32, y:f32) -> Entity {
+        let mut body = self.commands.spawn();
         let texture_atlas_handle = self.textures.tank_atlas.clone();
 
         let transform = Transform { 
@@ -69,9 +70,11 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .translation(x, y)
         .linear_damping(1.5)
         .angular_damping(1.5);
-        let collider = ColliderBuilder::cuboid(0.5, 0.5);
 
-        let body = self.commands.spawn_bundle(SpriteSheetBundle {
+        let collider = ColliderBuilder::cuboid(0.5, 0.5)
+        .user_data(body.id().to_bits() as u128);
+
+        let body = body.insert_bundle(SpriteSheetBundle {
             texture_atlas:texture_atlas_handle.clone(),
             transform,
             sprite:TextureAtlasSprite {

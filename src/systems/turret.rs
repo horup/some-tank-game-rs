@@ -35,7 +35,7 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
                 if turret.cooldown == 0.0 && turret.trigger {
                     turret.cooldown = 1.0;
                     let mut e = commands.spawn();
-                    let v = Vec3::new(1.0, 0.0, 0.0) * 0.75;
+                    let v = Vec3::new(1.0, 0.0, 0.0) * 0.5;
                     let v =  rot_global * v;
                     e.insert(ThingBuilder {
                         translation:parent_translation + v,
