@@ -66,8 +66,8 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
 
 
         // spawn some bots
-        for y in 0..10 {
-            factory.spawn_bot(10.5, y as f32 + 2.5);
+        for y in 0..100 {
+        //    factory.spawn_bot(10.5, y as f32 + 2.5);
         }
 
       //  factory.spawn_tank(5.5, 3.5, tile_map);

@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
 
-use crate::{Bot, Health, Owner, Player, Projectile, Tank, Textures, Thrust, Turret};
+use crate::{Bot, Drag, Health, Owner, Player, Projectile, Tank, Textures, Thrust, Turret};
 
 pub struct Factory<'a, 'b: 'a, 'c : 'a> {
     pub commands:&'a mut Commands<'b>,
@@ -67,9 +67,9 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         };
 
         let rigid_body = RigidBodyBuilder::new_dynamic()
-        .translation(x, y)
-        .linear_damping(1.5)
-        .angular_damping(1.5);
+        .translation(x, y);
+        //.linear_damping(1.5)
+        //.angular_damping(1.5);
 
         let collider = ColliderBuilder::cuboid(0.5, 0.5)
         .user_data(body.id().to_bits() as u128);
@@ -86,6 +86,7 @@ impl<'a, 'b, 'c, 'd> Factory<'a, 'b, 'c> {
         .insert(Tank::default())
         .insert(Thrust::default())
         .insert(Health::default())
+        .insert(Drag::default())
         .insert(rigid_body)
         .insert(collider)
         .id();

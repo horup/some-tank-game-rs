@@ -34,7 +34,9 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
 
         match tb.thing_type {
             ThingType::Unknown => {}
-            ThingType::Tank => {}
+            ThingType::Tank => {
+
+            }
             ThingType::Bullet => {
                 let speed = 10.0;
                 let v = Vec3::new(speed, 0.0, 0.0);
@@ -54,9 +56,7 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
                 .user_data(e.id().to_bits() as u128)
                 .modify_solver_contacts(true);
                 e.insert(collider);
-
                 e.insert(Projectile::default());
-
             }
 
         }

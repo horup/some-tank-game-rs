@@ -53,13 +53,15 @@ fn main() {
     .add_system(mouse_input_system.system())
     .add_system(game_system.system())
     .add_system(movement_system.system())
+    .add_system(drag_system.system())
     .add_system(turret_system.system())
     .add_system(camera_system.system())
     .add_system(bot_system.system())
     .add_system(test_system.system())
     .add_system(projectile_system.system())
     .add_system(physics_system.system())
-    .add_system(health_system.system());
+    .add_system(health_system.system())
+    .add_system(tank_system.system());
 
     builder.run();
 }
