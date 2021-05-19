@@ -1,15 +1,15 @@
 use bevy::math::Vec3;
 
 pub struct Drag {
-    pub drag_front:Vec3,
-    pub drag_side:Vec3
+    pub front:f32,
+    pub side:f32
 }
 
 impl Default for Drag {
     fn default() -> Self {
         Self {
-            drag_front:Vec3::new(10.0, 0.0, 0.0),
-            drag_side:Vec3::new(0.0, 100.0, 0.0)
+            front:10.0,
+            side:100.0
         }
     }
 }

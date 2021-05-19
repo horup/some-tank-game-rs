@@ -9,7 +9,6 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
     if let Ok((_player, mut tank, children)) = player.single_mut() {
         
         // tank movement input
-        let speed = 2.0;
         let mut v = Vec3::default();
         tank.tracks[0] = 0.0;
         tank.tracks[1] = 0.0;
@@ -17,19 +16,33 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
         if keyboard_input.pressed(KeyCode::W) {
             tank.tracks[0] = s;
             tank.tracks[1] = s;
+
+            if keyboard_input.pressed(KeyCode::A) {
+                tank.tracks[1] = 0.0;
+            } else if keyboard_input.pressed(KeyCode::D) {
+                tank.tracks[0] = 0.0;
+            }
         }
         else if keyboard_input.pressed(KeyCode::S) {
             tank.tracks[0] = -s;
             tank.tracks[1] = -s;
+
+            if keyboard_input.pressed(KeyCode::A) {
+                tank.tracks[1] = 0.0;
+            } else if keyboard_input.pressed(KeyCode::D) {
+                tank.tracks[0] = 0.0;
+            }
+        } else {
+            if keyboard_input.pressed(KeyCode::A) {
+                tank.tracks[0] = s;
+                tank.tracks[1] = -s;
+            }
+            else if keyboard_input.pressed(KeyCode::D) {
+                tank.tracks[0] = -s;
+                tank.tracks[1] = s;
+            }
         }
 
-        if keyboard_input.pressed(KeyCode::A) {
-            tank.tracks[0] = s;
-            //tank.tracks[1] = -1.0;
-        }
-        else if keyboard_input.pressed(KeyCode::D) {
-            tank.tracks[1] = s;
-        }
 
 
         // turret input
