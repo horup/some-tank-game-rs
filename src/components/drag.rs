@@ -8,8 +8,8 @@ pub struct Drag {
 impl Default for Drag {
     fn default() -> Self {
         Self {
-            front:10.0,
-            side:100.0
+            front:1.0,
+            side:10.0
         }
     }
 }

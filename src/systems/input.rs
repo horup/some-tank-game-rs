@@ -28,9 +28,9 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
             tank.tracks[1] = -s;
 
             if keyboard_input.pressed(KeyCode::A) {
-                tank.tracks[1] = 0.0;
-            } else if keyboard_input.pressed(KeyCode::D) {
                 tank.tracks[0] = 0.0;
+            } else if keyboard_input.pressed(KeyCode::D) {
+                tank.tracks[1] = 0.0;
             }
         } else {
             if keyboard_input.pressed(KeyCode::A) {
