@@ -1,29 +1,19 @@
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
-use crate::{Owner, Projectile};
+use crate::{Owner, Projectile, Effect};
 
 use super::*;
 
 pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity, &ThingBuilder), Added<ThingBuilder>>, texture_atlases:Res<TextureAtlases>) {
     query.for_each_mut(|(e, tb)| {
         let mut e = commands.entity(e);
-        let transform = Transform {
+        let mut transform = Transform {
             translation:tb.translation,
             rotation:tb.rotation,
             scale:Vec3::splat(1.0 / 8.0)
         };
         
-        let sprite_sheet_bundle = SpriteSheetBundle {
-            texture_atlas:texture_atlases.get_atlas(tb.thing_type),
-            transform,
-            sprite:TextureAtlasSprite {
-                index:texture_atlases.get_index(tb.thing_type),
-                ..Default::default()
-            },
-            ..Default::default()
-        };
-
-        e.insert_bundle(sprite_sheet_bundle);
+     
 
         if let Some(entity) = tb.owner {
             e.insert(Owner::from(entity));
@@ -58,11 +48,35 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
                 e.insert(collider);
                 e.insert(Projectile::default());
             }
-
+            ThingType::Effect(effect_type) => {
+                match effect_type {
+                    EffectType::BulletHit => {
+                        transform.scale = transform.scale * 0.5;
+                        e.insert(Effect {
+                            timer:0.5,
+                            grow:1.0,
+                            ..Default::default()
+                        });
+                    }
+                }
+            }
         }
+
+        let sprite_sheet_bundle = SpriteSheetBundle {
+            texture_atlas:texture_atlases.get_atlas(tb.thing_type),
+            transform,
+            sprite:TextureAtlasSprite {
+                index:texture_atlases.get_index(tb.thing_type),
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+
+        e.insert_bundle(sprite_sheet_bundle);
     });
 }
 
 pub fn thing_builder_init_system(mut textures:ResMut<TextureAtlases>, asset_server:Res<AssetServer>, mut texture_atlases:ResMut<Assets<TextureAtlas>>) {
     textures.tanks = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("tanks.png"), Vec2::new(8.0, 8.0), 4, 4));
+    textures.white = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("white.png"), Vec2::new(8.0, 8.0), 1, 1));
 }

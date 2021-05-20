@@ -1,11 +1,16 @@
 use bevy::{math::{Quat, Vec3}, prelude::Entity};
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum EffectType {
+    BulletHit
+}
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ThingType {
     Unknown,
     Tank,
-    Bullet
+    Bullet,
+    Effect(EffectType)
 }
 
 impl Default for ThingType {

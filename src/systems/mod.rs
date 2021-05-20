@@ -34,3 +34,6 @@ pub use drag::*;
 
 mod tank;
 pub use tank::*;
+
+mod effect;
+pub use effect::*;

@@ -24,3 +24,6 @@ pub use thrust::*;
 
 mod drag;
 pub use drag::*;
+
+mod effect;
+pub use effect::*;

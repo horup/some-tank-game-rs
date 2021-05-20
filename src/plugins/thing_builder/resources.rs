@@ -4,7 +4,8 @@ use crate::ThingType;
 
 #[derive(Default)]
 pub struct TextureAtlases {
-    pub tanks:Handle<TextureAtlas>
+    pub tanks:Handle<TextureAtlas>,
+    pub white:Handle<TextureAtlas>
 }
 
 impl TextureAtlases {
@@ -13,6 +14,7 @@ impl TextureAtlases {
             ThingType::Unknown => self.tanks.clone(),
             ThingType::Tank => self.tanks.clone(),
             ThingType::Bullet => self.tanks.clone(),
+            ThingType::Effect(_) => self.white.clone()
         }
     }
 
@@ -20,7 +22,8 @@ impl TextureAtlases {
         match thing_type {
             ThingType::Unknown => {0}
             ThingType::Tank => {0}
-            ThingType::Bullet => {2}
+            ThingType::Bullet => {2},
+            ThingType::Effect(_) => {0}
         }
     }
 }

@@ -1,7 +1,7 @@
 
 use bevy::prelude::*;
 
-use crate::{Factory, ThingBuilder, Turret, resources::Textures};
+use crate::{EffectType, Factory, ThingBuilder, ThingType, Turret, resources::Textures};
 
 
 pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>) {
@@ -42,6 +42,12 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
                         rotation:rot_global,
                         thing_type:crate::ThingType::Bullet,
                         owner:Some(parent_entity.0)
+                    });
+
+                    e.insert(ThingBuilder {
+                        translation:parent_translation + v,
+                        thing_type:ThingType::Effect(EffectType::BulletHit),
+                        ..Default::default()
                     });
                 }
             }

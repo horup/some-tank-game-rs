@@ -61,7 +61,8 @@ fn main() {
     .add_system(projectile_system.system())
     .add_system(physics_system.system())
     .add_system(health_system.system())
-    .add_system(tank_system.system());
+    .add_system(tank_system.system())
+    .add_system(effect_system.system());
 
     builder.run();
 }
