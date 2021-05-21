@@ -44,11 +44,6 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
                         owner:Some(parent_entity.0)
                     });
 
-                    e.insert(ThingBuilder {
-                        translation:parent_translation + v,
-                        thing_type:ThingType::Effect(EffectType::BulletHit),
-                        ..Default::default()
-                    });
                 }
             }
         }

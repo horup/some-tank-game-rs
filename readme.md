@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-05-21  30m worked on effects
 - 2021-05-20  30m worked on effects
 - 2021-05-19  100m worked on tank movement
 - 2021-05-18  70m worked on fixing physics sometimes behaving strange, worked on tank movement and tank system

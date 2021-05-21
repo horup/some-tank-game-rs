@@ -51,12 +51,9 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
             ThingType::Effect(effect_type) => {
                 match effect_type {
                     EffectType::BulletHit => {
-                        transform.scale = transform.scale * 0.5;
-                        e.insert(Effect {
-                            timer:0.5,
-                            grow:1.0,
-                            ..Default::default()
-                        });
+                        transform.scale = transform.scale * 0.25;
+                        transform.translation.z = 1.0;
+                        e.insert(Effect::new(0.25, 4.0, true).with_start_fade(0.25));
                     }
                 }
             }
