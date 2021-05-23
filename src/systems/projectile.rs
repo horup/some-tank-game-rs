@@ -8,7 +8,7 @@ pub fn projectile_system(mut commands:Commands, mut projectile_hit_events:EventR
         if let Ok(owner) = owners.get_component::<Owner>(hit_event.projectile) {
             if owner.owner != hit_event.target {
                 let mut projectile = commands.entity(hit_event.projectile);
-                projectile.despawn();
+                projectile.despawn_recursive();
                 apply_damage_writer.send(ApplyDamageEvent {
                     amount:100.0,
                     target:hit_event.target

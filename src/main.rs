@@ -58,8 +58,8 @@ fn main() {
     .add_system(camera_system.system())
     .add_system(bot_system.system())
     .add_system(test_system.system())
-    .add_system(projectile_system.system())
-    .add_system(physics_system.system())
+    .add_system(projectile_system.system().after("physics"))
+    .add_system(physics_system.system().label("physics"))
     .add_system(health_system.system())
     .add_system(tank_system.system())
     .add_system(effect_system.system());
