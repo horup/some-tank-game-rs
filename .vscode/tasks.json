@@ -12,6 +12,22 @@
 				"isDefault": true
 			},
 			"label": "rust: cargo run"
+		},
+		{
+			"type": "cargo",
+			"command": "build --release",
+			"problemMatcher": [
+				"$rustc"
+			],
+			"group": "build",
+			"label": "rust: cargo build release"
+		},
+		{
+			"label": "wasm-pack build release",
+			"type": "process",
+			"command":"wasm-pack",
+			"args": ["build", "--target", "web", "--release"],
+			"problemMatcher":"$rustc"
 		}
 	]
 }

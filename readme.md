@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-05-24  
+- 2021-05-24  50m played around with v-sync off, tried to to get to compile for wasm, changed resolver to 2.0
 - 2021-05-23  40m worked on contect pairs to get effect spawning to work
 - 2021-05-22  10m worked on contact pairs to enable effect spawning at contact point
 - 2021-05-21  30m worked on effects
