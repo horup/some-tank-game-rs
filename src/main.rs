@@ -23,13 +23,23 @@ pub use plugins::*;
 fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
     rapier.gravity.x = 0.0;
     rapier.gravity.y = 0.0;
+    rapier.time_dependent_number_of_timesteps = true;
     new_game_writer.send(NewGameEvent::default());
 }
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() {
     let mut builder = App::build();
-    
+    let window = WindowDescriptor {
+        title: "Blueprint 3.0".to_string(),
+        width: 640.0,
+        height: 480.0,
+        vsync: false,
+        ..Default::default()
+    };
+    builder.insert_resource(window);
+
+
     // add plugins
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPlugin)
@@ -38,7 +48,7 @@ fn main() {
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default());
-
+    
     // add resources
     builder.insert_resource(Textures::default());
     builder.insert_resource(Mouse::default());
