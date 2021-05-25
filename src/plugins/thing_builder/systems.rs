@@ -4,7 +4,7 @@ use crate::{Drag, Effect, Health, Owner, Projectile, Tank, Turret};
 
 use super::*;
 
-pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity, &ThingBuilder), Added<ThingBuilder>>, texture_atlases:Res<TextureAtlases>) {
+pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &ThingBuilder), Added<ThingBuilder>>, texture_atlases:Res<TextureAtlases>) {
     query.for_each_mut(|(e, tb)| {
         let mut e = commands.entity(e);
         let mut transform = Transform {

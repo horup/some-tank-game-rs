@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_rapier2d::{physics::RigidBodyHandleComponent, rapier::{dynamics::{RigidBodySet}, geometry::ColliderSet}};
+use bevy_rapier2d::{physics::RigidBodyHandleComponent, rapier::{dynamics::{RigidBodySet}}};
 
 use crate::{Drag};
 
@@ -9,10 +9,9 @@ fn project(a:Vec2, b:Vec2) -> Vec2 {
     return a1;
 }
 
-pub fn drag_system( mut dragable:Query<Dragable>, mut rigid_body_set:ResMut<RigidBodySet>, colliders:ResMut<ColliderSet>, time:Res<Time>) {
+pub fn drag_system(dragable:Query<Dragable>, mut rigid_body_set:ResMut<RigidBodySet>, time:Res<Time>) {
     dragable.for_each_mut(|(drag, rigid_body)| {
         if let Some(rigid_body) = rigid_body_set.get_mut(rigid_body.handle()) {
-
             let rotation = rigid_body.position().rotation;
             let front:Vec2 = [rotation.re, rotation.im].into();
             let side = front.perp();

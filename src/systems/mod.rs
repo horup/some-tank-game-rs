@@ -14,9 +14,6 @@ pub use turret::*;
 mod bot;
 pub use bot::*;
 
-mod test;
-pub use test::*;
-
 mod projectile;
 pub use projectile::*;
 

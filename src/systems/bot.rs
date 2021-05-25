@@ -1,8 +1,7 @@
 use bevy::prelude::*;
-use rand::random;
 
-use crate::{Bot, Tank};
+use crate::{Tank};
 
-pub fn bot_system(mut query:Query<(&mut Tank)>, time:Res<Time>) {
+pub fn bot_system(_query:Query<(Entity, &Tank)>, _time:Res<Time>) {
    
 }

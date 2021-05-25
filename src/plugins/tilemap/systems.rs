@@ -20,7 +20,7 @@ pub fn tilemap_added_system(
         });
 
 
-        let mut m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);
+        let m:Mesh = Mesh::new(PrimitiveTopology::TriangleList);
         let m = meshes.add(m);
         update_tilemap_mesh(meshes.get_mut(m.clone()).unwrap(), &mut tilemap);
 

@@ -1,7 +1,7 @@
-use bevy::{ prelude::*, render::camera::Camera};
+use bevy::{ prelude::*};
 use crate::{NewGameEvent, Player, Tank, Turret, resources::Mouse};
 
-pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &mut Tank, &Children)>, mut turrets:Query<(&mut Turret)>) {
+pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &mut Tank, &Children)>, mut turrets:Query<&mut Turret>) {
     if keyboard_input.just_pressed(KeyCode::F5) {
         new_game.send(NewGameEvent::default());
     }
@@ -9,7 +9,7 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
     if let Ok((_player, mut tank, children)) = player.single_mut() {
         
         // tank movement input
-        let mut v = Vec3::default();
+        let _v = Vec3::default();
         tank.tracks[0] = 0.0;
         tank.tracks[1] = 0.0;
         let s = 1.0;

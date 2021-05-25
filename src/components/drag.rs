@@ -1,5 +1,3 @@
-use bevy::math::Vec3;
-
 pub struct Drag {
     pub front:f32,
     pub side:f32

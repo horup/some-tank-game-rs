@@ -3,7 +3,7 @@ use bevy_rapier2d::{physics::EventQueue, rapier::geometry::{ColliderSet, Contact
 
 use crate::{Projectile, ProjectileHitEvent};
 
-pub fn physics_system(mut physics_events:Res<EventQueue>, collider_set:Res<ColliderSet>, mut commands:Commands, projectiles:Query<&Projectile>, mut projectile_hit_events:EventWriter<ProjectileHitEvent>, narrow_set:Res<NarrowPhase>) {
+pub fn physics_system(physics_events:Res<EventQueue>, collider_set:Res<ColliderSet>, mut commands:Commands, projectiles:Query<&Projectile>, mut projectile_hit_events:EventWriter<ProjectileHitEvent>, narrow_set:Res<NarrowPhase>) {
     while let Ok(contact_event) = physics_events.contact_events.pop() {
         match contact_event {
             ContactEvent::Started(h1, h2) => {
@@ -13,7 +13,7 @@ pub fn physics_system(mut physics_events:Res<EventQueue>, collider_set:Res<Colli
 
                         if let Some(contact_pair) = narrow_set.contact_pair(h1, h2) {
                             if contact_pair.has_any_active_contact {
-                                let col1_translation = col1.position().translation;
+                                let _col1_translation = col1.position().translation;
                                 let col1:Entity = Entity::from_bits(col1.user_data as u64);
                                 let col2:Entity = Entity::from_bits(col2.user_data as u64);
                                 if let Some(contact) = contact_pair.find_deepest_contact() {
@@ -22,8 +22,8 @@ pub fn physics_system(mut physics_events:Res<EventQueue>, collider_set:Res<Colli
                                         world_point = [p.point.x, p.point.y, 0.0].into();
                                     }
 
-                                    let mut e = commands.entity(col1);
-                                    if let Ok(component) = projectiles.get_component::<Projectile>(e.id()) {
+                                    let e = commands.entity(col1);
+                                    if let Ok(_component) = projectiles.get_component::<Projectile>(e.id()) {
 
                                         projectile_hit_events.send(ProjectileHitEvent {
                                             projectile:e.id(),

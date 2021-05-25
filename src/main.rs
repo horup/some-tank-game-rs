@@ -20,7 +20,7 @@ mod plugins;
 pub use plugins::*;
 
 
-fn startup_system(mut commands:Commands, mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
+fn startup_system(mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
     rapier.gravity.x = 0.0;
     rapier.gravity.y = 0.0;
     rapier.time_dependent_number_of_timesteps = true;
@@ -43,7 +43,7 @@ fn main() {
     // add plugins
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPlugin)
-    //.add_plugin(LogDiagnosticsPlugin::default())
+    .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(FrameTimeDiagnosticsPlugin::default())
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
@@ -66,7 +66,6 @@ fn main() {
     .add_system(turret_system.system())
     .add_system(camera_system.system())
     .add_system(bot_system.system())
-    .add_system(test_system.system())
     .add_system(projectile_system.system().after("physics"))
     .add_system(physics_system.system().label("physics"))
     .add_system(health_system.system())

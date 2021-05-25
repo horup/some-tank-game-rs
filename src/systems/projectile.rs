@@ -1,7 +1,7 @@
 use bevy::prelude::*;
-use bevy_rapier2d::{physics::EventQueue, rapier::geometry::{Collider, ColliderHandle, ColliderSet, ContactEvent}};
 
-use crate::{ApplyDamageEvent, EffectType, Health, Owner, Projectile, ProjectileHitEvent, ThingBuilder, ThingType};
+
+use crate::{ApplyDamageEvent, EffectType, Owner, ProjectileHitEvent, ThingBuilder, ThingType};
 
 pub fn projectile_system(mut commands:Commands, mut projectile_hit_events:EventReader<ProjectileHitEvent>, owners:Query<&Owner>, mut apply_damage_writer:EventWriter<ApplyDamageEvent>) {
     for hit_event in projectile_hit_events.iter() {
@@ -13,7 +13,6 @@ pub fn projectile_system(mut commands:Commands, mut projectile_hit_events:EventR
                     amount:100.0,
                     target:hit_event.target
                 });
-
                 
                 let mut e = commands.spawn();
 
