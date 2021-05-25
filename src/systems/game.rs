@@ -22,8 +22,8 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
                 align_self: AlignSelf::FlexEnd,
                 position_type: PositionType::Absolute,
                 position: Rect {
-                    bottom: Val::Px(5.0),
-                    right: Val::Px(15.0),
+                    top: Val::Px(0.0),
+                    left: Val::Px(0.0),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -31,10 +31,10 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
             // Use the `Text::with_section` constructor
             text: Text::with_section(
                 // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                "hello\nbevy!",
+                "Blueprint 3.0",
                 TextStyle {
                     font: asset_server.load("fonts/default.ttf"),
-                    font_size: 10.0,
+                    font_size: 16.0,
                     color: Color::WHITE,
                 },
                 // Note: You can use `Default::default()` in place of the `TextAlignment`
