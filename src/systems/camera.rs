@@ -1,16 +1,14 @@
 use bevy::{prelude::*, render::camera::{Camera, CameraProjection, OrthographicProjection}};
-use crate::Tilemap;
+use crate::{GamePiece, Tilemap};
 
-pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera, &mut Transform)>, tilemap:Query<&Tilemap>,  windows: ResMut<Windows>) {
+pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera, &mut Transform, &GamePiece)>, tilemap:Query<&Tilemap>,  windows: ResMut<Windows>) {
     let camera = camera.single_mut();
     let tilemap = tilemap.single();
     let primary = windows.get_primary();
     match (camera, tilemap, primary) {
         (Ok(camera), Ok(tilemap), Some(primary)) => {
-            let (mut projection, mut camera, mut transform) = camera;
-            
+            let (mut projection, mut camera, mut transform, _) = camera;
             projection.scaling_mode = bevy::render::camera::ScalingMode::None;
-
 
             // calculate pixel perfect integer scaling
             let tile_size = 8;

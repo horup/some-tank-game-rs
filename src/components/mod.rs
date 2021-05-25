@@ -27,3 +27,6 @@ pub use drag::*;
 
 mod effect;
 pub use effect::*;
+
+mod game_piece;
+pub use game_piece::*;

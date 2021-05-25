@@ -1,17 +1,51 @@
 use bevy::prelude::*;
-use crate::{Factory, NewGameEvent, Tile, Tilemap, resources::Textures};
+use crate::{Factory, GamePiece, NewGameEvent, Tile, Tilemap, resources::Textures};
 
 pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
     for e in new_game_reader.iter() {
-     
         // cleanup existing entities
         entities.for_each_mut(|e| {
             let mut e = commands.entity(e);
             e.despawn_recursive();
         });
+      
+        // UI camera
+        commands.spawn_bundle(UiCameraBundle::default());
 
         // create camera
-        commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+        commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GamePiece::default());
+
+        // spawn fps:
+        commands
+        .spawn_bundle(TextBundle {
+            style: Style {
+                align_self: AlignSelf::FlexEnd,
+                position_type: PositionType::Absolute,
+                position: Rect {
+                    bottom: Val::Px(5.0),
+                    right: Val::Px(15.0),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+            // Use the `Text::with_section` constructor
+            text: Text::with_section(
+                // Accepts a `String` or any type that converts into a `String`, such as `&str`
+                "hello\nbevy!",
+                TextStyle {
+                    font: asset_server.load("fonts/default.ttf"),
+                    font_size: 10.0,
+                    color: Color::WHITE,
+                },
+                // Note: You can use `Default::default()` in place of the `TextAlignment`
+                TextAlignment {
+                    horizontal: HorizontalAlign::Center,
+                    ..Default::default()
+                },
+            ),
+            ..Default::default()
+        });
+
 
         // create tilemap
         let size = e.map_size;

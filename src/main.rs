@@ -43,7 +43,7 @@ fn main() {
     // add plugins
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPlugin)
-    .add_plugin(LogDiagnosticsPlugin::default())
+    //.add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(FrameTimeDiagnosticsPlugin::default())
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
