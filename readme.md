@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-05-25  30m worked on adding text support to game
+- 2021-05-25  50m worked on adding text support to game + refactored
 - 2021-05-24  65m played around with v-sync off, tried to to get to compile for wasm, changed resolver to 2.0, fixed issue related to vsync off
 - 2021-05-23  40m worked on contect pairs to get effect spawning to work
 - 2021-05-22  10m worked on contact pairs to enable effect spawning at contact point
