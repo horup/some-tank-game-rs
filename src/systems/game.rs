@@ -1,11 +1,11 @@
 use bevy::prelude::*;
-use crate::{Factory, GamePiece, NewGameEvent, Tile, Tilemap, resources::Textures};
+use crate::{GamePiece, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::Textures};
 
-pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
+pub fn game_system(mut game_pieces:Query<(Entity, &GamePiece)>, mut commands: Commands, asset_server: Res<AssetServer>, mut materials: ResMut<Assets<StandardMaterial>>, mut meshes: ResMut<Assets<Mesh>>, mut new_game_reader:EventReader<NewGameEvent>, textures:Res<Textures>) {
     for e in new_game_reader.iter() {
         // cleanup existing entities
-        entities.for_each_mut(|e| {
-            let mut e = commands.entity(e);
+        game_pieces.for_each_mut(|e| {
+            let mut e = commands.entity(e.0);
             e.despawn_recursive();
         });
       
@@ -78,8 +78,8 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
 
         for y in 0..size {
             for x in 0..size {
-                if y %3 == 0 {
-                    if x % (1 + y) == 0 {
+                if x % 5 == 0 {
+                    if y % 5 == 0 {
                         tilemap.set_tile(Tile {
                             index:1,
                             solid:true,
@@ -92,17 +92,24 @@ pub fn game_system(mut entities:Query<Entity>, mut commands: Commands, asset_ser
 
         commands.spawn().insert(tilemap);
 
+        // spawn player
+        commands.spawn().insert(ThingBuilder {
+            translation:Vec3::new(2.5, 2.5, 0.0),
+            thing_type:ThingType::Tank,
+            ..Default::default()
+        })
+        .insert(Player::default());
 
-        let mut factory = Factory::new(&mut commands, &textures);
+        //let mut factory = Factory::new(&mut commands, &textures);
 
         // spawn a player
-        factory.spawn_player(2.5, 2.5);
+        //factory.spawn_player(2.5, 2.5);
 
 
         // spawn some bots
-        for y in 0..100 {
-        //    factory.spawn_bot(10.5, y as f32 + 2.5);
-        }
+       /* for y in 0..100 {
+            factory.spawn_bot(10.5, y as f32 + 2.5);
+        }*/
 
       //  factory.spawn_tank(5.5, 3.5, tile_map);
         //let f = Factory::new(&mut commands, &asset_server);

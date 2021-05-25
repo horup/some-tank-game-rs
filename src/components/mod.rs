@@ -19,9 +19,6 @@ pub use owner::*;
 mod health;
 pub use health::*;
 
-mod thrust;
-pub use thrust::*;
-
 mod drag;
 pub use drag::*;
 

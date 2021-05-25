@@ -12,9 +12,9 @@ use systems::*;
 
 mod resources;
 use resources::*;
-
+/*
 mod factory;
-pub use factory::*;
+pub use factory::*;*/
 
 mod plugins;
 pub use plugins::*;
@@ -62,7 +62,6 @@ fn main() {
     .add_system(input_system.system())
     .add_system(mouse_input_system.system())
     .add_system(game_system.system())
-    .add_system(movement_system.system())
     .add_system(drag_system.system())
     .add_system(turret_system.system())
     .add_system(camera_system.system())

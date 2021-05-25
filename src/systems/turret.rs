@@ -1,7 +1,7 @@
 
 use bevy::prelude::*;
 
-use crate::{EffectType, Factory, ThingBuilder, ThingType, Turret, resources::Textures};
+use crate::{EffectType, ThingBuilder, ThingType, Turret, resources::Textures};
 
 
 pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>) {

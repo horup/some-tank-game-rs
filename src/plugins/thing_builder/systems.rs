@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
-use crate::{Owner, Projectile, Effect};
+use crate::{Drag, Effect, Health, Owner, Projectile, Tank, Turret};
 
 use super::*;
 
@@ -25,7 +25,48 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
         match tb.thing_type {
             ThingType::Unknown => {}
             ThingType::Tank => {
+                let rigid_body = RigidBodyBuilder::new_dynamic()
+                .translation(x, y);
+                let collider = ColliderBuilder::cuboid(0.5, 0.5)
+                .user_data(e.id().to_bits() as u128);
+                e.insert(rigid_body);
+                e.insert(collider);
+                e.insert(Tank::default());
+                e.insert(Health::default());
+                e.insert(Drag::default());
 
+                let sprite_sheet_bundle = SpriteSheetBundle {
+                    texture_atlas:texture_atlases.get_atlas(tb.thing_type),
+                    transform,
+                    sprite:TextureAtlasSprite {
+                        index:texture_atlases.get_index(tb.thing_type),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                };
+        
+                e.insert_bundle(sprite_sheet_bundle);
+                let tank = e.id();
+
+                let turret = commands.spawn_bundle(SpriteSheetBundle {
+                    texture_atlas:texture_atlases.tanks.clone(),
+                    sprite:TextureAtlasSprite {
+                        index:1,
+                        ..Default::default()
+                    },
+                    transform:Transform {
+                        translation:Vec3::new(0.0, 0.0, 1.0),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                })
+                .insert(Turret::default())
+                .id();
+        
+                // adding Parent component to the entity above does not work correct due to scale
+                // is not properly propagated: https://github.com/bevyengine/bevy/issues/1807
+                // can be fixed by doing this instead
+                commands.entity(tank).push_children(&[turret]);
             }
             ThingType::Bullet => {
                 let speed = 10.0;
@@ -47,6 +88,18 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
                 .modify_solver_contacts(true);
                 e.insert(collider);
                 e.insert(Projectile::default());
+
+                let sprite_sheet_bundle = SpriteSheetBundle {
+                    texture_atlas:texture_atlases.get_atlas(tb.thing_type),
+                    transform,
+                    sprite:TextureAtlasSprite {
+                        index:texture_atlases.get_index(tb.thing_type),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                };
+        
+                e.insert_bundle(sprite_sheet_bundle);
             }
             ThingType::Effect(effect_type) => {
                 match effect_type {
@@ -54,22 +107,28 @@ pub fn thing_builder_added_system(mut commands:Commands, mut query:Query<(Entity
                         transform.scale = transform.scale * 0.25;
                         transform.translation.z = 1.0;
                         e.insert(Effect::new(0.25, 4.0, true).with_start_fade(0.25));
+
+                        let sprite_sheet_bundle = SpriteSheetBundle {
+                            texture_atlas:texture_atlases.get_atlas(tb.thing_type),
+                            transform,
+                            sprite:TextureAtlasSprite {
+                                index:texture_atlases.get_index(tb.thing_type),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        };
+                
+                        e.insert_bundle(sprite_sheet_bundle);
+
+
                     }
                 }
+
+                
             }
         }
 
-        let sprite_sheet_bundle = SpriteSheetBundle {
-            texture_atlas:texture_atlases.get_atlas(tb.thing_type),
-            transform,
-            sprite:TextureAtlasSprite {
-                index:texture_atlases.get_index(tb.thing_type),
-                ..Default::default()
-            },
-            ..Default::default()
-        };
-
-        e.insert_bundle(sprite_sheet_bundle);
+      
     });
 }
 
