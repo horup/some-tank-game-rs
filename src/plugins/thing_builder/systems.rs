@@ -26,7 +26,8 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
             ThingType::Unknown => {}
             ThingType::Tank => {
                 let rigid_body = RigidBodyBuilder::new_dynamic()
-                .translation(x, y);
+                .translation(x, y)
+                .rotation(tb.rotation.angle_between(Quat::default()));
                 let collider = ColliderBuilder::cuboid(0.5, 0.5)
                 .user_data(e.id().to_bits() as u128);
                 e.insert(rigid_body);

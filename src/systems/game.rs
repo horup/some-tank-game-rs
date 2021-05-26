@@ -1,5 +1,7 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::*;
-use crate::{GamePiece, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap};
+use crate::{Bot, GamePiece, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap};
 
 pub fn game_system(game_pieces:Query<(Entity, &GamePiece)>, mut commands: Commands, asset_server: Res<AssetServer>, mut new_game_reader:EventReader<NewGameEvent>) {
     for e in new_game_reader.iter() {
@@ -95,10 +97,20 @@ pub fn game_system(game_pieces:Query<(Entity, &GamePiece)>, mut commands: Comman
         // spawn player
         commands.spawn().insert(ThingBuilder {
             translation:Vec3::new(2.5, 2.5, 0.0),
+            rotation:Quat::default(),
             thing_type:ThingType::Tank,
             ..Default::default()
         })
         .insert(Player::default());
+
+        // spawn bot
+        commands.spawn().insert(ThingBuilder {
+            translation:Vec3::new(size as f32 - 2.5, size as f32 - 2.5, 0.0),
+            thing_type:ThingType::Tank,
+            rotation:Quat::from_rotation_z(PI),
+            ..Default::default()
+        })
+        .insert(Bot::default());
     }
 }
  
