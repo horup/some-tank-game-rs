@@ -66,6 +66,7 @@ fn main() {
     .add_system(turret_system.system())
     .add_system(camera_system.system())
     .add_system(bot_system.system())
+    .add_system(bot_sensor_system.system())
     .add_system(projectile_system.system().after("physics"))
     .add_system(physics_system.system().label("physics"))
     .add_system(health_system.system())

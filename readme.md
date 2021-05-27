@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-05-27  60m worked on bot
 - 2021-05-26  25m worked on bot
 - 2021-05-25  50m worked on adding text support to game + refactored
 - 2021-05-24  65m played around with v-sync off, tried to to get to compile for wasm, changed resolver to 2.0, fixed issue related to vsync off
