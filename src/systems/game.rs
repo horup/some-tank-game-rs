@@ -103,14 +103,20 @@ pub fn game_system(game_pieces:Query<(Entity, &GamePiece)>, mut commands: Comman
         })
         .insert(Player::default());
 
+        let mut spawn_bot = |x, y| {
+            commands.spawn().insert(ThingBuilder {
+                translation:Vec3::new(x, y, 0.0),
+                rotation:Quat::default(),
+                thing_type:ThingType::Tank,
+                ..Default::default()
+            })
+            .insert(Bot::default());
+        };
+
         // spawn bot
-        commands.spawn().insert(ThingBuilder {
-            translation:Vec3::new(size as f32 - 2.5, size as f32 - 2.5, 0.0),
-            thing_type:ThingType::Tank,
-            rotation:Quat::from_rotation_z(PI),
-            ..Default::default()
-        })
-        .insert(Bot::default());
+        spawn_bot(size as f32 - 2.5, size as f32 - 2.5);
+        spawn_bot(2.5, size as f32 - 2.5);
+        spawn_bot(size as f32 - 2.5, 2.5);
     }
 }
  

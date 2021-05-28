@@ -2,14 +2,46 @@ use bevy::prelude::*;
 use bevy_rapier2d::{physics::{RigidBodyHandleComponent}, rapier::{dynamics::{RigidBodySet}, geometry::{ColliderSet, InteractionGroups, Ray}, math::Real, pipeline::QueryPipeline}};
 use rand::random;
 
-use crate::{Bot, BotState, Tank};
+use crate::{Bot, BotState, Enemy, Tank};
 
-pub fn bot_sensor_system(bots:Query<(Entity, &mut Bot)>, rigid_bodies:Query<&RigidBodyHandleComponent>, rigid_body_set:Res<RigidBodySet>, collider_set:Res<ColliderSet>, query_pipeline: Res<QueryPipeline>) {
-    bots.for_each_mut(|(entity, mut bot)| {
-        if let Ok(body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(entity) {
-            if let Some(body) = rigid_body_set.get(body.handle()) {
-                bot.sensors.obstacle_distance_front = raycast_front_distance(body, &query_pipeline, &collider_set);
-                
+pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut Bot)>, rigid_bodies:Query<&RigidBodyHandleComponent>, rigid_body_set:Res<RigidBodySet>, collider_set:Res<ColliderSet>, query_pipeline: Res<QueryPipeline>) {
+    bots.for_each_mut(|(bot_entity, mut bot)| {
+        if let Ok(bot_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(bot_entity) {
+            if let Some(bot_body) = rigid_body_set.get(bot_body.handle()) {
+                // measure distance to front
+                bot.sensors.obstacle_distance_front = raycast_front_distance(bot_body, &query_pipeline, &collider_set);
+
+                // collect know enemies
+                tanks.for_each(|(tank_entity, tank)| {
+                    if tank_entity != bot_entity {
+                        if let Ok(enemy_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(tank_entity) {
+                            if let Some(enemy_body) = rigid_body_set.get(enemy_body.handle()) {
+                                let pos:Vec3 = [enemy_body.position().translation.x, enemy_body.position().translation.y, 0.0].into();
+                                bot.sensors.known_enemies.push(Enemy {
+                                    entity:tank_entity,
+                                    position:pos
+                                });
+                            }
+                        }
+                    }
+                });
+
+                // find visibile enemies
+                bot.sensors.visible_enemies.clear();
+                let sensors = &mut bot.sensors;
+                let known_enemies = &sensors.known_enemies;
+                let visible_enemies = &mut sensors.visible_enemies;
+                for enemy in known_enemies {
+                    let test = raycast_target(enemy.position.truncate(), bot_body, &query_pipeline, &collider_set);
+                    if let Some((handle, _)) = test {
+                        if let Some(collider) = collider_set.get(handle) {
+                            let e = Entity::from_bits(collider.user_data as u64);
+                            if enemy.entity == e {
+                                visible_enemies.push(*enemy);
+                            }
+                        }
+                    }
+                }
             }
         }
     });
@@ -52,12 +84,12 @@ pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleCompo
                                 bot.mem[0] = 0.0;
                             }
                             else {
-                                if raycast_target(Vec2::default(), body, &query_pipeline, &collider_set) != None {
+                               /* if raycast_target(Vec2::default(), body, &query_pipeline, &collider_set) != None {
                                     // target is free
                                     println!("free");
                                 } else {
                                     println!("not free");
-                                }
+                                }*/
                             }
                         }
                         BotState::Rotate180 => {
@@ -111,6 +143,6 @@ fn raycast_target(target:Vec2, body: &bevy_rapier2d::rapier::dynamics::RigidBody
         dir:[dir.x, dir.y].into()
     };
     let res = query_pipeline.cast_ray(&collider_set, 
-        &ray, 1.0, true, InteractionGroups::default(), None);
+        &ray, f32::MAX, true, InteractionGroups::default(), None);
     res
 }

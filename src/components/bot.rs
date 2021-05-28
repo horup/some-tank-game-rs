@@ -1,4 +1,4 @@
-use bevy::math::Vec2;
+use bevy::{math::{Vec2, Vec3}, prelude::Entity};
 use rand::random;
 
 #[derive(Clone, Copy)]
@@ -9,7 +9,6 @@ pub enum BotState {
     Exploring
 }
 
-#[derive(Clone, Copy)]
 pub struct Bot {
     pub next_think:f64,
     pub state:BotState,
@@ -18,10 +17,18 @@ pub struct Bot {
     pub sensors:BotSensors
 }
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Default)]
 pub struct BotSensors {
     // sensed distance to front obstacle
-    pub obstacle_distance_front:f32
+    pub obstacle_distance_front:f32,
+    pub known_enemies:Vec<Enemy>,
+    pub visible_enemies:Vec<Enemy>
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Enemy {
+    pub entity:Entity,
+    pub position:Vec3
 }
 
 
