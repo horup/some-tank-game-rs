@@ -1,18 +1,23 @@
 use bevy::prelude::*;
-use bevy_rapier2d::{physics::{ColliderHandleComponent, RigidBodyHandleComponent}, rapier::{dynamics::{RigidBodySet}, geometry::{ColliderSet, InteractionGroups, NarrowPhase, Ray}, pipeline::QueryPipeline}};
+use bevy_rapier2d::{physics::{RigidBodyHandleComponent}, rapier::{dynamics::{RigidBodySet}, geometry::{ColliderSet, InteractionGroups, Ray}, math::Real, pipeline::QueryPipeline}};
 use rand::random;
 
 use crate::{Bot, BotState, Tank};
 
-pub fn bot_sensor_system(bots:Query<&mut Bot>, tanks:Query<&Tank>, rigid_bodies:Query<&RigidBodyHandleComponent>, colliders:Query<&ColliderHandleComponent>) {
-    bots.for_each_mut(|bot| {
-        println!("bot sensing");
+pub fn bot_sensor_system(bots:Query<(Entity, &mut Bot)>, rigid_bodies:Query<&RigidBodyHandleComponent>, rigid_body_set:Res<RigidBodySet>, collider_set:Res<ColliderSet>, query_pipeline: Res<QueryPipeline>) {
+    bots.for_each_mut(|(entity, mut bot)| {
+        if let Ok(body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(entity) {
+            if let Some(body) = rigid_body_set.get(body.handle()) {
+                bot.sensors.obstacle_distance_front = raycast_front_distance(body, &query_pipeline, &collider_set);
+                
+            }
+        }
     });
 }
 
 
 pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent)>, time:Res<Time>, bodies:Res<RigidBodySet>, query_pipeline:Res<QueryPipeline>, collider_set:Res<ColliderSet>) {
-    bots.for_each_mut(|(entity, mut bot, mut tank, body)| {
+    bots.for_each_mut(|(_entity, mut bot, mut tank, body)| {
         let t = time.time_since_startup().as_secs_f64();
         if let Some(body) = bodies.get(body.handle()) {
                 if bot.next_think <= t {
@@ -27,7 +32,6 @@ pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleCompo
                                 let r = random::<f32>() - 0.5;
                                 if r > 0.0 {
                                     tank.tracks = [1.0, -1.0];
-    
                                 } 
                                 else {
                                     tank.tracks = [-1.0, 1.0];
@@ -42,7 +46,7 @@ pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleCompo
                         }
                         BotState::Exploring => {
                             tank.tracks = [1.0, 1.0];
-                            if raycast_front(body, &query_pipeline, &collider_set) != None {
+                            if bot.sensors.obstacle_distance_front < 2.0 {
                                 // front of tank hit something
                                 bot.state = BotState::RandomRotate;
                                 bot.mem[0] = 0.0;
@@ -74,7 +78,7 @@ pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleCompo
     });
 }
 
-fn raycast_front(body: &bevy_rapier2d::rapier::dynamics::RigidBody, query_pipeline: &Res<QueryPipeline>, collider_set: &Res<ColliderSet>) -> Option<(bevy_rapier2d::rapier::geometry::ColliderHandle, f32)> {
+fn raycast_front_distance(body: &bevy_rapier2d::rapier::dynamics::RigidBody, query_pipeline: &Res<QueryPipeline>, collider_set: &Res<ColliderSet>) -> f32 {
     let o:Vec2 = [body.position().translation.x, body.position().translation.y].into();
     let dir:Vec2 = [body.position().rotation.re, body.position().rotation.im].into();
     let o = o + dir;
@@ -83,8 +87,13 @@ fn raycast_front(body: &bevy_rapier2d::rapier::dynamics::RigidBody, query_pipeli
         dir:[dir.x, dir.y].into()
     };
     let res = query_pipeline.cast_ray(&collider_set, 
-        &ray, 1.0, true, InteractionGroups::default(), None);
-    res
+        &ray, Real::MAX, true, InteractionGroups::default(), None);
+    
+    if let Some((_handle, r)) = res {
+        return r;
+    }
+
+    return f32::MAX;
 }
 
 
