@@ -32,10 +32,8 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 .user_data(e.id().to_bits() as u128);
                 e.insert(rigid_body);
                 e.insert(collider);
-                e.insert(Tank::default());
                 e.insert(Health::default());
                 e.insert(Drag::default());
-
                 let sprite_sheet_bundle = SpriteSheetBundle {
                     texture_atlas:texture_atlases.get_atlas(tb.thing_type),
                     transform,
@@ -63,11 +61,15 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 })
                 .insert(Turret::default())
                 .id();
-        
+
                 // adding Parent component to the entity above does not work correct due to scale
                 // is not properly propagated: https://github.com/bevyengine/bevy/issues/1807
                 // can be fixed by doing this instead
                 commands.entity(tank).push_children(&[turret]);
+                commands.entity(tank).insert(Tank {
+                    turret_entity:turret,
+                    tracks:[0.0, 0.0]
+                });
             }
             ThingType::Bullet => {
                 let speed = 10.0;

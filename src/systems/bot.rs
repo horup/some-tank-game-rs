@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::{physics::{RigidBodyHandleComponent}, rapier::{dynamics::{RigidBodySet}, geometry::{ColliderSet, InteractionGroups, Ray}, math::Real, pipeline::QueryPipeline}};
 use rand::random;
 
-use crate::{Bot, BotState, Enemy, Tank};
+use crate::{Bot, BotState, Enemy, Tank, Turret};
 
 pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut Bot)>, rigid_bodies:Query<&RigidBodyHandleComponent>, rigid_body_set:Res<RigidBodySet>, collider_set:Res<ColliderSet>, query_pipeline: Res<QueryPipeline>) {
     bots.for_each_mut(|(bot_entity, mut bot)| {
@@ -48,8 +48,8 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut 
 }
 
 
-pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent)>, time:Res<Time>, bodies:Res<RigidBodySet>, query_pipeline:Res<QueryPipeline>, collider_set:Res<ColliderSet>) {
-    bots.for_each_mut(|(_entity, mut bot, mut tank, body)| {
+pub fn bot_system(turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent, &Children)>, time:Res<Time>, bodies:Res<RigidBodySet>, query_pipeline:Res<QueryPipeline>, collider_set:Res<ColliderSet>) {
+    bots.for_each_mut(|(bot_entity, mut bot, mut tank, body, children)| {
         let t = time.time_since_startup().as_secs_f64();
         if let Some(body) = bodies.get(body.handle()) {
                 if bot.next_think <= t {
@@ -84,19 +84,16 @@ pub fn bot_system(bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleCompo
                                 bot.mem[0] = 0.0;
                             }
                             else {
-                               /* if raycast_target(Vec2::default(), body, &query_pipeline, &collider_set) != None {
-                                    // target is free
-                                    println!("free");
-                                } else {
-                                    println!("not free");
-                                }*/
+                               // track and shoot enemies
+                               for enemy in &bot.sensors.visible_enemies {
+                                  // if let Ok(turret) = 
+                               }
                             }
                         }
                         BotState::Rotate180 => {
                             if bot.mem[0] > 0.0 {
                                 tank.tracks = [1.0, -1.0];
                                 bot.mem[0] -= 1.0;
-                                println!("rotate180");
                             } else {
                                 bot.mem[0];
                                 bot.state = BotState::Idle;
