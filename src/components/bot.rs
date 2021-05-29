@@ -13,7 +13,6 @@ pub struct Bot {
     pub next_think:f64,
     pub state:BotState,
     pub mem:[f32;4],
-    pub visible_target:Option<Vec2>,
     pub sensors:BotSensors
 }
 
@@ -25,10 +24,28 @@ pub struct BotSensors {
     pub visible_enemies:Vec<Enemy>
 }
 
+impl BotSensors {
+    pub fn get_closest_visible_enemy(&self) -> Option<Enemy> {
+        if self.visible_enemies.len() > 0 {
+            let mut enemy = self.visible_enemies.first().unwrap();
+            for e in &self.visible_enemies {
+                if e.distance < enemy.distance {
+                    enemy = e;
+                }
+            }
+
+            return Some(*enemy);
+        }
+
+        None
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct Enemy {
     pub entity:Entity,
-    pub position:Vec3
+    pub position:Vec3,
+    pub distance:f32
 }
 
 
@@ -38,7 +55,6 @@ impl Default for Bot {
             next_think:random(),
             state:BotState::Idle,
             mem:Default::default(),
-            visible_target:None,
             sensors:Default::default()
         }
     }

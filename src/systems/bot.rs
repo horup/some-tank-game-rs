@@ -16,10 +16,13 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut 
                     if tank_entity != bot_entity {
                         if let Ok(enemy_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(tank_entity) {
                             if let Some(enemy_body) = rigid_body_set.get(enemy_body.handle()) {
+                                let my_pos:Vec3 = [bot_body.position().translation.x, bot_body.position().translation.y, 0.0].into();
                                 let pos:Vec3 = [enemy_body.position().translation.x, enemy_body.position().translation.y, 0.0].into();
+                                
                                 bot.sensors.known_enemies.push(Enemy {
                                     entity:tank_entity,
-                                    position:pos
+                                    position:pos,
+                                    distance: my_pos.distance(pos)
                                 });
                             }
                         }
@@ -48,7 +51,7 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut 
 }
 
 
-pub fn bot_system(turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent, &Children)>, time:Res<Time>, bodies:Res<RigidBodySet>, query_pipeline:Res<QueryPipeline>, collider_set:Res<ColliderSet>) {
+pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent, &Children)>, time:Res<Time>, bodies:Res<RigidBodySet>, query_pipeline:Res<QueryPipeline>, collider_set:Res<ColliderSet>) {
     bots.for_each_mut(|(bot_entity, mut bot, mut tank, body, children)| {
         let t = time.time_since_startup().as_secs_f64();
         if let Some(body) = bodies.get(body.handle()) {
@@ -85,9 +88,13 @@ pub fn bot_system(turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut
                             }
                             else {
                                // track and shoot enemies
-                               for enemy in &bot.sensors.visible_enemies {
-                                  // if let Ok(turret) = 
-                               }
+                                if let Ok(mut turret) = turrets.get_component_mut::<Turret>(tank.turret_entity) {
+                                    turret.trigger = false;
+                                    if let Some(enemy)  = bot.sensors.get_closest_visible_enemy() {
+                                        turret.target = enemy.position;
+                                        turret.trigger = true;
+                                    } 
+                                }
                             }
                         }
                         BotState::Rotate180 => {

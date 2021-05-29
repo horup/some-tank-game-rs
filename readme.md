@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-05-29  15m worked on bot
 - 2021-05-28  80m worked on bot + fixed lib name conflic + worked on visible and known enemies 
 - 2021-05-27  60m worked on bot
 - 2021-05-26  25m worked on bot
