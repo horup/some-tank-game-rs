@@ -57,6 +57,20 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
         if let Some(body) = bodies.get(body.handle()) {
                 if bot.next_think <= t {
                     bot.next_think = t + 0.1;
+
+                    if bot.attack_timer <= 0.0 {
+                        if let Ok(mut turret) = turrets.get_component_mut::<Turret>(tank.turret_entity) {
+                            turret.trigger = false;
+                            if let Some(enemy)  = bot.sensors.get_closest_visible_enemy() {
+                                turret.target = enemy.position;
+                                turret.trigger = true;
+                            } 
+                        }
+                        bot.attack_timer = random::<f32>() * 20.0;
+                    }
+                    bot.attack_timer -= 1.0;
+
+
                     match bot.state {
                         BotState::Idle => {
                             bot.state = BotState::RandomRotate;
@@ -87,14 +101,7 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
                                 bot.mem[0] = 0.0;
                             }
                             else {
-                               // track and shoot enemies
-                                if let Ok(mut turret) = turrets.get_component_mut::<Turret>(tank.turret_entity) {
-                                    turret.trigger = false;
-                                    if let Some(enemy)  = bot.sensors.get_closest_visible_enemy() {
-                                        turret.target = enemy.position;
-                                        turret.trigger = true;
-                                    } 
-                                }
+                               
                             }
                         }
                         BotState::Rotate180 => {

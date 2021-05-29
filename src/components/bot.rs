@@ -13,7 +13,8 @@ pub struct Bot {
     pub next_think:f64,
     pub state:BotState,
     pub mem:[f32;4],
-    pub sensors:BotSensors
+    pub sensors:BotSensors,
+    pub attack_timer:f32
 }
 
 #[derive(Default)]
@@ -55,7 +56,8 @@ impl Default for Bot {
             next_think:random(),
             state:BotState::Idle,
             mem:Default::default(),
-            sensors:Default::default()
+            sensors:Default::default(),
+            attack_timer:10.0
         }
     }
 }
