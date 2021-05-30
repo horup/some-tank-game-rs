@@ -52,13 +52,19 @@ fn main() {
     // add resources
     builder.insert_resource(Textures::default());
     builder.insert_resource(Mouse::default());
+    builder.insert_resource(Texts::default());
 
     // add events
     builder.add_event::<NewGameEvent>();
 
+    // add startup systems
+    builder
+    .add_startup_system(startup_system.system())
+    .add_startup_system(ui_initialization_system.system())
+    .add_startup_system(load_textures_system.system());
+
     // add systems
-    builder.add_startup_system(startup_system.system())
-    .add_startup_system(load_textures_system.system())
+    builder
     .add_system(input_system.system())
     .add_system(mouse_input_system.system())
     .add_system(game_system.system())
