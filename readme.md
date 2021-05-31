@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-05-31  worked on hud abstraction, worked on game system
 - 2021-05-30  60m worked on ui text components 
 - 2021-05-29  15m worked on bot
 - 2021-05-28  80m worked on bot + fixed lib name conflic + worked on visible and known enemies 

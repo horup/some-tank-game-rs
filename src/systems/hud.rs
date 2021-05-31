@@ -1,43 +1,12 @@
 use bevy::prelude::*;
 
-pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
+use crate::{HudText, resources::Hud};
+
+pub fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
     // UI camera
     commands.spawn_bundle(UiCameraBundle::default());
 
     let font_size = 16.0;
-
-    // center text
-  /*  commands.spawn_bundle(TextBundle {
-        style: Style {
-            align_self: AlignSelf::FlexEnd,
-            position_type: PositionType::Absolute,
-            align_items: AlignItems::FlexEnd,
-            justify_content:JustifyContent::Center,
-            size:Size {
-                width: Val::Percent(100.0),
-                height: Val::Percent(100.0),
-            },
-            ..Default::default()
-        },
-        // Use the `Text::with_section` constructor
-        text: Text::with_section(
-            // Accepts a `String` or any type that converts into a `String`, such as `&str`
-            "Center\nText",
-            TextStyle {
-                font: asset_server.load("fonts/default.ttf"),
-                font_size: font_size * 2.0,
-                color: Color::WHITE,
-            },
-
-            // Note: You can use `Default::default()` in place of the `TextAlignment`
-            TextAlignment {
-                horizontal: HorizontalAlign::Center,
-                vertical: VerticalAlign::Center,
-                ..Default::default()
-            },
-        ),
-        ..Default::default()
-    });*/
 
     commands.spawn_bundle(NodeBundle {
         style:Style {
@@ -62,7 +31,7 @@ pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetS
             // Use the `Text::with_section` constructor
             text: Text::with_section(
                 // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                "Center\nText",
+                "",
                 TextStyle {
                     font: asset_server.load("fonts/default.ttf"),
                     font_size:font_size * 2.0,
@@ -76,7 +45,7 @@ pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetS
                 },
             ),
             ..Default::default()
-        });
+        }).insert(HudText::Center);
     });
 
     // top-left text
@@ -94,7 +63,7 @@ pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetS
         // Use the `Text::with_section` constructor
         text: Text::with_section(
             // Accepts a `String` or any type that converts into a `String`, such as `&str`
-            "Top\nLeft\nText",
+            "",
             TextStyle {
                 font: asset_server.load("fonts/default.ttf"),
                 font_size,
@@ -107,7 +76,7 @@ pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetS
             },
         ),
         ..Default::default()
-    });
+    }).insert(HudText::TopLeft);
 
     // right text
     commands.spawn_bundle(TextBundle {
@@ -124,7 +93,7 @@ pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetS
         // Use the `Text::with_section` constructor
         text: Text::with_section(
             // Accepts a `String` or any type that converts into a `String`, such as `&str`
-            "Top\nRight\nText",
+            "",
             TextStyle {
                 font: asset_server.load("fonts/default.ttf"),
                 font_size,
@@ -137,5 +106,28 @@ pub fn ui_initialization_system(mut commands: Commands, asset_server: Res<AssetS
             },
         ),
         ..Default::default()
+    }).insert(HudText::TopRight);
+}
+
+pub fn set_text(text:&mut Text, value:&str) {
+    let section = text.sections.first_mut().expect("atleast one section in hud text was expected!");
+    if section.value != value {
+        section.value = value.into();
+    }
+}
+
+pub fn hud_system(hud:ResMut<Hud>, query:Query<(&mut Text, &HudText)>) {
+    query.for_each_mut(|(mut text, hud_text)| {
+        match *hud_text {
+            HudText::TopLeft => {
+                set_text(&mut text, &hud.top_left_text);
+            }
+            HudText::Center => {
+                set_text(&mut text, &hud.center_text);
+            }
+            HudText::TopRight => {
+                set_text(&mut text, &hud.top_right_text);
+            }
+        }
     });
 }

@@ -1,15 +1,21 @@
 use bevy::prelude::*;
-use crate::{Bot, GamePiece, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap};
+use crate::{Bot, GamePiece, HudText, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameState}};
 
-pub fn game_system(game_pieces:Query<(Entity, &GamePiece)>, mut commands: Commands, asset_server: Res<AssetServer>, mut new_game_reader:EventReader<NewGameEvent>) {
-    for e in new_game_reader.iter() {
+
+fn tick(game:&mut ResMut<Game>, hud_texts:&mut Query<(&mut Text, &HudText)>, time:&Res<Time>) {
+    if game.state == GameState::Loading {
+        //hud_texts.for
+    }
+}
+
+pub fn game_system(mut game:ResMut<Game>, game_pieces:Query<(Entity, &GamePiece)>, mut hud_texts:Query<(&mut Text, &HudText)>, mut commands: Commands, mut new_game_reader:EventReader<NewGameEvent>, time:Res<Time>) {
+    tick(&mut game, &mut hud_texts, &time);
+    /*for e in new_game_reader.iter() {
         // cleanup existing entities
         game_pieces.for_each_mut(|e| {
             let mut e = commands.entity(e.0);
             e.despawn_recursive();
         });
-      
-       
 
         // create camera
         commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GamePiece::default());
@@ -83,6 +89,6 @@ pub fn game_system(game_pieces:Query<(Entity, &GamePiece)>, mut commands: Comman
         spawn_bot(size as f32 - 2.5, size as f32 - 2.5);
         spawn_bot(2.5, size as f32 - 2.5);
         spawn_bot(size as f32 - 2.5, 2.5);
-    }
+    }*/
 }
  

@@ -4,5 +4,8 @@ pub use textures::*;
 mod mouse;
 pub use mouse::*;
 
-mod texts;
-pub use texts::*;
+mod game;
+pub use game::*;
+
+mod hud;
+pub use hud::*;

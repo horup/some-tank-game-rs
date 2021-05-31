@@ -50,17 +50,19 @@ fn main() {
     .add_plugin(EventsPlugin::default());
     
     // add resources
-    builder.insert_resource(Textures::default());
-    builder.insert_resource(Mouse::default());
-    builder.insert_resource(Texts::default());
+    builder.insert_resource(Textures::default())
+    .insert_resource(Mouse::default())
+    .insert_resource(Game::default())
+    .insert_resource(Hud::default());
 
     // add events
     builder.add_event::<NewGameEvent>();
+    
 
     // add startup systems
     builder
     .add_startup_system(startup_system.system())
-    .add_startup_system(ui_initialization_system.system())
+    .add_startup_system(hud_initialization_system.system())
     .add_startup_system(load_textures_system.system());
 
     // add systems
@@ -77,7 +79,8 @@ fn main() {
     .add_system(physics_system.system().label("physics"))
     .add_system(health_system.system())
     .add_system(tank_system.system())
-    .add_system(effect_system.system());
+    .add_system(effect_system.system())
+    .add_system(hud_system.system());
 
     builder.run();
 }
