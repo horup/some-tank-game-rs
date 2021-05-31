@@ -57,6 +57,7 @@ fn main() {
 
     // add events
     builder.add_event::<NewGameEvent>();
+    builder.add_event::<GameStateChangeEvent>();
     
 
     // add startup systems
@@ -67,9 +68,10 @@ fn main() {
 
     // add systems
     builder
+    .add_system_to_stage(CoreStage::PreUpdate,game_tick_system.system())
+    .add_system(game_system.system())
     .add_system(input_system.system())
     .add_system(mouse_input_system.system())
-    .add_system(game_system.system())
     .add_system(drag_system.system())
     .add_system(turret_system.system())
     .add_system(camera_system.system())

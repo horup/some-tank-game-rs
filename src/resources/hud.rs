@@ -7,9 +7,9 @@ pub struct Hud {
 impl Default for Hud {
     fn default() -> Self {
         Self {
-            top_left_text:"top left text".into(),
-            top_right_text:"top right text".into(),
-            center_text:"center text".into()
+            top_left_text:"".into(),
+            top_right_text:"".into(),
+            center_text:"".into()
         }
     }
 }
