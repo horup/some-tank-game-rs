@@ -1,5 +1,5 @@
 use bevy::{prelude::*, render::camera::Camera};
-use crate::{GameCamera, GamePiece};
+use crate::{GameCamera};
 
 #[derive(Default)]
 pub struct Mouse {

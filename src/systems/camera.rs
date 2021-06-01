@@ -1,5 +1,5 @@
 use bevy::{prelude::*, render::camera::{Camera, CameraProjection, OrthographicProjection}};
-use crate::{GameCamera, GamePiece, Tilemap};
+use crate::{GameCamera, Tilemap};
 
 pub fn camera_system(mut camera:Query<(&mut OrthographicProjection, &mut Camera, &mut Transform, &GameCamera)>, tilemap:Query<&Tilemap>,  windows: ResMut<Windows>) {
     let camera = camera.single_mut();

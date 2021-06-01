@@ -56,7 +56,7 @@ fn main() {
     .add_plugin(EventsPlugin::default());
     
     // add resources
-    builder.insert_resource(Textures::default())
+    builder
     .insert_resource(Mouse::default())
     .insert_resource(Game::default())
     .insert_resource(Hud::default());
