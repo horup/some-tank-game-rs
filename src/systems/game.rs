@@ -81,7 +81,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
     spawn_bot(size as f32 - 2.5, 2.5);
 }
 
-pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, mut app_state:ResMut<State<AppState>>) {
+pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
@@ -106,9 +106,14 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
                 hud.center_text = "Loading...".into();
                 game.transition_asap(GameState::GetReady);
             }
-            GameState::Restarting => {
+            GameState::Failure => {
                 let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Failure!\nRestarting level...".into();
+                game.transition(GameState::GetReady, 3.0, &time);
+            }
+            GameState::Success => {
+                let _ = app_state.set(AppState::Pause);
+                hud.center_text = "Success!\nStarting next level...".into();
                 game.transition(GameState::GetReady, 3.0, &time);
             }
         }
@@ -125,8 +130,15 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
     
         if player_is_dead {
             if game.next_state() == None {
-
-                game.transition(GameState::Restarting, 3.0, &time);
+                game.transition(GameState::Failure, 3.0, &time);
+            }
+        } else {
+            // check if no bots are left
+            let bots = bots.iter().len();
+            if bots == 0 {
+                if game.next_state() == None {
+                    game.transition(GameState::Success, 3.0, &time);
+                }
             }
         }
     }

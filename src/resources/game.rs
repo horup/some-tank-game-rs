@@ -7,7 +7,8 @@ pub enum GameState {
     GetReady,
     Go,
     InProgress,
-    Restarting
+    Failure,
+    Success
 }
 
 pub struct Game {
