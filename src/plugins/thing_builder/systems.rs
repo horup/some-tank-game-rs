@@ -1,12 +1,13 @@
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
-use crate::{Drag, Effect, Health, Owner, Projectile, Tank, Turret};
+use crate::{Drag, Effect, GamePiece, Health, Owner, Projectile, Tank, Turret};
 
 use super::*;
 
 pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &ThingBuilder), Added<ThingBuilder>>, texture_atlases:Res<TextureAtlases>) {
     query.for_each_mut(|(e, tb)| {
         let mut e = commands.entity(e);
+        e.insert(GamePiece::default());
         let mut transform = Transform {
             translation:tb.translation,
             rotation:tb.rotation,
@@ -34,6 +35,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 e.insert(collider);
                 e.insert(Health::default());
                 e.insert(Drag::default());
+
                 let sprite_sheet_bundle = SpriteSheetBundle {
                     texture_atlas:texture_atlases.get_atlas(tb.thing_type),
                     transform,

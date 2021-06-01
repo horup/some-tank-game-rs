@@ -2,15 +2,12 @@ use bevy::prelude::*;
 use crate::{AppState, Bot, GamePiece, GameState, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameStateChangeEvent, Hud}};
 
 fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut Commands) {
+    println!("initialize game");
     // cleanup existing entities
     game_pieces.for_each_mut(|e| {
         let mut e = commands.entity(e.0);
         e.despawn_recursive();
-        println!("test");
     });
-
-    // create camera
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GamePiece::default());
 
     // create tilemap
     let size = 16;
@@ -90,7 +87,6 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
             GameState::GetReady => {
                 let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Get Ready!".into();
-                initialize_game(&mut game_pieces, &mut commands);
                 initialize_game(&mut game_pieces, &mut commands);
                 game.transition(GameState::Go, 3.0, &time);
             }

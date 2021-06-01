@@ -1,6 +1,5 @@
 use bevy::{prelude::*, render::camera::Camera};
-
-use crate::GamePiece;
+use crate::{GameCamera, GamePiece};
 
 #[derive(Default)]
 pub struct Mouse {
@@ -8,7 +7,7 @@ pub struct Mouse {
     pub pos_world:Vec3
 }
 
-pub fn mouse_input_system(mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Transform, &GamePiece)>, mut mouse_moved_events:EventReader<CursorMoved>, windows:Res<Windows>) {
+pub fn mouse_input_system(mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Transform, &GameCamera)>, mut mouse_moved_events:EventReader<CursorMoved>, windows:Res<Windows>) {
     
     for e in mouse_moved_events.iter() {
         mouse.pos_screen = e.position;
@@ -17,7 +16,7 @@ pub fn mouse_input_system(mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Trans
     update_position_world(&camera, &windows, &mut mouse);
 }
 
-fn update_position_world(camera: &Query<(&Camera, &Transform, &GamePiece)>, windows: &Res<Windows>, mouse: &mut ResMut<Mouse>) {
+fn update_position_world(camera: &Query<(&Camera, &Transform, &GameCamera)>, windows: &Res<Windows>, mouse: &mut ResMut<Mouse>) {
     if let Ok((camera, transform, _)) = camera.single() {
         let wnd = windows.get_primary().expect("could not get primary monitor");
         let wnd_size = Vec2::new(wnd.width(), wnd.height());

@@ -3,8 +3,7 @@ use bevy::prelude::*;
 use crate::{HudText, resources::Hud};
 
 pub fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
-    // UI camera
-    commands.spawn_bundle(UiCameraBundle::default());
+   
 
     let font_size = 16.0;
 

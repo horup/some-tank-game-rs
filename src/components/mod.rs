@@ -30,3 +30,6 @@ pub use game_piece::*;
 
 mod ui;
 pub use ui::*;
+
+mod game_camera;
+pub use game_camera::*;

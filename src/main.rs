@@ -1,4 +1,4 @@
-use bevy::{diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin}, prelude::*};
+use bevy::{diagnostic::{LogDiagnosticsPlugin}, prelude::*};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
@@ -23,11 +23,14 @@ mod states;
 pub use states::*;
 
 
-fn startup_system(mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
+fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>) {
+    // cameras
+    commands.spawn_bundle(UiCameraBundle::default());
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GameCamera::default());
+
     rapier.gravity.x = 0.0;
     rapier.gravity.y = 0.0;
     rapier.time_dependent_number_of_timesteps = true;
-    new_game_writer.send(NewGameEvent::default());
 }
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
@@ -47,7 +50,7 @@ fn main() {
     .add_plugin(States)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
-    .add_plugin(FrameTimeDiagnosticsPlugin::default())
+    //.add_plugin(FrameTimeDiagnosticsPlugin::default())
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default());
@@ -66,8 +69,8 @@ fn main() {
     // add startup systems
     builder
     .add_startup_system(startup_system.system())
-    .add_startup_system(hud_initialization_system.system())
-    .add_startup_system(load_textures_system.system());
+    .add_startup_system(hud_initialization_system.system());
+    //.add_startup_system(load_textures_system.system());
 
     // add always on systems
     builder
