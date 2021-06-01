@@ -6,6 +6,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
     game_pieces.for_each_mut(|e| {
         let mut e = commands.entity(e.0);
         e.despawn_recursive();
+        println!("test");
     });
 
     // create camera
@@ -54,7 +55,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
         }
     }
 
-    commands.spawn().insert(tilemap);
+    commands.spawn().insert(tilemap).insert(GamePiece::default());
 
     // spawn player
     commands.spawn().insert(ThingBuilder {
@@ -90,6 +91,7 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
                 let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Get Ready!".into();
                 initialize_game(&mut game_pieces, &mut commands);
+                initialize_game(&mut game_pieces, &mut commands);
                 game.transition(GameState::Go, 3.0, &time);
             }
             GameState::Go => {
@@ -121,7 +123,6 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
     }
 
     if game.state == GameState::InProgress {
-
         let mut player_is_dead = true;
         players.for_each(|_| {
             player_is_dead = false;
