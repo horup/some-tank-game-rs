@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, GamePiece, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameState, GameStateChangeEvent, Hud}};
+use crate::{AppState, Bot, GamePiece, GameState, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameStateChangeEvent, Hud}};
 
 fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut Commands) {
     // cleanup existing entities
@@ -87,27 +87,27 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
             GameState::NotSet => {
             }
             GameState::GetReady => {
-                let _ = app_state.set(AppState::InBetweenGames);
+                let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Get Ready!".into();
                 initialize_game(&mut game_pieces, &mut commands);
                 game.transition(GameState::Go, 3.0, &time);
             }
             GameState::Go => {
-                let _ = app_state.set(AppState::InGame);
+                let _ = app_state.set(AppState::Running);
                 hud.center_text = "Go!".into();
                 game.transition(GameState::InProgress, 1.0, &time);
             }
             GameState::InProgress => {
-                let _ = app_state.set(AppState::InGame);
+                let _ = app_state.set(AppState::Running);
                 hud.center_text = "".into();
             }
             GameState::Loading => {
-                let _ = app_state.set(AppState::InBetweenGames);
+                let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Loading...".into();
                 game.transition_asap(GameState::GetReady);
             }
             GameState::Restarting => {
-                let _ = app_state.set(AppState::InBetweenGames);
+                let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Failure!\nRestarting level...".into();
                 game.transition(GameState::GetReady, 3.0, &time);
             }

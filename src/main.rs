@@ -19,11 +19,9 @@ pub use factory::*;*/
 mod plugins;
 pub use plugins::*;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum AppState {
-    InBetweenGames,
-    InGame
-}
+mod states;
+pub use states::*;
+
 
 fn startup_system(mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
     rapier.gravity.x = 0.0;
@@ -44,11 +42,9 @@ fn main() {
     };
     builder.insert_resource(window);
 
-    // add state
-    builder.add_state(AppState::InBetweenGames);
-
     // add plugins
     builder.add_plugins(DefaultPlugins)
+    .add_plugin(States)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(FrameTimeDiagnosticsPlugin::default())
@@ -82,7 +78,7 @@ fn main() {
 
     // add in game update systems
     builder
-    .add_system_set(SystemSet::on_update(AppState::InGame)
+    .add_system_set(SystemSet::on_update(AppState::Running)
         .with_system(input_system.system())
         .with_system(mouse_input_system.system())
         .with_system(drag_system.system())

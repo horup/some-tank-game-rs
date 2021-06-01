@@ -1,6 +1,6 @@
 use bevy::core::Time;
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug, Eq)]
 pub enum GameState {
     NotSet,
     Loading,
