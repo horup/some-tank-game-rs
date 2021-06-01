@@ -1,4 +1,4 @@
-use bevy::{math::{Vec2, Vec3}, prelude::Entity};
+use bevy::{math::{Vec3}, prelude::Entity};
 use rand::random;
 
 #[derive(Clone, Copy)]

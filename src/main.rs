@@ -1,7 +1,7 @@
 use bevy::{diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin}, prelude::*};
 
 mod components;
-use bevy_rapier2d::physics::{RapierConfiguration, RapierPhysicsPlugin};
+use bevy_rapier2d::physics::{RapierConfiguration};
 pub use components::*;
 
 mod events;

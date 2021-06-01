@@ -12,7 +12,7 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut 
                 bot.sensors.obstacle_distance_front = raycast_front_distance(bot_body, &query_pipeline, &collider_set);
 
                 // collect know enemies
-                tanks.for_each(|(tank_entity, tank)| {
+                tanks.for_each(|(tank_entity, _tank)| {
                     if tank_entity != bot_entity {
                         if let Ok(enemy_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(tank_entity) {
                             if let Some(enemy_body) = rigid_body_set.get(enemy_body.handle()) {
@@ -51,10 +51,10 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut 
 }
 
 
-pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent, &Children)>, time:Res<Time>, bodies:Res<RigidBodySet>, query_pipeline:Res<QueryPipeline>, collider_set:Res<ColliderSet>) {
-    bots.for_each_mut(|(bot_entity, mut bot, mut tank, body, children)| {
+pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent)>, time:Res<Time>, bodies:Res<RigidBodySet>) {
+    bots.for_each_mut(|(_bot_entity, mut bot, mut tank, body)| {
         let t = time.time_since_startup().as_secs_f64();
-        if let Some(body) = bodies.get(body.handle()) {
+        if let Some(_body) = bodies.get(body.handle()) {
                 if bot.next_think <= t {
                     bot.next_think = t + 0.1;
 
