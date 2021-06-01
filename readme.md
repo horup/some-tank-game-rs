@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-06-01  worked on app states and in game system
 - 2021-05-31  105m worked on hud abstraction, worked on game system, worked on state transitioning
 - 2021-05-30  60m worked on ui text components 
 - 2021-05-29  15m worked on bot

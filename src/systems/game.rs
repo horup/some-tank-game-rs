@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{Bot, GamePiece, HudText, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameState, GameStateChangeEvent, Hud}};
+use crate::{AppState, Bot, GamePiece, HudText, NewGameEvent, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameState, GameStateChangeEvent, Hud}};
 
 
 fn tick(game:&mut ResMut<Game>, hud:&mut ResMut<Hud>, time:&Res<Time>, game_state_change_writer:&mut EventWriter<GameStateChangeEvent>) {
@@ -25,7 +25,6 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
 
     // create camera
     commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GamePiece::default());
-
 
     // create tilemap
     let size = 16;
@@ -97,29 +96,33 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
     spawn_bot(size as f32 - 2.5, 2.5);
 }
 
-pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>) {
+pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
             }
             GameState::GetReady => {
+                let _ = app_state.set(AppState::InBetweenGames);
                 hud.center_text = "Get Ready!".into();
                 initialize_game(&mut game_pieces, &mut commands);
                 game.transition(GameState::Go, 3.0, &time);
             }
             GameState::Go => {
+                let _ = app_state.set(AppState::InGame);
                 hud.center_text = "Go!".into();
                 game.transition(GameState::InProgress, 1.0, &time);
             }
             GameState::InProgress => {
+                let _ = app_state.set(AppState::InGame);
                 hud.center_text = "".into();
-
             }
             GameState::Loading => {
+                let _ = app_state.set(AppState::InBetweenGames);
                 hud.center_text = "Loading...".into();
                 game.transition_asap(GameState::GetReady);
             }
             GameState::Restarting => {
+                let _ = app_state.set(AppState::InBetweenGames);
                 hud.center_text = "Failure!\nRestarting level...".into();
                 game.transition(GameState::GetReady, 3.0, &time);
             }

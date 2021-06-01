@@ -19,6 +19,11 @@ pub use factory::*;*/
 mod plugins;
 pub use plugins::*;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum AppState {
+    InBetweenGames,
+    InGame
+}
 
 fn startup_system(mut new_game_writer:EventWriter<NewGameEvent>, mut rapier:ResMut<RapierConfiguration>) {
     rapier.gravity.x = 0.0;
@@ -39,10 +44,12 @@ fn main() {
     };
     builder.insert_resource(window);
 
+    // add state
+    builder.add_state(AppState::InBetweenGames);
 
     // add plugins
     builder.add_plugins(DefaultPlugins)
-    .add_plugin(RapierPhysicsPlugin)
+    .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(FrameTimeDiagnosticsPlugin::default())
     .add_plugin(TilemapPlugin::default())
@@ -57,7 +64,7 @@ fn main() {
 
     // add events
     builder.add_event::<NewGameEvent>();
-    builder.add_event::<GameStateChangeEvent>();
+    
     
 
     // add startup systems
@@ -66,23 +73,29 @@ fn main() {
     .add_startup_system(hud_initialization_system.system())
     .add_startup_system(load_textures_system.system());
 
-    // add systems
+    // add always on systems
     builder
     .add_system_to_stage(CoreStage::PreUpdate,game_tick_system.system())
     .add_system(game_system.system())
-    .add_system(input_system.system())
-    .add_system(mouse_input_system.system())
-    .add_system(drag_system.system())
-    .add_system(turret_system.system())
-    .add_system(camera_system.system())
-    .add_system(bot_system.system())
-    .add_system(bot_sensor_system.system())
-    .add_system(projectile_system.system().after("physics"))
-    .add_system(physics_system.system().label("physics"))
-    .add_system(health_system.system())
-    .add_system(tank_system.system())
-    .add_system(effect_system.system())
-    .add_system(hud_system.system());
+    .add_system(hud_system.system())
+    .add_system(camera_system.system());
 
+    // add in game update systems
+    builder
+    .add_system_set(SystemSet::on_update(AppState::InGame)
+        .with_system(input_system.system())
+        .with_system(mouse_input_system.system())
+        .with_system(drag_system.system())
+        .with_system(turret_system.system())
+        .with_system(bot_system.system())
+        .with_system(bot_sensor_system.system())
+        .with_system(projectile_system.system().after("physics"))
+        .with_system(physics_system.system().label("physics"))
+        .with_system(health_system.system())
+        .with_system(tank_system.system())
+        .with_system(effect_system.system())
+        .with_system(hud_system.system())
+    );
+    
     builder.run();
 }

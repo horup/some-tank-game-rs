@@ -9,6 +9,8 @@ pub use projectile_hit::*;
 mod apply_damage;
 pub use apply_damage::*;
 
+use crate::resources::GameStateChangeEvent;
+
 #[derive(Default)]
 pub struct EventsPlugin {
 }
@@ -18,6 +20,7 @@ impl Plugin for EventsPlugin {
         app
         .add_event::<NewGameEvent>()
         .add_event::<ProjectileHitEvent>()
-        .add_event::<ApplyDamageEvent>();
+        .add_event::<ApplyDamageEvent>()
+        .add_event::<GameStateChangeEvent>();
     }
 }
