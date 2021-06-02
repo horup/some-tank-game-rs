@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, GamePiece, Hud, Player, ThingBuilder, ThingType, Tile, Tilemap};
+use crate::{AppState, Bot, ENEMY_FACTION, Faction, GamePiece, Hud, PLAYER_FACTION, Player, ThingBuilder, ThingType, Tile, Tilemap};
 
 use bevy::core::Time;
 
@@ -112,7 +112,8 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
         thing_type:ThingType::Tank,
         ..Default::default()
     })
-    .insert(Player::default());
+    .insert(Player::default())
+    .insert(Faction(PLAYER_FACTION));
 
     let mut spawn_bot = |x, y| {
         commands.spawn().insert(ThingBuilder {
@@ -121,7 +122,8 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
             thing_type:ThingType::Tank,
             ..Default::default()
         })
-        .insert(Bot::default());
+        .insert(Bot::default())
+        .insert(Faction(ENEMY_FACTION));
     };
 
     // spawn bot

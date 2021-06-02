@@ -2,18 +2,18 @@ use bevy::prelude::*;
 use bevy_rapier2d::{physics::{RigidBodyHandleComponent}, rapier::{dynamics::{RigidBodySet}, geometry::{ColliderSet, InteractionGroups, Ray}, math::Real, pipeline::QueryPipeline}};
 use rand::random;
 
-use crate::{Bot, BotState, Enemy, Tank, Turret};
+use crate::{Bot, BotState, Enemy, Faction, Tank, Turret};
 
-pub fn bot_sensor_system(tanks:Query<(Entity, &Tank)>, bots:Query<(Entity, &mut Bot)>, rigid_bodies:Query<&RigidBodyHandleComponent>, rigid_body_set:Res<RigidBodySet>, collider_set:Res<ColliderSet>, query_pipeline: Res<QueryPipeline>) {
-    bots.for_each_mut(|(bot_entity, mut bot)| {
+pub fn bot_sensor_system(tanks:Query<(Entity, &Tank, &Faction)>, bots:Query<(Entity, &mut Bot, &Faction)>, rigid_bodies:Query<&RigidBodyHandleComponent>, rigid_body_set:Res<RigidBodySet>, collider_set:Res<ColliderSet>, query_pipeline: Res<QueryPipeline>) {
+    bots.for_each_mut(|(bot_entity, mut bot, my_faction)| {
         if let Ok(bot_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(bot_entity) {
             if let Some(bot_body) = rigid_body_set.get(bot_body.handle()) {
                 // measure distance to front
                 bot.sensors.obstacle_distance_front = raycast_front_distance(bot_body, &query_pipeline, &collider_set);
 
                 // collect know enemies
-                tanks.for_each(|(tank_entity, _tank)| {
-                    if tank_entity != bot_entity {
+                tanks.for_each(|(tank_entity, _tank, faction)| {
+                    if tank_entity != bot_entity && my_faction != faction {
                         if let Ok(enemy_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(tank_entity) {
                             if let Some(enemy_body) = rigid_body_set.get(enemy_body.handle()) {
                                 let my_pos:Vec3 = [bot_body.position().translation.x, bot_body.position().translation.y, 0.0].into();
