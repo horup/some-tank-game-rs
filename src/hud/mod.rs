@@ -1,10 +1,29 @@
 use bevy::prelude::*;
 
-use crate::{HudText, resources::Hud};
+pub struct Hud {
+    pub top_left_text:String,
+    pub top_right_text:String,
+    pub center_text:String
+}
 
-pub fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
-   
+impl Default for Hud {
+    fn default() -> Self {
+        Self {
+            top_left_text:"".into(),
+            top_right_text:"".into(),
+            center_text:"".into()
+        }
+    }
+}
 
+#[derive(Copy, Clone, PartialEq)]
+pub enum HudText {
+    TopLeft,
+    Center, 
+    TopRight
+}
+
+fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
     let font_size = 16.0;
 
     commands.spawn_bundle(NodeBundle {
@@ -115,7 +134,7 @@ pub fn set_text(text:&mut Text, value:&str) {
     }
 }
 
-pub fn hud_system(hud:ResMut<Hud>, query:Query<(&mut Text, &HudText)>) {
+fn hud_system(hud:ResMut<Hud>, query:Query<(&mut Text, &HudText)>) {
     query.for_each_mut(|(mut text, hud_text)| {
         match *hud_text {
             HudText::TopLeft => {
@@ -129,4 +148,15 @@ pub fn hud_system(hud:ResMut<Hud>, query:Query<(&mut Text, &HudText)>) {
             }
         }
     });
+}
+
+pub struct HudPlugin;
+
+impl Plugin for HudPlugin {
+    fn build(&self, app: &mut AppBuilder) {
+        app.insert_resource(Hud::default());
+        app.add_startup_system(hud_initialization_system.system());
+        app.add_system(hud_system.system());
+        
+    }
 }

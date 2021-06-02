@@ -19,6 +19,9 @@ pub use plugins::*;
 mod game_director;
 pub use game_director::*;
 
+mod hud;
+pub use hud::*;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AppState {
     Pause,
@@ -58,7 +61,8 @@ fn main() {
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default())
-    .add_plugin(GameDirectorPlugin);
+    .add_plugin(GameDirectorPlugin)
+    .add_plugin(HudPlugin);
     
     // add resources
     builder
@@ -73,13 +77,11 @@ fn main() {
 
     // add startup systems
     builder
-    .add_startup_system(startup_system.system())
-    .add_startup_system(hud_initialization_system.system());
+    .add_startup_system(startup_system.system());
     //.add_startup_system(load_textures_system.system());
 
     // add always on systems
     builder
-    .add_system(hud_system.system())
     .add_system(camera_system.system());
 
     // add in game update systems
@@ -96,7 +98,6 @@ fn main() {
         .with_system(health_system.system())
         .with_system(tank_system.system())
         .with_system(effect_system.system())
-        .with_system(hud_system.system())
     );
     
     builder.run();

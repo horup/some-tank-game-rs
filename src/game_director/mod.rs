@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, GamePiece, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Hud}};
+use crate::{AppState, Bot, GamePiece, Hud, Player, ThingBuilder, ThingType, Tile, Tilemap};
 
 use bevy::core::Time;
 

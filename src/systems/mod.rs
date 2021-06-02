@@ -28,6 +28,3 @@ pub use tank::*;
 
 mod effect;
 pub use effect::*;
-
-mod hud;
-pub use hud::*;
