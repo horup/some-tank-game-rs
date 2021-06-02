@@ -82,7 +82,8 @@ fn main() {
 
     // add always on systems
     builder
-    .add_system(camera_system.system());
+    .add_system(camera_system.system())
+    .add_system(faction_system.system());
 
     // add in game update systems
     builder

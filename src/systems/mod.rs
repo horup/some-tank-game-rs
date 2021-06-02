@@ -28,3 +28,6 @@ pub use tank::*;
 
 mod effect;
 pub use effect::*;
+
+mod faction;
+pub use faction::*;
