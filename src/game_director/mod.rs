@@ -1,5 +1,56 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, GamePiece, GameState, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Game, GameStateChangeEvent, Hud}};
+use crate::{AppState, Bot, GamePiece, Player, ThingBuilder, ThingType, Tile, Tilemap, resources::{Hud}};
+
+use bevy::core::Time;
+
+#[derive(Clone, Copy, PartialEq, Debug, Eq)]
+pub enum GameState {
+    NotSet,
+    Loading,
+    GetReady,
+    Go,
+    InProgress,
+    Failure,
+    Success
+}
+
+pub struct Game {
+    pub state:GameState,
+    pub next_state_at:Option<(GameState, f64)>,
+}
+
+pub struct GameStateChangeEvent {
+    pub from:GameState,
+    pub to:GameState
+}
+
+impl Game {
+    pub fn transition(&mut self, next_state:GameState, in_seconds:f64, time:&Time) {
+        self.next_state_at = Some((next_state, time.seconds_since_startup()  + in_seconds));
+    }
+
+    pub fn transition_asap(&mut self, next_state:GameState) {
+        self.next_state_at = Some((next_state, 0.0));
+    }
+
+    pub fn clear_transition(&mut self) {
+        self.next_state_at = None;
+    }
+
+    pub fn next_state(&self) -> Option<GameState> {
+        Some(self.next_state_at?.0)
+    }
+}
+
+impl Default for Game {
+    fn default() -> Self {
+        Self {
+            state:GameState::NotSet,
+            next_state_at:Some((GameState::Loading, 0.0))
+        }
+    }
+}
+
 
 fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut Commands) {
     println!("initialize game");
@@ -79,7 +130,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
     spawn_bot(size as f32 - 2.5, 2.5);
 }
 
-pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
+fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
@@ -142,7 +193,7 @@ pub fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_piece
    
 }
 
-pub fn game_tick_system(mut game:ResMut<Game>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
+fn game_tick_system(mut game:ResMut<Game>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
     if let Some((next_state, at)) = game.next_state_at {
         if at <= time.seconds_since_startup() {
             let prev = game.state;
@@ -156,3 +207,14 @@ pub fn game_tick_system(mut game:ResMut<Game>, time:Res<Time>, mut game_state_ch
     }
 }
  
+pub struct GameDirectorPlugin;
+
+impl Plugin for GameDirectorPlugin {
+    fn build(&self, app: &mut AppBuilder) {
+        app
+        .add_event::<GameStateChangeEvent>()
+        .insert_resource(Game::default())
+        .add_system_to_stage(CoreStage::PreUpdate,game_tick_system.system())
+        .add_system(game_system.system());
+    }
+}

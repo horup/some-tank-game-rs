@@ -12,15 +12,15 @@ use systems::*;
 
 mod resources;
 use resources::*;
-/*
-mod factory;
-pub use factory::*;*/
 
 mod plugins;
 pub use plugins::*;
 
 mod states;
 pub use states::*;
+
+mod game_director;
+pub use game_director::*;
 
 
 fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>) {
@@ -53,12 +53,13 @@ fn main() {
     //.add_plugin(FrameTimeDiagnosticsPlugin::default())
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
-    .add_plugin(EventsPlugin::default());
+    .add_plugin(EventsPlugin::default())
+    .add_plugin(GameDirectorPlugin);
     
     // add resources
     builder
     .insert_resource(Mouse::default())
-    .insert_resource(Game::default())
+
     .insert_resource(Hud::default());
 
     // add events
@@ -74,8 +75,6 @@ fn main() {
 
     // add always on systems
     builder
-    .add_system_to_stage(CoreStage::PreUpdate,game_tick_system.system())
-    .add_system(game_system.system())
     .add_system(hud_system.system())
     .add_system(camera_system.system());
 
