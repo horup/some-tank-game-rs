@@ -16,11 +16,14 @@ use resources::*;
 mod plugins;
 pub use plugins::*;
 
-mod states;
-pub use states::*;
-
 mod game_director;
 pub use game_director::*;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum AppState {
+    Pause,
+    Running
+}
 
 
 fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>) {
@@ -45,9 +48,10 @@ fn main() {
     };
     builder.insert_resource(window);
 
+    builder.add_state(AppState::Pause);
+
     // add plugins
     builder.add_plugins(DefaultPlugins)
-    .add_plugin(States)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
     //.add_plugin(FrameTimeDiagnosticsPlugin::default())
