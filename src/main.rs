@@ -44,8 +44,8 @@ fn main() {
     let mut builder = App::build();
     let window = WindowDescriptor {
         title: "Blueprint 3.0".to_string(),
-        width: 640.0,
-        height: 480.0,
+        width: 1024.0,
+        height: 768.0,
         vsync: false,
         ..Default::default()
     };

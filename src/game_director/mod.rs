@@ -14,9 +14,10 @@ pub enum GameState {
     Success
 }
 
-pub struct Game {
+pub struct GameDirector {
     pub state:GameState,
     pub next_state_at:Option<(GameState, f64)>,
+    pub quick:bool
 }
 
 pub struct GameStateChangeEvent {
@@ -24,7 +25,7 @@ pub struct GameStateChangeEvent {
     pub to:GameState
 }
 
-impl Game {
+impl GameDirector {
     pub fn transition(&mut self, next_state:GameState, in_seconds:f64, time:&Time) {
         self.next_state_at = Some((next_state, time.seconds_since_startup()  + in_seconds));
     }
@@ -42,11 +43,12 @@ impl Game {
     }
 }
 
-impl Default for Game {
+impl Default for GameDirector {
     fn default() -> Self {
         Self {
             state:GameState::NotSet,
-            next_state_at:Some((GameState::Loading, 0.0))
+            next_state_at:Some((GameState::Loading, 0.0)),
+            quick:true
         }
     }
 }
@@ -132,7 +134,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
     spawn_bot(size as f32 - 2.5, 2.5);
 }
 
-fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
+fn game_system(mut game:ResMut<GameDirector>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
@@ -195,9 +197,9 @@ fn game_system(mut game:ResMut<Game>, mut commands: Commands, mut game_pieces:Qu
    
 }
 
-fn game_tick_system(mut game:ResMut<Game>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
+fn game_tick_system(mut game:ResMut<GameDirector>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
     if let Some((next_state, at)) = game.next_state_at {
-        if at <= time.seconds_since_startup() {
+        if at <= time.seconds_since_startup() || game.quick {
             let prev = game.state;
             game.state = next_state;
             game.clear_transition();
@@ -215,7 +217,7 @@ impl Plugin for GameDirectorPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app
         .add_event::<GameStateChangeEvent>()
-        .insert_resource(Game::default())
+        .insert_resource(GameDirector::default())
         .add_system_to_stage(CoreStage::PreUpdate,game_tick_system.system())
         .add_system(game_system.system());
     }

@@ -68,10 +68,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 // is not properly propagated: https://github.com/bevyengine/bevy/issues/1807
                 // can be fixed by doing this instead
                 commands.entity(tank).push_children(&[turret]);
-                commands.entity(tank).insert(Tank {
-                    turret_entity:turret,
-                    tracks:[0.0, 0.0]
-                });
+                commands.entity(tank).insert(Tank::new(turret));
 
                 let tracks = commands.spawn_bundle(SpriteSheetBundle {
                     texture_atlas:texture_atlases.tanks.clone(),
