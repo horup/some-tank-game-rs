@@ -16,7 +16,7 @@ pub fn tank_system(tank:Query<(&mut Tank, &RigidBodyHandleComponent, Entity)>, m
             if tank.tracks_distance.length() > 0.2 {
                 tank.tracks_distance = [0.0, 0.0].into();
                 if let Ok(mut sprite) = sprites.get_component_mut::<TextureAtlasSprite>(e) {
-                    sprite.flip_y = !sprite.flip_y;
+                    sprite.flip_x = !sprite.flip_x;
                 }
             }
         }
