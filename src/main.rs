@@ -46,7 +46,7 @@ fn main() {
         title: "Blueprint 3.0".to_string(),
         width: 1024.0,
         height: 768.0,
-        vsync: false,
+        vsync: true,
         ..Default::default()
     };
     builder.insert_resource(window);
@@ -86,10 +86,13 @@ fn main() {
     .add_system(faction_system.system());
 
     // add in game update systems
-    builder
-    .add_system_set(SystemSet::on_update(AppState::Running)
+    builder.add_system_set_to_stage(CoreStage::Update, 
+        SystemSet::on_update(AppState::Running)
         .with_system(input_system.system())
         .with_system(mouse_input_system.system())
+    );
+    builder
+    .add_system_set(SystemSet::on_update(AppState::Running)
         .with_system(drag_system.system())
         .with_system(turret_system.system())
         .with_system(bot_system.system())
