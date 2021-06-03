@@ -6,7 +6,7 @@ pub struct Drag {
 impl Default for Drag {
     fn default() -> Self {
         Self {
-            front:1.0,
+            front:5.0,
             side:10.0
         }
     }

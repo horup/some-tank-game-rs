@@ -52,6 +52,7 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank, &Faction)>, bots:Query<(Ent
 
 
 pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent)>, time:Res<Time>, bodies:Res<RigidBodySet>) {
+    return;
     bots.for_each_mut(|(_bot_entity, mut bot, mut tank, body)| {
         let t = time.time_since_startup().as_secs_f64();
         if let Some(_body) = bodies.get(body.handle()) {
@@ -74,16 +75,16 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
                     match bot.state {
                         BotState::Idle => {
                             bot.state = BotState::RandomRotate;
-                            tank.tracks = [0.0, 0.0];
+                            tank.tracks = [0.0, 0.0].into();
                         }
                         BotState::RandomRotate => {
                             if bot.mem[0] == 0.0 {
                                 let r = random::<f32>() - 0.5;
                                 if r > 0.0 {
-                                    tank.tracks = [1.0, -1.0];
+                                    tank.tracks = [1.0, -1.0].into();
                                 } 
                                 else {
-                                    tank.tracks = [-1.0, 1.0];
+                                    tank.tracks = [-1.0, 1.0].into();
                                 }
                             }
 
@@ -94,7 +95,7 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
                             }
                         }
                         BotState::Exploring => {
-                            tank.tracks = [1.0, 1.0];
+                            tank.tracks = [1.0, 1.0].into();
                             if bot.sensors.obstacle_distance_front < 2.0 {
                                 // front of tank hit something
                                 bot.state = BotState::RandomRotate;
@@ -106,7 +107,7 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
                         }
                         BotState::Rotate180 => {
                             if bot.mem[0] > 0.0 {
-                                tank.tracks = [1.0, -1.0];
+                                tank.tracks = [1.0, -1.0].into();
                                 bot.mem[0] -= 1.0;
                             } else {
                                 bot.mem[0];
