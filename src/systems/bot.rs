@@ -52,7 +52,6 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank, &Faction)>, bots:Query<(Ent
 
 
 pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, &mut Bot, &mut Tank, &RigidBodyHandleComponent)>, time:Res<Time>, bodies:Res<RigidBodySet>) {
-    return;
     bots.for_each_mut(|(_bot_entity, mut bot, mut tank, body)| {
         let t = time.time_since_startup().as_secs_f64();
         if let Some(_body) = bodies.get(body.handle()) {
