@@ -48,7 +48,7 @@ impl Default for GameDirector {
         Self {
             state:GameState::NotSet,
             next_state_at:Some((GameState::Loading, 0.0)),
-            quick:true
+            quick:false
         }
     }
 }
