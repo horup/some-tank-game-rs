@@ -1,8 +1,4 @@
 use bevy::prelude::Color;
-
-pub const PLAYER_FACTION:u8 = 0;
-pub const ENEMY_FACTION:u8 = 1;
-
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum Faction {
     Player,
