@@ -113,7 +113,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
         ..Default::default()
     })
     .insert(Player::default())
-    .insert(Faction::Player);
+    .insert(Faction::Greens);
 
     let mut spawn_bot = |x, y| {
         commands.spawn().insert(ThingBuilder {
@@ -123,7 +123,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
             ..Default::default()
         })
         .insert(Bot::default())
-        .insert(Faction::EnemyBots);
+        .insert(Faction::Reds);
     };
 
     // spawn bot
