@@ -40,7 +40,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                     texture_atlas:texture_atlases.get_atlas(tb.thing_type),
                     transform,
                     sprite:TextureAtlasSprite {
-                        index:texture_atlases.get_index(tb.thing_type),
+                        index:0,
                         ..Default::default()
                     },
                     ..Default::default()
@@ -52,7 +52,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 let turret = commands.spawn_bundle(SpriteSheetBundle {
                     texture_atlas:texture_atlases.tanks.clone(),
                     sprite:TextureAtlasSprite {
-                        index:1,
+                        index:2,
                         ..Default::default()
                     },
                     transform:Transform {
@@ -72,6 +72,22 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                     turret_entity:turret,
                     tracks:[0.0, 0.0]
                 });
+
+                let tracks = commands.spawn_bundle(SpriteSheetBundle {
+                    texture_atlas:texture_atlases.tanks.clone(),
+                    sprite:TextureAtlasSprite {
+                        index:1,
+                        ..Default::default()
+                    },
+                    transform:Transform {
+                        translation:Vec3::new(0.0, 0.0, 0.5),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                })
+                .id();
+
+                commands.entity(tank).push_children(&[tracks]);
             }
             ThingType::Bullet => {
                 let speed = 10.0;
@@ -98,7 +114,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                     texture_atlas:texture_atlases.get_atlas(tb.thing_type),
                     transform,
                     sprite:TextureAtlasSprite {
-                        index:texture_atlases.get_index(tb.thing_type),
+                        index:3,
                         ..Default::default()
                     },
                     ..Default::default()
