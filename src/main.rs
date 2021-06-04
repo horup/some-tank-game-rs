@@ -22,6 +22,8 @@ pub use game_director::*;
 mod hud;
 pub use hud::*;
 
+mod tiled;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AppState {
     Pause,
@@ -50,14 +52,13 @@ fn main() {
         ..Default::default()
     };
     builder.insert_resource(window);
-
     builder.add_state(AppState::Pause);
 
     // add plugins
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
-    //.add_plugin(FrameTimeDiagnosticsPlugin::default())
+    .add_plugin(crate::tiled::TiledPlugin)
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default())
