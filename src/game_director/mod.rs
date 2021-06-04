@@ -64,7 +64,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
 
     // create tilemap
     let size = 16;
-    let mut tilemap = Tilemap::new(size, 4, "tiles.png");
+    let mut tilemap = Tilemap::new(size, 4, "imgs/tiles.png");
     for y in 0..size {
         tilemap.set_tile(Tile {
             index:1,

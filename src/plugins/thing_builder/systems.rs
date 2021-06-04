@@ -151,6 +151,6 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
 }
 
 pub fn thing_builder_init_system(mut textures:ResMut<TextureAtlases>, asset_server:Res<AssetServer>, mut texture_atlases:ResMut<Assets<TextureAtlas>>) {
-    textures.tanks = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("tanks.png"), Vec2::new(8.0, 8.0), 4, 4));
-    textures.white = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("white.png"), Vec2::new(8.0, 8.0), 1, 1));
+    textures.tanks = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("imgs/tanks.png"), Vec2::new(8.0, 8.0), 4, 4));
+    textures.white = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("imgs/white.png"), Vec2::new(8.0, 8.0), 1, 1));
 }
