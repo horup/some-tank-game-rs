@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-04 60m worked on map support, refactored assets folder structure a bit
+- 2021-06-04 75m worked on map support, refactored assets folder structure a bit
 - 2021-06-03 70m correct tank coloring based upon faction, added quick to game director, started working on tracks animation
 - 2021-06-02  100m moved game into game_director plugin, updated graphics for tank to include red tank, added faction component and updated ai to match, removed red tank again adn replaced with gray tank that can be painted
 - 2021-06-01  85m worked on app states and in game system, forked rapier plugin to add AppState::InGame, refactored a bit, added success state, worked on camera quirk when starting level second time, looked into crashing issue related to texture

@@ -1,4 +1,6 @@
-use bevy::asset::{BoxedFuture, LoadContext};
+use std::path::Path;
+
+use bevy::asset::{BoxedFuture, LoadContext, LoadedAsset};
 use bevy::{asset::AssetLoader, prelude::*};
 use bevy::reflect::{TypeUuid, Uuid};
 
@@ -10,12 +12,16 @@ impl AssetLoader for TiledMapLoader {
         bytes: &'a [u8],
         load_context: &'a mut LoadContext,
     ) -> BoxedFuture<'a, Result<(), anyhow::Error>> {
-        println!("{:?}", bytes);
-        
-
-       
-
         Box::pin(async move {
+            let path:String = "assets/".to_string() + load_context.path().to_str().expect("not valid path");
+            let map = tiled::parse_file(Path::new(&path));
+            if let Ok(map) = map {
+                load_context.set_default_asset(LoadedAsset::new(TiledMap {
+                    map
+                }));
+
+                return Ok(());
+            }
             Err(anyhow::anyhow!("unable to load map"))
         })
     }
@@ -25,7 +31,7 @@ impl AssetLoader for TiledMapLoader {
     }
 }
 pub struct TiledMap {
-
+    pub map:tiled::Map
 }
 
 // 88e307b1-c8ed-4102-a646-63ff86afaa0c
@@ -34,7 +40,7 @@ impl TypeUuid for TiledMap {
 }
 
 
-fn test(maps:Res<AssetServer>) {
+fn load_assets(maps:Res<AssetServer>) {
     let h:Handle<TiledMap> = maps.load("maps/1.tmx");
     println!("{:?}", h);
 }
@@ -42,7 +48,8 @@ fn test(maps:Res<AssetServer>) {
 
 impl Plugin for TiledPlugin {
     fn build(&self, app: &mut AppBuilder) {
+        app.add_asset::<TiledMap>();
         app.add_asset_loader(TiledMapLoader);
-        app.add_startup_system(test.system());
+        app.add_startup_system(load_assets.system());
     }
 }
