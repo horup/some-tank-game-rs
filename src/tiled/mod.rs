@@ -9,12 +9,12 @@ struct TiledMapLoader;
 impl AssetLoader for TiledMapLoader {
     fn load<'a>(
         &'a self,
-        _bytes: &'a [u8],
+        bytes: &'a [u8],
         load_context: &'a mut LoadContext,
     ) -> BoxedFuture<'a, Result<(), anyhow::Error>> {
         Box::pin(async move {
             let path:String = "assets/".to_string() + load_context.path().to_str().expect("not valid path");
-            let map = tiled::parse_file(Path::new(&path));
+            let map = tiled::parse_with_path(bytes, Path::new(&path));
             if let Ok(map) = map {
                 load_context.set_default_asset(LoadedAsset::new(TiledMap {
                     map
