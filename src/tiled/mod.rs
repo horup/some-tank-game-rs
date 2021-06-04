@@ -9,7 +9,7 @@ struct TiledMapLoader;
 impl AssetLoader for TiledMapLoader {
     fn load<'a>(
         &'a self,
-        bytes: &'a [u8],
+        _bytes: &'a [u8],
         load_context: &'a mut LoadContext,
     ) -> BoxedFuture<'a, Result<(), anyhow::Error>> {
         Box::pin(async move {
