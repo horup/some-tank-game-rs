@@ -40,9 +40,14 @@ impl TypeUuid for TiledMap {
 }
 
 
-fn load_assets(maps:Res<AssetServer>) {
-    let h:Handle<TiledMap> = maps.load("maps/1.tmx");
-    println!("{:?}", h);
+fn load_assets(asset_server:Res<AssetServer>, maps:ResMut<Assets<TiledMap>>) {
+    let h:Handle<TiledMap> = asset_server.load("maps/1.tmx");
+    let map = maps.get(h);
+    println!("{:?}", map.is_some());
+}
+
+fn assets() {
+    
 }
 
 
@@ -50,6 +55,6 @@ impl Plugin for TiledPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.add_asset::<TiledMap>();
         app.add_asset_loader(TiledMapLoader);
-        app.add_startup_system(load_assets.system());
+        app.add_system(load_assets.system());
     }
 }
