@@ -1,4 +1,4 @@
-use bevy::{diagnostic::{LogDiagnosticsPlugin}, prelude::*};
+use bevy::{diagnostic::{LogDiagnosticsPlugin}};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
@@ -23,6 +23,12 @@ mod hud;
 pub use hud::*;
 
 mod tiled;
+
+mod console;
+pub use console::*;
+
+mod map_loader;
+pub use map_loader::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AppState {
@@ -63,7 +69,9 @@ fn main() {
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default())
     .add_plugin(GameDirectorPlugin)
-    .add_plugin(HudPlugin);
+    .add_plugin(HudPlugin)
+    .add_plugin(ConsolePlugin)
+    .add_plugin(MapLoaderPlugin);
     
     // add resources
     builder

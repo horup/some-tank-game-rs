@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, Faction, GamePiece, Hud, Player, ThingBuilder, ThingType, Tile, Tilemap};
+use crate::{AppState, Bot, Console, Faction, GamePiece, Hud, Player, ThingBuilder, ThingType, Tile, Tilemap};
 
 use bevy::core::Time;
 
@@ -134,7 +134,7 @@ fn initialize_game(game_pieces:&mut Query<(Entity, &GamePiece)>, commands: &mut 
     spawn_bot(size as f32 - 2.5, 2.5);
 }
 
-fn game_system(mut game:ResMut<GameDirector>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
+fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
@@ -142,7 +142,8 @@ fn game_system(mut game:ResMut<GameDirector>, mut commands: Commands, mut game_p
             GameState::GetReady => {
                 let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Get Ready!".into();
-                initialize_game(&mut game_pieces, &mut commands);
+                //initialize_game(&mut game_pieces, &mut commands);
+                console.load_map("1");
                 game.transition(GameState::Go, 3.0, &time);
             }
             GameState::Go => {

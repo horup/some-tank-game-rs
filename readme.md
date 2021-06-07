@@ -1,5 +1,6 @@
 ## Devlog
-- 2021-06-6   20m refactored tiledmap
+- 2021-06-07  60m worked on console and map loader support
+- 2021-06-06  20m refactored tiledmap
 - 2021-06-05  5m worked on map support
 - 2021-06-04  75m worked on map support, refactored assets folder structure a bit
 - 2021-06-03  70m correct tank coloring based upon faction, added quick to game director, started working on tracks animation
