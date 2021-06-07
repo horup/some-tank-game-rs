@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-07  60m worked on console and map loader support
+- 2021-06-07  90m worked on console and map loader support
 - 2021-06-06  20m refactored tiledmap
 - 2021-06-05  5m worked on map support
 - 2021-06-04  75m worked on map support, refactored assets folder structure a bit
