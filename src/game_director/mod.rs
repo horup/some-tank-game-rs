@@ -53,12 +53,12 @@ impl Default for GameDirector {
             next_state_at:Some((GameState::Loading, 0.0)),
             quick:false,
             level:1,
-            levels:1
+            levels:3
         }
     }
 }
 
-fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
+fn game_system(mouse_button_input:Res<Input<MouseButton>>, mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
@@ -82,6 +82,7 @@ fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut g
             GameState::Loading => {
                 let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Loading...".into();
+                game.level = 1;
                 game.transition_asap(GameState::GetReady);
             }
             GameState::Failure => {
@@ -97,12 +98,11 @@ fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut g
                     game.level += 1;
                     game.transition(GameState::GetReady, 3.0, &time);
                 } else {
-                    hud.center_text = "You Won the Game!\nCongratulations!".into();
+                    hud.center_text = "You Won the Game!\nCongratulations!\nClick to restart the game...".into();
                     game.transition(GameState::YouWon, 1.0, &time);
                 }
             }
             GameState::YouWon => {
-                
             }
         }
 
@@ -128,8 +128,9 @@ fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut g
                 }
             }
         }
+    } else if game.state == GameState::YouWon && game.next_state() == None && mouse_button_input.just_pressed(MouseButton::Left) {
+        game.transition(GameState::Loading, 0.0, &time);
     }
-   
 }
 
 fn game_tick_system(mut game:ResMut<GameDirector>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
