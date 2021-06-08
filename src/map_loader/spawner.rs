@@ -13,7 +13,6 @@ pub fn spawn(commands:&mut Commands, spawn:Spawn) {
     let (x, y) = (spawn.x, spawn.y);
     match spawn.object_type.to_lowercase().as_str() {
         "player" => {
-            println!("{},{}", x, y);
             commands.spawn().insert(ThingBuilder {
                 translation:Vec3::new(x, y, 0.0),
                 rotation:Quat::default(),

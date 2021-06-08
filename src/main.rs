@@ -37,6 +37,14 @@ pub enum AppState {
 }
 
 
+fn debug_system(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMut<Console>) {
+    for e in char_input_reader.iter() {
+        if ['1', '2', '3', '4', '5', '6', '7', '8', '9'].contains(&e.char) {
+            console.load_map(e.char.to_string().as_str());
+        }
+    }
+}
+
 fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>) {
     // cameras
     commands.spawn_bundle(UiCameraBundle::default());
@@ -59,6 +67,8 @@ fn main() {
     };
     builder.insert_resource(window);
     builder.add_state(AppState::Pause);
+
+    builder.add_system(debug_system.system());
 
     // add plugins
     builder.add_plugins(DefaultPlugins)

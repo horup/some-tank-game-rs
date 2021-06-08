@@ -22,8 +22,8 @@ impl Console {
         println!("> {:?}", cmd);
         self.command_queue.push_back(cmd);
     }
-    pub fn load_map(&mut self, map_path:&str) {
-        self.push_command(ConsoleCommand::LoadMap(map_path.into()));
+    pub fn load_map(&mut self, map_name:&str) {
+        self.push_command(ConsoleCommand::LoadMap(map_name.into()));
     }
 }
 

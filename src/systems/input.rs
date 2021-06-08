@@ -43,8 +43,6 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
             }
         }
 
-
-
         // turret input
         for e in children.iter() {
             if let Ok(mut turret) = turrets.get_component_mut::<Turret>(*e) {
@@ -53,7 +51,5 @@ pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>
                 turret.target = mouse.pos_world.truncate().extend(0.0);
             }
         }
-
-
     }
 }

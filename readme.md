@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-08  60m added working map loader with entity spawner
+- 2021-06-08  60m+ added working map loader with entity spawner, refactored a bit
 - 2021-06-07  90m worked on console and map loader support
 - 2021-06-06  20m refactored tiledmap
 - 2021-06-05  5m worked on map support

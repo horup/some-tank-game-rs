@@ -97,32 +97,6 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, mut 
                     });
                 });
             })
-/*
-            // spawn player
-            commands.spawn().insert(ThingBuilder {
-                translation:Vec3::new(2.5, 2.5, 0.0),
-                rotation:Quat::default(),
-                thing_type:ThingType::Tank,
-                ..Default::default()
-            })
-            .insert(Player::default())
-            .insert(Faction::Greens);
-
-            let mut spawn_bot = |x, y| {
-                commands.spawn().insert(ThingBuilder {
-                    translation:Vec3::new(x, y, 0.0),
-                    rotation:Quat::default(),
-                    thing_type:ThingType::Tank,
-                    ..Default::default()
-                })
-                .insert(Bot::default())
-                .insert(Faction::Reds);
-            };
-
-            // spawn bot
-            spawn_bot(size as f32 - 2.5, size as f32 - 2.5);
-            spawn_bot(2.5, size as f32 - 2.5);
-            spawn_bot(size as f32 - 2.5, 2.5);*/
         }
     }
 }
