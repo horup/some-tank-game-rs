@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="left-down" width="16" height="16" tilewidth="8" tileheight="8" infinite="0" nextlayerid="6" nextobjectid="13">
+ <tileset firstgid="1" source="../tilesets/tiles.tsx"/>
+ <tileset firstgid="17" source="../tilesets/objects.tsx"/>
+ <layer id="1" name="tiles" width="16" height="16">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,2,2,2,2,2,2,2,2,1,1,1,2,
+2,1,1,1,2,1,1,1,1,1,1,2,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,2,1,1,1,1,1,1,2,1,1,1,2,
+2,1,1,1,2,2,2,2,2,2,2,2,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <objectgroup id="5" name="objects">
+  <object id="9" gid="18" x="67.0468" y="16.0063" width="8" height="8" rotation="178.321"/>
+  <object id="11" gid="17" x="60" y="67.8182" width="8" height="8"/>
+  <object id="12" gid="18" x="59.8182" y="112.182" width="8" height="8"/>
+ </objectgroup>
+</map>
