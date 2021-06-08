@@ -1,8 +1,5 @@
-use std::usize;
-
 pub use bevy::prelude::*;
-use crate::{Bot, Faction, GamePiece, Player, ThingBuilder, ThingType, Tile, Tilemap, tiled::TiledMap};
-use tiled::Map;
+use crate::{GamePiece, Tile, Tilemap, tiled::TiledMap};
 
 mod spawner;
 use spawner::*;
@@ -19,11 +16,11 @@ impl MapLoader {
     }
 }
 
-fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, mut game_pieces:Query<(Entity, &GamePiece)>, mut commands:Commands) {
+fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, game_pieces:Query<(Entity, &GamePiece)>, mut commands:Commands) {
     if let Some(next_map) = map_loader.next_map.clone() {
         let map = maps.get(next_map.clone());
         if let Some(map) = map {
-            
+            map_loader.current_map = Some(next_map.clone());
             map_loader.next_map = None;
 
             // cleanup existing game pieces

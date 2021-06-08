@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, Console, Faction, GamePiece, Hud, Player, ThingBuilder, ThingType, Tile, Tilemap};
+use crate::{AppState, Bot, Console, Hud, Player};
 
 use bevy::core::Time;
 
@@ -11,13 +11,16 @@ pub enum GameState {
     Go,
     InProgress,
     Failure,
-    Success
+    Success,
+    YouWon
 }
 
 pub struct GameDirector {
     pub state:GameState,
     pub next_state_at:Option<(GameState, f64)>,
-    pub quick:bool
+    pub quick:bool,
+    pub level:i32,
+    pub levels:i32
 }
 
 pub struct GameStateChangeEvent {
@@ -48,12 +51,14 @@ impl Default for GameDirector {
         Self {
             state:GameState::NotSet,
             next_state_at:Some((GameState::Loading, 0.0)),
-            quick:false
+            quick:false,
+            level:1,
+            levels:1
         }
     }
 }
 
-fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut commands: Commands, mut game_pieces:Query<(Entity, &GamePiece)>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
+fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut game_state_change_reader:EventReader<GameStateChangeEvent>, mut hud:ResMut<Hud>, time:Res<Time>, players:Query<&Player>, bots:Query<&Bot>, mut app_state:ResMut<State<AppState>>) {
     for e in game_state_change_reader.iter() {
         match e.to {
             GameState::NotSet => {
@@ -61,8 +66,8 @@ fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut c
             GameState::GetReady => {
                 let _ = app_state.set(AppState::Pause);
                 hud.center_text = "Get Ready!".into();
-                //initialize_game(&mut game_pieces, &mut commands);
-                console.load_map("1");
+                hud.top_left_text = "Level ".to_string() + game.level.to_string().as_str() + " of " + &game.levels.to_string();
+                console.load_map(game.level.to_string().as_str());
                 game.transition(GameState::Go, 3.0, &time);
             }
             GameState::Go => {
@@ -81,13 +86,23 @@ fn game_system(mut console:ResMut<Console>, mut game:ResMut<GameDirector>, mut c
             }
             GameState::Failure => {
                 let _ = app_state.set(AppState::Pause);
-                hud.center_text = "Failure!\nRestarting level...".into();
+                hud.center_text = "You Died!\nRestarting level...".into();
                 game.transition(GameState::GetReady, 3.0, &time);
             }
             GameState::Success => {
                 let _ = app_state.set(AppState::Pause);
-                hud.center_text = "Success!\nStarting next level...".into();
-                game.transition(GameState::GetReady, 3.0, &time);
+
+                if game.level < game.levels {
+                    hud.center_text = "All Enemies are dead!\nStarting next level...".into();
+                    game.level += 1;
+                    game.transition(GameState::GetReady, 3.0, &time);
+                } else {
+                    hud.center_text = "You Won the Game!\nCongratulations!".into();
+                    game.transition(GameState::YouWon, 1.0, &time);
+                }
+            }
+            GameState::YouWon => {
+                
             }
         }
 
