@@ -41,19 +41,20 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, mut 
                         for (row, col) in row.iter().enumerate() {
                             for (col, tile) in col.iter().enumerate() {
                                 let gid = tile.gid;
-                                let mut index = 0;
                                 let mut solid = false;
-
                                 let tileset = map.get_tileset_by_gid(gid).expect("tileset was not found");
-                                index = gid - tileset.first_gid;
-                                if let Some(tile) = tileset.tiles.get(index as usize) {
+                                let id = gid - tileset.first_gid;
+                                let tile = tileset.tiles.iter().find(|tile| {
+                                    tile.id == id
+                                });
+                                if let Some(tile) = tile {
                                     if let Some(tiled::PropertyValue::BoolValue(property)) = tile.properties.get("solid") {
                                         solid = *property;
                                     }
                                 }
 
                                 tilemap.set_tile(Tile {
-                                    index,
+                                    index: id,
                                     solid,
                                     ..Default::default()
                                 }, col, row);

@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-06-08  worked on map loader support
 - 2021-06-07  90m worked on console and map loader support
 - 2021-06-06  20m refactored tiledmap
 - 2021-06-05  5m worked on map support
