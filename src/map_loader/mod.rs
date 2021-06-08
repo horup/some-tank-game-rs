@@ -4,6 +4,9 @@ pub use bevy::prelude::*;
 use crate::{Bot, Faction, GamePiece, Player, ThingBuilder, ThingType, Tile, Tilemap, tiled::TiledMap};
 use tiled::Map;
 
+mod spawner;
+use spawner::*;
+
 #[derive(Default)]
 pub struct MapLoader {
     pub(in self) next_map:Option<Handle<TiledMap>>,
@@ -53,11 +56,13 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, mut 
                                     }
                                 }
 
+                                // flip row
+                                let flipped_row = map.height as usize - row - 1;
                                 tilemap.set_tile(Tile {
                                     index: id,
                                     solid,
                                     ..Default::default()
-                                }, col, row);
+                                }, col, flipped_row);
                             }
                         }
                     },
@@ -65,49 +70,34 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, mut 
                 }
             }
 
-            /*
-            for y in 0..size {
-                tilemap.set_tile(Tile {
-                    index:1,
-                    solid:true,
-                    ..Default::default()
-                }, 0, y);
-                tilemap.set_tile(Tile {
-                    index:1,
-                    solid:true,
-                    ..Default::default()
-                }, size-1, y);
-            }
-
-            for x in 0..size {
-                tilemap.set_tile(Tile {
-                    index:1,
-                    solid:true,
-                    ..Default::default()
-                }, x, 0);
-                tilemap.set_tile(Tile {
-                    index:1,
-                    solid:true,
-                    ..Default::default()
-                }, x, size - 1);
-            }
-
-            for y in 0..size {
-                for x in 0..size {
-                    if x % 5 == 0 {
-                        if y % 5 == 0 {
-                            tilemap.set_tile(Tile {
-                                index:1,
-                                solid:true,
-                                ..Default::default()
-                            }, x, y);
-                        }
-                    }
-                }
-            }*/
-
             commands.spawn().insert(tilemap).insert(GamePiece::default());
 
+            map.object_groups.iter().for_each(|grp| {
+                grp.objects.iter().for_each(|obj| {
+                    let x = obj.x + obj.width / 2.0;
+                    let y = obj.y - obj.height / 2.0;
+                    let x = x / map.tile_width as f32;
+                    let y = (map.height as f32 * map.tile_height as f32 - y) / map.tile_height as f32;
+                    let gid = obj.gid;
+                    let tileset = map.get_tileset_by_gid(gid).expect("tileset was not found");
+                    let id = gid - tileset.first_gid;
+                    let mut object_type_type = String::default();
+                    tileset.tiles.iter().for_each(|tile| {
+                        if tile.id == id {
+                            object_type_type = tile.tile_type.clone().unwrap_or_default();
+                        }
+                    });
+                    let object_type = if obj.obj_type.len() == 0 {object_type_type} else {obj.obj_type.clone()};
+                    let rotation = obj.rotation;
+                    spawn(&mut commands, Spawn {
+                        x,
+                        y,
+                        object_type,
+                        rotation
+                    });
+                });
+            })
+/*
             // spawn player
             commands.spawn().insert(ThingBuilder {
                 translation:Vec3::new(2.5, 2.5, 0.0),
@@ -132,7 +122,7 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, mut 
             // spawn bot
             spawn_bot(size as f32 - 2.5, size as f32 - 2.5);
             spawn_bot(2.5, size as f32 - 2.5);
-            spawn_bot(size as f32 - 2.5, 2.5);
+            spawn_bot(size as f32 - 2.5, 2.5);*/
         }
     }
 }
