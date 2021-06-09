@@ -53,7 +53,7 @@ impl Default for GameDirector {
             next_state_at:Some((GameState::Loading, 0.0)),
             quick:false,
             level:1,
-            levels:3
+            levels:4
         }
     }
 }
