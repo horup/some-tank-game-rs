@@ -6,4 +6,9 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="5">
+  <properties>
+   <property name="solid" type="bool" value="true"/>
+  </properties>
+ </tile>
 </tileset>
