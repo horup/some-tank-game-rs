@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
 use crate::{Drag, Effect, GamePiece, Health, Owner, Projectile, Tank, Turret};
@@ -26,9 +28,10 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
         match tb.thing_type {
             ThingType::Unknown => {}
             ThingType::Tank => {
+                let a = tb.rotation.to_axis_angle().1;
                 let rigid_body = RigidBodyBuilder::new_dynamic()
                 .translation(x, y)
-                .rotation(tb.rotation.angle_between(Quat::default()));
+                .rotation(a);
                 let collider = ColliderBuilder::cuboid(0.5, 0.5)
                 .user_data(e.id().to_bits() as u128);
                 e.insert(rigid_body);
@@ -90,7 +93,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 let speed = 10.0;
                 let v = Vec3::new(speed, 0.0, 0.0);
                 let v = tb.rotation * v;
-                let a = v.angle_between(Vec3::new(1.0, 0.0, 0.0));
+                let a = tb.rotation.to_axis_angle().1;
                 let rigid_body = RigidBodyBuilder::new_dynamic()
                 .translation(x, y)
                 //.linear_damping(1.5)

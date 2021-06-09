@@ -11,11 +11,13 @@ pub struct Spawn {
 
 pub fn spawn(commands:&mut Commands, spawn:Spawn) {
     let (x, y) = (spawn.x, spawn.y);
+    let rotation = Quat::from_rotation_z(spawn.rotation);
+    let translation = Vec3::new(x, y, 0.0);
     match spawn.object_type.to_lowercase().as_str() {
         "player" => {
             commands.spawn().insert(ThingBuilder {
-                translation:Vec3::new(x, y, 0.0),
-                rotation:Quat::default(),
+                translation,
+                rotation,
                 thing_type:ThingType::Tank,
                 ..Default::default()
             })
@@ -24,8 +26,8 @@ pub fn spawn(commands:&mut Commands, spawn:Spawn) {
         }
         "bot" => {
             commands.spawn().insert(ThingBuilder {
-                translation:Vec3::new(x, y, 0.0),
-                rotation:Quat::default(),
+                translation,
+                rotation,
                 thing_type:ThingType::Tank,
                 ..Default::default()
             })

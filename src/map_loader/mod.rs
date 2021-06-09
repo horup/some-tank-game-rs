@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 pub use bevy::prelude::*;
 use crate::{GamePiece, Tile, Tilemap, tiled::TiledMap};
 
@@ -71,8 +73,16 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, game
 
             map.object_groups.iter().for_each(|grp| {
                 grp.objects.iter().for_each(|obj| {
-                    let x = obj.x + obj.width / 2.0;
-                    let y = obj.y - obj.height / 2.0;
+                    // some math to help find center x and y based upon rotation
+                    let rotation = obj.rotation * PI/180.0;
+                    let center_x = obj.width / 2.0;
+                    let center_y = -obj.height / 2.0;
+                    let cos_rot = rotation.cos();
+                    let sin_rot = rotation.sin();
+                    let rotated_center_x = center_x * cos_rot - center_y * sin_rot;
+                    let rotated_center_y = center_x * sin_rot + center_y * cos_rot;
+                    let x = obj.x + rotated_center_x;
+                    let y = obj.y + rotated_center_y;
                     let x = x / map.tile_width as f32;
                     let y = (map.height as f32 * map.tile_height as f32 - y) / map.tile_height as f32;
                     let gid = obj.gid;
@@ -85,7 +95,9 @@ fn map_loader(mut map_loader:ResMut<MapLoader>, maps:Res<Assets<TiledMap>>, game
                         }
                     });
                     let object_type = if obj.obj_type.len() == 0 {object_type_type} else {obj.obj_type.clone()};
-                    let rotation = obj.rotation;
+
+                    // flip rotation since we change coordinate space
+                    let rotation = (360.0 - obj.rotation) * PI/180.0;
                     spawn(&mut commands, Spawn {
                         x,
                         y,
