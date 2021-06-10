@@ -1,6 +1,6 @@
-use bevy::{input::mouse::MouseButtonInput, prelude::*};
+use bevy::{prelude::*};
 
-use crate::{AppState, Hud};
+use crate::{AppState, DelayState, Hud};
 
 pub struct SplashPlugin;
 
@@ -12,8 +12,9 @@ fn hide_splash(mut hud:ResMut<Hud>) {
     hud.clear();
 }
 
-fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<State<AppState>>) {
+fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<DelayState<AppState>>) {
     if mouse_input.just_pressed(MouseButton::Left) {
+        app_state.set(AppState::InBetweenGames, 1.0);
     }
 }
 

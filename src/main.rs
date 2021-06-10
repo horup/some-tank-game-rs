@@ -33,8 +33,8 @@ pub use map_loader::*;
 mod splash;
 pub use splash::*;
 
-mod delay;
-pub use delay::*;
+mod delay_state;
+pub use delay_state::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AppState {

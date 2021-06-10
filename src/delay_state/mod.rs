@@ -2,25 +2,33 @@ use std::{fmt::Debug, hash::Hash, marker::PhantomData};
 
 use bevy::{ecs::component::Component, prelude::*};
 
-pub struct Delay<T> {
+pub struct DelayState<T> {
     pub remaining:f32,
     pub start:f32,
     pub next_state:Option<T>
 }
 
-impl<T : PartialEq> Delay<T> {
-    pub fn set_next_state(&mut self, state:T, delay:f32) {
+impl<T : Component + Clone + Eq + Hash + Debug> DelayState<T> {
+    
+    // set next state and delay.
+    // if existing state and delay has been set, simply ignore
+    pub fn set(&mut self, state:T, delay:f32) -> bool {
+        if self.has_state() {
+            return false;
+        }
+
         self.next_state = Some(state);
         self.remaining = delay;
         self.start = delay;
+        true
     }
 
-    pub fn some(&self) -> bool {
+    pub fn has_state(&self) -> bool {
         self.next_state != None
     }
 }
 
-impl<T> Default for Delay<T> {
+impl<T> Default for DelayState<T> {
     fn default() -> Self {
         Self {
             remaining:0.0,
@@ -30,12 +38,13 @@ impl<T> Default for Delay<T> {
     }
 }
 
-fn delay_update<T : Component + Clone + Eq + Debug + Hash>(mut delay:ResMut<Delay<T>>, mut state:ResMut<State<T>>, time:Res<Time>) {
+fn delay_update<T : Component + Clone + Eq + Debug + Hash>(mut delay:ResMut<DelayState<T>>, mut state:ResMut<State<T>>, time:Res<Time>) {
     if let Some(s) = delay.next_state.clone() {
         delay.remaining -= time.delta_seconds();
         if delay.remaining <= 0.0 {
+            delay.next_state = None;
             delay.remaining = 0.0;
-            state.overwrite_set(s).unwrap();
+            let _ = state.overwrite_set(s);
         }
     }
 }
@@ -47,7 +56,7 @@ pub struct DelayPlugin<T : Component + Clone + Eq + Hash + Debug> {
 
 impl<T : Component + Clone + Eq + Hash + Debug> Plugin for DelayPlugin<T> {
     fn build(&self, app: &mut AppBuilder) {
-        app.insert_resource(Delay::<T>::default());
+        app.insert_resource(DelayState::<T>::default());
         app.add_system_to_stage(CoreStage::PreUpdate, delay_update::<T>.system());
     }
 }
