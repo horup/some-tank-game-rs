@@ -33,11 +33,15 @@ pub use map_loader::*;
 mod splash;
 pub use splash::*;
 
+mod delay;
+pub use delay::*;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
     InBetweenGames,
-    InGame
+    InGame,
+    Delay
 }
 
 impl Default for AppState {
@@ -94,7 +98,9 @@ fn main() {
     .add_plugin(HudPlugin)
     .add_plugin(ConsolePlugin)
     .add_plugin(MapLoaderPlugin)
-    .add_plugin(SplashPlugin);
+    .add_plugin(SplashPlugin)
+    .add_plugin(DelayPlugin::<AppState>::default());
+
     
     // add resources
     builder

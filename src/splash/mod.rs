@@ -14,7 +14,6 @@ fn hide_splash(mut hud:ResMut<Hud>) {
 
 fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<State<AppState>>) {
     if mouse_input.just_pressed(MouseButton::Left) {
-        app_state.pop().unwrap();
     }
 }
 
