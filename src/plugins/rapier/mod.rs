@@ -48,7 +48,7 @@ impl Plugin for RapierPhysicsPluginCustom {
                 physics::update_collider_system.system(),
             )
             .add_system_to_stage(CoreStage::PreUpdate, physics::create_joints_system.system())
-            .add_system_set_to_stage(CoreStage::Update, SystemSet::on_update(AppState::Running).with_system(physics::step_world_system.system()))
+            .add_system_set_to_stage(CoreStage::Update, SystemSet::on_update(AppState::InGame).with_system(physics::step_world_system.system()))
             .add_stage_before(
                 CoreStage::PostUpdate,
                 TRANSFORM_SYNC_STAGE,

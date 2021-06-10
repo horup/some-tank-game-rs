@@ -6,6 +6,14 @@ pub struct Hud {
     pub center_text:String
 }
 
+impl Hud {
+    pub fn clear(&mut self) {
+        self.top_left_text = "".into();
+        self.top_right_text = "".into();
+        self.center_text = "".into();
+    }
+}
+
 impl Default for Hud {
     fn default() -> Self {
         Self {

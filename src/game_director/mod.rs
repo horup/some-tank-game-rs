@@ -64,34 +64,34 @@ fn game_system(mouse_button_input:Res<Input<MouseButton>>, mut console:ResMut<Co
             GameState::NotSet => {
             }
             GameState::GetReady => {
-                let _ = app_state.set(AppState::Pause);
+                let _ = app_state.set(AppState::InBetweenGames);
                 hud.center_text = "Get Ready!".into();
                 hud.top_left_text = "Level ".to_string() + game.level.to_string().as_str() + " of " + &game.levels.to_string();
                 console.load_map(game.level.to_string().as_str());
                 game.transition(GameState::Go, 3.0, &time);
             }
             GameState::Go => {
-                let _ = app_state.set(AppState::Running);
+                let _ = app_state.set(AppState::InGame);
                 hud.center_text = "Go!".into();
                 game.transition(GameState::InProgress, 1.0, &time);
             }
             GameState::InProgress => {
-                let _ = app_state.set(AppState::Running);
+                let _ = app_state.set(AppState::InGame);
                 hud.center_text = "".into();
             }
             GameState::Loading => {
-                let _ = app_state.set(AppState::Pause);
+                let _ = app_state.set(AppState::InBetweenGames);
                 hud.center_text = "Loading...".into();
                 game.level = 1;
                 game.transition_asap(GameState::GetReady);
             }
             GameState::Failure => {
-                let _ = app_state.set(AppState::Pause);
+                let _ = app_state.set(AppState::InBetweenGames);
                 hud.center_text = "You Died!\nRestarting level...".into();
                 game.transition(GameState::GetReady, 3.0, &time);
             }
             GameState::Success => {
-                let _ = app_state.set(AppState::Pause);
+                let _ = app_state.set(AppState::InBetweenGames);
 
                 if game.level < game.levels {
                     hud.center_text = "All Enemies are dead!\nStarting next level...".into();
@@ -133,7 +133,7 @@ fn game_system(mouse_button_input:Res<Input<MouseButton>>, mut console:ResMut<Co
     }
 }
 
-fn game_tick_system(mut game:ResMut<GameDirector>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
+fn game_tick_system(app_state:ResMut<State<AppState>>, mut game:ResMut<GameDirector>, time:Res<Time>, mut game_state_change_writer:EventWriter<GameStateChangeEvent>) {
     if let Some((next_state, at)) = game.next_state_at {
         if at <= time.seconds_since_startup() || game.quick {
             let prev = game.state;
