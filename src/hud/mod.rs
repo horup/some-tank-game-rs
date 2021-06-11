@@ -25,15 +25,30 @@ impl Default for Hud {
 }
 
 #[derive(Copy, Clone, PartialEq)]
-pub enum HudText {
+pub enum HudElement {
     TopLeft,
     Center, 
-    TopRight
+    TopRight,
+    Foreground
 }
 
 fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
     let font_size = 16.0;
 
+
+    commands.spawn_bundle(NodeBundle {
+        style: Style {
+            size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+            justify_content: JustifyContent::SpaceBetween,
+            ..Default::default()
+        },
+        material: materials.add(Color::NONE.into()),
+        ..Default::default()
+    }).with_children(|parent| {
+
+    });
+
+    /*
     commands.spawn_bundle(NodeBundle {
         style:Style {
             size:Size {
@@ -59,7 +74,7 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                 // Accepts a `String` or any type that converts into a `String`, such as `&str`
                 "",
                 TextStyle {
-                    font: asset_server.load("fonts/default.ttf"),
+                    font: as|set_server.load("fonts/default.ttf"),
                     font_size:font_size * 2.0,
                     color: Color::WHITE,
                 },
@@ -71,8 +86,27 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                 },
             ),
             ..Default::default()
-        }).insert(HudText::Center);
+        }).insert(HudElement::Center);
     });
+
+    
+    
+     /* 
+    // foreground
+    commands.spawn_bundle(NodeBundle {
+        style:Style {
+            size:Size {
+                height:Val::Percent(100.0),
+                width:Val::Percent(100.0),
+            },
+            position_type: PositionType::Absolute,
+            ..Default::default()
+        },
+        material:materials.add(Color::rgba(1.0, 0.0, 0.0, 1.0).into()),
+        ..Default::default()
+    }).insert(HudElement::Foreground);*/
+
+  
 
     // top-left text
     commands.spawn_bundle(TextBundle {
@@ -102,7 +136,7 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             },
         ),
         ..Default::default()
-    }).insert(HudText::TopLeft);
+    }).insert(HudElement::TopLeft);
 
     // right text
     commands.spawn_bundle(TextBundle {
@@ -132,7 +166,8 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             },
         ),
         ..Default::default()
-    }).insert(HudText::TopRight);
+    }).insert(HudElement::TopRight);*/
+
 }
 
 pub fn set_text(text:&mut Text, value:&str) {
@@ -142,17 +177,20 @@ pub fn set_text(text:&mut Text, value:&str) {
     }
 }
 
-fn hud_system(hud:ResMut<Hud>, query:Query<(&mut Text, &HudText)>) {
-    query.for_each_mut(|(mut text, hud_text)| {
-        match *hud_text {
-            HudText::TopLeft => {
+fn hud_system(hud:ResMut<Hud>, query:Query<(&mut Text, &HudElement)>) {
+    query.for_each_mut(|(mut text, element)| {
+        match *element {
+            HudElement::TopLeft => {
                 set_text(&mut text, &hud.top_left_text);
             }
-            HudText::Center => {
+            HudElement::Center => {
                 set_text(&mut text, &hud.center_text);
             }
-            HudText::TopRight => {
+            HudElement::TopRight => {
                 set_text(&mut text, &hud.top_right_text);
+            }
+            HudElement::Foreground => {
+
             }
         }
     });

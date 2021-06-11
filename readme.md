@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-10  75m worked on splash plugin, started refactoring state system using delay plugin abstraction
+- 2021-06-10  85m worked on splash plugin, started refactoring state system using delay plugin abstraction
 - 2021-06-09  60m added support for object rotation in map loader, worked a bit on map 3, added new tiles
 - 2021-06-08  100m added working map loader with entity spawner, refactored a bit, worked on level system, added working game!
 - 2021-06-07  90m worked on console and map loader support
