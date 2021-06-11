@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-11  25m worked on foreground coloring
+- 2021-06-11  25m+30m+10 worked on foreground coloring and fade_in_out support
 - 2021-06-10  85m worked on splash plugin, started refactoring state system using delay plugin abstraction
 - 2021-06-09  60m added support for object rotation in map loader, worked a bit on map 3, added new tiles
 - 2021-06-08  100m added working map loader with entity spawner, refactored a bit, worked on level system, added working game!

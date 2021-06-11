@@ -11,12 +11,14 @@ fn show_splash(mut hud:ResMut<Hud>) {
 }
 
 fn hide_splash(mut hud:ResMut<Hud>) {
-    hud.clear();
+    hud.clear_texts();
 }
 
-fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<DelayState<AppState>>) {
+fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<DelayState<AppState>>, mut hud:ResMut<Hud>) {
     if mouse_input.just_pressed(MouseButton::Left) {
-        app_state.set(AppState::InBetweenGames, 1.0);
+        let time = 0.5;
+        app_state.set(AppState::InBetweenGames, time);
+        hud.fade(time, time, Color::BLACK);
     }
 }
 

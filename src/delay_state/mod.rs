@@ -26,6 +26,15 @@ impl<T : Component + Clone + Eq + Hash + Debug> DelayState<T> {
     pub fn has_state(&self) -> bool {
         self.next_state != None
     }
+
+    pub fn elapsed_normalized(&self) -> f32 {
+        if self.start <= 0.0 {
+            return 0.0;
+        }
+
+        let elapsed =  1.0 - self.remaining / self.start;
+        return elapsed;
+    }
 }
 
 impl<T> Default for DelayState<T> {
