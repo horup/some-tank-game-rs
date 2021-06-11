@@ -44,6 +44,7 @@ pub enum AppState {
     Delay
 }
 
+
 impl Default for AppState {
     fn default() -> Self {
         Self::InGame
@@ -94,7 +95,7 @@ fn main() {
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default())
-    //.add_plugin(GameDirectorPlugin)
+    .add_plugin(GameDirectorPlugin)
     .add_plugin(HudPlugin)
     .add_plugin(ConsolePlugin)
     .add_plugin(MapLoaderPlugin)
