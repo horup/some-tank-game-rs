@@ -17,7 +17,7 @@ fn hide_splash(mut hud:ResMut<Hud>) {
 fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<DelayState<AppState>>, mut hud:ResMut<Hud>) {
     if mouse_input.just_pressed(MouseButton::Left) {
         let time = 0.5;
-        app_state.set(AppState::InBetweenGames, time);
+        app_state.set(AppState::InGame, time);
         hud.fade(time, time, Color::BLACK);
     }
 }

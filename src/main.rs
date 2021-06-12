@@ -16,8 +16,8 @@ use resources::*;
 mod plugins;
 pub use plugins::*;
 
-mod game_director;
-pub use game_director::*;
+mod director;
+pub use director::*;
 
 mod hud;
 pub use hud::*;
@@ -36,20 +36,30 @@ pub use splash::*;
 mod delay_state;
 pub use delay_state::*;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
-    InBetweenGames,
-    InGame,
-    Delay
+    InGame
 }
-
 
 impl Default for AppState {
     fn default() -> Self {
         Self::InGame
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum GameState {
+    Paused,
+    Running
+}
+
+impl Default for GameState {
+    fn default() -> Self {
+        Self::Paused
+    }
+}
+
 
 
 fn debug_system(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMut<Console>) {
@@ -69,8 +79,9 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
     rapier.gravity.y = 0.0;
     rapier.time_dependent_number_of_timesteps = true;
 
-    app_state.push(AppState::Splash).unwrap();
+    app_state.push(AppState::Splash.into()).unwrap();
 }
+
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() {
@@ -82,8 +93,10 @@ fn main() {
         vsync: true,
         ..Default::default()
     };
+    
     builder.insert_resource(window);
     builder.add_state(AppState::default());
+    builder.add_state(GameState::default());
 
     builder.add_system(debug_system.system());
 
@@ -95,7 +108,7 @@ fn main() {
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default())
-    .add_plugin(GameDirectorPlugin)
+    .add_plugin(DirectorPlugin)
     .add_plugin(HudPlugin)
     .add_plugin(ConsolePlugin)
     .add_plugin(MapLoaderPlugin)
@@ -131,7 +144,7 @@ fn main() {
         .with_system(mouse_input_system.system())
     );
     builder
-    .add_system_set(SystemSet::on_update(AppState::InGame)
+    .add_system_set(SystemSet::on_update(GameState::Running)
         .with_system(drag_system.system())
         .with_system(turret_system.system())
         .with_system(bot_system.system())

@@ -1,10 +1,11 @@
 use bevy::{prelude::*};
 
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum FadeDirection {
     In,
-    Out
+    Out,
+    InBetween
 }
 #[derive(Clone, Copy)]
 pub struct FadeInOut {
@@ -12,15 +13,17 @@ pub struct FadeInOut {
     pub elapsed_sec:f32,
     pub time_in_sec:f32,
     pub time_out_sec:f32,
+    pub time_in_between_sec:f32,
     pub direction:FadeDirection
 }
 
 impl FadeInOut {
-    pub fn new(mut base_color:Color, time_in_sec:f32, time_out_sec:f32) -> Self {
+    pub fn new(base_color:Color, time_in_sec:f32, time_out_sec:f32, time_between_sec:f32) -> Self {
         FadeInOut {
             base_color,
             time_in_sec,
             time_out_sec,
+            time_in_between_sec: time_between_sec,
             direction:FadeDirection::In,
             elapsed_sec:0.0
         }
@@ -29,6 +32,7 @@ impl FadeInOut {
         match self.direction {
             FadeDirection::In => self.elapsed_sec / self.time_in_sec,
             FadeDirection::Out => 1.0 - (self.elapsed_sec / self.time_out_sec),
+            FadeDirection::InBetween => 1.0,
         }
     }
 }
@@ -50,8 +54,12 @@ impl Hud {
 
     pub fn fade(&mut self, time_in_sec:f32, time_out_sec:f32, base_color:Color) {
         if self.fade_in_out.is_none() {
-            self.fade_in_out = Some(FadeInOut::new(base_color, time_in_sec, time_out_sec));
+            self.fade_in_out = Some(FadeInOut::new(base_color, time_in_sec, time_in_sec / 2.0 + time_out_sec / 2.0, 0.5));
         }
+    }
+
+    pub fn start_default_fade(&mut self) {
+        self.fade(0.5, 0.5, Color::BLACK);
     }
 }
 
@@ -255,7 +263,7 @@ fn fade_out_in_out(mut hud:ResMut<Hud>, time:Res<Time>) {
             FadeDirection::In => {
                 if fade_in_out.elapsed_sec >= fade_in_out.time_in_sec {
                     fade_in_out.elapsed_sec = 0.0;
-                    fade_in_out.direction = FadeDirection::Out;
+                    fade_in_out.direction = FadeDirection::InBetween;
                 }
 
                 hud.fade_in_out = Some(fade_in_out);
@@ -269,6 +277,15 @@ fn fade_out_in_out(mut hud:ResMut<Hud>, time:Res<Time>) {
                     hud.fade_in_out = Some(fade_in_out);
                 }
             },
+            FadeDirection::InBetween => {
+                if fade_in_out.elapsed_sec >= fade_in_out.time_in_between_sec {
+                    fade_in_out.elapsed_sec = 0.0;
+                    fade_in_out.direction = FadeDirection::Out;
+                    
+                } 
+                
+                hud.fade_in_out = Some(fade_in_out);
+            }
         }
 
         hud.foreground = fade_in_out.base_color;

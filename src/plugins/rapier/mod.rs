@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::{physics::{self, EntityMaps, EventQueue, InteractionPairFilters, RapierConfiguration, SimulationToRenderTime}, rapier::{dynamics::{CCDSolver, IntegrationParameters, JointSet, RigidBodySet}, geometry::{BroadPhase, ColliderSet, NarrowPhase}, pipeline::{PhysicsPipeline, QueryPipeline}}};
 
-use crate::AppState;
+use crate::{GameState};
 
 /// A plugin responsible for setting up a full Rapier physics simulation pipeline and resources.
 ///
@@ -48,7 +48,7 @@ impl Plugin for RapierPhysicsPluginCustom {
                 physics::update_collider_system.system(),
             )
             .add_system_to_stage(CoreStage::PreUpdate, physics::create_joints_system.system())
-            .add_system_set_to_stage(CoreStage::Update, SystemSet::on_update(AppState::InGame).with_system(physics::step_world_system.system()))
+            .add_system_set_to_stage(CoreStage::Update, SystemSet::on_update(GameState::Running).with_system(physics::step_world_system.system()))
             .add_stage_before(
                 CoreStage::PostUpdate,
                 TRANSFORM_SYNC_STAGE,
