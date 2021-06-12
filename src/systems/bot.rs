@@ -88,7 +88,7 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
                             }
 
                             bot.mem[0] += 1.0;
-                            if bot.mem[0] > 10.0 {
+                            if bot.mem[0] > 2.0 {
                                 bot.state = BotState::Exploring;  
 
                             }

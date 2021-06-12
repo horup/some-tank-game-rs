@@ -9,8 +9,8 @@ fn show_splash(mut hud:ResMut<Hud>, audio:Res<Audio>, asset_server:Res<AssetServ
     hud.top_right_text = "build date 2021-10-10".into();
     hud.top_left_text = "v1.0".into();
 
-    let music = asset_server.load("music/test.mp3");
-    audio.play(music);
+    //let music = asset_server.load("music/test.mp3");
+    //audio.play(music);
 }
 
 fn hide_splash(mut hud:ResMut<Hud>) {

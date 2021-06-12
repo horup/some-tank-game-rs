@@ -1,3 +1,5 @@
+use std::convert::TryInto;
+
 use bevy::{diagnostic::{LogDiagnosticsPlugin}};
 
 mod components;
@@ -70,7 +72,7 @@ fn debug_system(mut char_input_reader:EventReader<ReceivedCharacter>, mut consol
     }
 }
 
-fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>) {
+fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>, asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
     // cameras
     commands.spawn_bundle(UiCameraBundle::default());
     commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GameCamera::default());
@@ -80,6 +82,15 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
     rapier.time_dependent_number_of_timesteps = true;
 
     app_state.push(AppState::Splash.into()).unwrap();
+
+    
+
+}
+
+fn test(asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
+    let music:Handle<AudioSource> = asset_server.load("music/test.mp3");
+    if let Some(s) = audio_source.get(music) {
+    }
 }
 
 
@@ -93,6 +104,8 @@ fn main() {
         vsync: true,
         ..Default::default()
     };
+
+    builder.add_system(test.system());
     
     builder.insert_resource(window);
     builder.add_state(AppState::default());

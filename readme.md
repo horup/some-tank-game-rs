@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-12  105m reimplemented game director into director + worked on audio playback
+- 2021-06-12  125m reimplemented game director into director + worked on audio playback, improved ai a bit
 - 2021-06-11  70m worked on foreground coloring and fade_in_out support, worked on re-implementing game director
 - 2021-06-10  85m worked on splash plugin, started refactoring state system using delay plugin abstraction
 - 2021-06-09  60m added support for object rotation in map loader, worked a bit on map 3, added new tiles
