@@ -132,7 +132,7 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                     },
                 ),
                 ..Default::default()
-            }).insert(HudElement::Center);
+            }).insert(HudElement::Center);;
         });
 
         // top-left text
