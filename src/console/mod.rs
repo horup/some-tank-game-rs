@@ -5,7 +5,7 @@ use bevy::prelude::*;
 mod console_command;
 pub use console_command::*;
 
-use crate::{MapLoader};
+use crate::{MapLoader, Persister, PersisterCommand};
 
 
 #[derive(Default)]
@@ -33,7 +33,7 @@ impl Console {
     }
 }
 
-pub fn command_interpreter(mut console:ResMut<Console>, asset_server:Res<AssetServer>, mut map_loader:ResMut<MapLoader>) {
+pub fn command_interpreter(mut persister:ResMut<Persister>, mut console:ResMut<Console>, asset_server:Res<AssetServer>, mut map_loader:ResMut<MapLoader>) {
     if let Some(command) = console.pop_command() {
         match command {
             ConsoleCommand::LoadMap(map_name) => {
@@ -41,10 +41,10 @@ pub fn command_interpreter(mut console:ResMut<Console>, asset_server:Res<AssetSe
                 map_loader.load_map(&path, asset_server);
             }
             ConsoleCommand::SaveState(index) => {
-
+                persister.push_command(PersisterCommand::SaveState);
             },
             ConsoleCommand::LoadState(index) => {
-
+                persister.push_command(PersisterCommand::LoadState);
             },
         }
     }

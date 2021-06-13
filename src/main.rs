@@ -116,12 +116,6 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
     app_state.push(AppState::Splash.into()).unwrap();
 }
 
-fn test(asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
-    let music:Handle<AudioSource> = asset_server.load("music/test.mp3");
-    if let Some(s) = audio_source.get(music) {
-    }
-}
-
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() {
@@ -134,8 +128,6 @@ fn main() {
         ..Default::default()
     };
 
-    builder.add_system(test.system());
-    
     builder.insert_resource(window);
     builder.add_state(AppState::default());
     builder.add_state(GameState::default());
