@@ -1,4 +1,4 @@
-use std::convert::TryInto;
+use std::{collections::HashMap};
 
 use bevy::{diagnostic::{LogDiagnosticsPlugin}};
 
@@ -38,6 +38,9 @@ pub use splash::*;
 mod delay_state;
 pub use delay_state::*;
 
+mod persister;
+pub use persister::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
@@ -64,12 +67,41 @@ impl Default for GameState {
 
 
 
-fn debug_system(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMut<Console>) {
+fn debug(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMut<Console>) {
     for e in char_input_reader.iter() {
         if ['1', '2', '3', '4', '5', '6', '7', '8', '9'].contains(&e.char) {
             console.load_map(e.char.to_string().as_str());
         }
     }
+}
+
+fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>) {
+    let mut save = false;
+    if input.pressed(KeyCode::LShift) || input.pressed(KeyCode::RShift) {
+        save = true;
+    }
+
+    let mut map:HashMap<KeyCode, u8> = HashMap::default();
+    map.insert(KeyCode::F1, 0);
+    map.insert(KeyCode::F2, 1);
+    map.insert(KeyCode::F3, 2);
+    map.insert(KeyCode::F4, 3);
+    map.insert(KeyCode::F5, 4);
+    map.insert(KeyCode::F6, 5);
+    map.insert(KeyCode::F7, 6);
+    map.insert(KeyCode::F8, 7);
+
+    for (key_code, index) in map {
+        if input.just_pressed(key_code) {
+            if save {
+                console.save_state(index);
+            } else {
+                console.load_state(index);
+            }
+            return;
+        }
+    }
+
 }
 
 fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>, asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
@@ -82,9 +114,6 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
     rapier.time_dependent_number_of_timesteps = true;
 
     app_state.push(AppState::Splash.into()).unwrap();
-
-    
-
 }
 
 fn test(asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
@@ -110,8 +139,8 @@ fn main() {
     builder.insert_resource(window);
     builder.add_state(AppState::default());
     builder.add_state(GameState::default());
-
-    builder.add_system(debug_system.system());
+    builder.add_system(debug.system());
+    builder.add_system(state_input.system());
 
     // add plugins
     builder.add_plugins(DefaultPlugins)
@@ -126,7 +155,8 @@ fn main() {
     .add_plugin(ConsolePlugin)
     .add_plugin(MapLoaderPlugin)
     .add_plugin(SplashPlugin)
-    .add_plugin(DelayPlugin::<AppState>::default());
+    .add_plugin(DelayPlugin::<AppState>::default())
+    .add_plugin(PersisterPlugin);
 
     
     // add resources

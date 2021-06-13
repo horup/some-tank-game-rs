@@ -25,6 +25,12 @@ impl Console {
     pub fn load_map(&mut self, map_name:&str) {
         self.push_command(ConsoleCommand::LoadMap(map_name.into()));
     }
+    pub fn load_state(&mut self, index:u8) {
+        self.push_command(ConsoleCommand::LoadState(index));
+    }
+    pub fn save_state(&mut self, index:u8) {
+        self.push_command(ConsoleCommand::SaveState(index));
+    }
 }
 
 pub fn command_interpreter(mut console:ResMut<Console>, asset_server:Res<AssetServer>, mut map_loader:ResMut<MapLoader>) {
@@ -34,6 +40,12 @@ pub fn command_interpreter(mut console:ResMut<Console>, asset_server:Res<AssetSe
                 let path:String = "maps/".to_owned() + &map_name + ".tmx";
                 map_loader.load_map(&path, asset_server);
             }
+            ConsoleCommand::SaveState(index) => {
+
+            },
+            ConsoleCommand::LoadState(index) => {
+
+            },
         }
     }
 }
