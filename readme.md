@@ -1,4 +1,5 @@
 ## Devlog
+- 2021-06-14  75m looked into persistance and state restoring
 - 2021-06-13  40m looked into persistance and state restoring
 - 2021-06-12  125m reimplemented game director into director + worked on audio playback, improved ai a bit
 - 2021-06-11  70m worked on foreground coloring and fade_in_out support, worked on re-implementing game director

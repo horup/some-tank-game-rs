@@ -1,7 +1,8 @@
 use bevy::{math::Vec2, prelude::Entity};
+use serde::{Serialize, Deserialize};
 
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 pub struct Tank {
     pub tracks:Vec2,
     pub turret_entity:Entity,

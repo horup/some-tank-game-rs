@@ -1,6 +1,7 @@
 use bevy::math::Vec3;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
 pub struct Effect {
     pub start:f32,
     pub timer:f32,

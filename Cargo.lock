@@ -156,6 +156,9 @@ name = "arrayvec"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "269d0f5e68353a7cab87f81e7c736adc008d279a36ebc6a05dfe01193a89f0c9"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "ash"
@@ -819,6 +822,9 @@ name = "bit-vec"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "349f9b6a179ed607305526ca489b34ad0a41aed5f7980fa90eb03160b69598fb"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "bitflags"
@@ -842,6 +848,8 @@ dependencies = [
  "bevy_webgl2",
  "integer_scaling",
  "rand",
+ "serde",
+ "serde_json",
  "tiled",
  "wasm-bindgen",
 ]
@@ -2556,6 +2564,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "747d632c0c558b87dbabbe6a82f3b4ae03720d0646ac5b7b4dae89394be5f2c5"
 dependencies = [
  "num-traits",
+ "serde",
 ]
 
 [[package]]
@@ -2777,6 +2786,7 @@ dependencies = [
  "num-derive",
  "num-traits",
  "rustc-hash",
+ "serde",
  "simba",
  "slab",
  "smallvec",
@@ -2937,6 +2947,7 @@ dependencies = [
  "num-traits",
  "parry2d",
  "rustc-hash",
+ "serde",
  "simba",
 ]
 

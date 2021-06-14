@@ -16,9 +16,11 @@ crate-type = ["cdylib", "rlib"]
 wasm-bindgen = "0.2"
 rand = "0.8.3"
 integer_scaling = "1.3.2"
-bevy_rapier2d = "0.9.0" 
+bevy_rapier2d = {version = "0.9.0", features = ["serde-serialize"]} 
 tiled = "0.9.3"
 anyhow = "1.0"
+serde = "1.0.126"
+serde_json = "1.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 bevy = {version = "0.5"}

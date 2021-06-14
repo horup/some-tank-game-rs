@@ -1,4 +1,5 @@
-#[derive(Clone, Copy, Default)]
+use serde::{Serialize, Deserialize};
+#[derive(Clone, Copy, Default,Serialize, Deserialize)]
 pub struct Player {
 
 }

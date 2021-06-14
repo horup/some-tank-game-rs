@@ -1,5 +1,6 @@
+use serde::{Serialize, Deserialize};
 use bevy::prelude::Color;
-#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Faction {
     Greens,
     Reds

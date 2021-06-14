@@ -1,6 +1,7 @@
+use serde::{Serialize, Deserialize};
 use bevy::math::Vec3;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 pub struct  Turret {
     pub target:Vec3,
     pub cooldown:f32,

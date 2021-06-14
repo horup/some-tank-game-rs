@@ -37,6 +37,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 e.insert(Health::default());
                 e.insert(Drag::default());
 
+
                 let sprite_sheet_bundle = SpriteSheetBundle {
                     texture_atlas:texture_atlases.get_atlas(tb.thing_type),
                     transform,
@@ -63,6 +64,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                     ..Default::default()
                 })
                 .insert(Turret::default())
+                .insert(GamePiece::default())
                 .id();
 
                 // adding Parent component to the entity above does not work correct due to scale
@@ -83,6 +85,7 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                     },
                     ..Default::default()
                 })
+                .insert(GamePiece::default())
                 .id();
 
                 commands.entity(tank).push_children(&[tracks]);

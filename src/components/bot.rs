@@ -1,7 +1,8 @@
 use bevy::{math::{Vec3}, prelude::Entity};
 use rand::random;
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 pub enum BotState {
     Idle,
     RandomRotate,
@@ -9,6 +10,7 @@ pub enum BotState {
     Exploring
 }
 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Bot {
     pub next_think:f64,
     pub state:BotState,
@@ -17,7 +19,7 @@ pub struct Bot {
     pub attack_timer:f32
 }
 
-#[derive(Default)]
+#[derive(Default, Clone, Serialize, Deserialize)]
 pub struct BotSensors {
     // sensed distance to front obstacle
     pub obstacle_distance_front:f32,
@@ -42,7 +44,7 @@ impl BotSensors {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Enemy {
     pub entity:Entity,
     pub position:Vec3,
