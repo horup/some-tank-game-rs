@@ -1,10 +1,11 @@
 use std::collections::VecDeque;
-use bevy::{ecs::{component::Component, system::CommandQueue}, prelude::*, utils::HashMap};
+use bevy::{ecs::{component::Component, system::CommandQueue}, prelude::*, reflect::{TypeRegistry, serde::ReflectSerializer}, utils::HashMap};
 use serde::{Serialize, Deserialize};
 use serde_json::Value;
 use crate::GamePiece;
-use crate::components::*;
 
+mod state;
+pub use state::*;
 
 pub enum PersisterCommand {
     SaveState,
@@ -52,15 +53,27 @@ fn serialize<T:Serialize + Component>(world:&mut World) -> serde_json::Value {
     let mut array:Vec<Value> = Vec::default();
     for (t, _) in world.query::<(&T, &GamePiece)>().iter(world) {
         let value = serde_json::to_value(t).unwrap();
+        println!("{:?}", value);
         array.push(value);
     }
 
     serde_json::Value::Array(array)
 }
 
+fn serialize2<T:Reflect>(world:&mut World) {
+    for (t, _) in world.query::<(&T, &GamePiece)>().iter(world) {
+        let tr = world.get_resource::<TypeRegistry>().unwrap();
+        let tr = tr.read();
+        let serializer = ReflectSerializer::new(t, &tr);
+        let ron_string = ron::ser::to_string_pretty(&serializer, ron::ser::PrettyConfig::default()).unwrap();
+        println!("{}", ron_string);
+      
+    }
+}
+
+
 fn save_state(world:&mut World) {
-    serialize::<Tank>(world);
-    serialize::<Bot>(world);
+
 }
 
 

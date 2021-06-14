@@ -22,6 +22,7 @@ pub fn effect_system(mut commands:Commands, query:Query<(Entity, &mut Effect, &m
                     let a = 1.0 - (elapsed - effect.start_fade) / (1.0 - effect.start_fade);
                     sprite.color.set_a(a);
                 } else {
+                    
                 }
 
 

@@ -848,6 +848,7 @@ dependencies = [
  "bevy_webgl2",
  "integer_scaling",
  "rand",
+ "ron",
  "serde",
  "serde_json",
  "tiled",
