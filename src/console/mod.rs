@@ -40,10 +40,10 @@ pub fn command_interpreter(mut persister:ResMut<Persister>, mut console:ResMut<C
                 let path:String = "maps/".to_owned() + &map_name + ".tmx";
                 map_loader.load_map(&path, asset_server);
             }
-            ConsoleCommand::SaveState(index) => {
+            ConsoleCommand::SaveState(_index) => {
                 persister.push_command(PersisterCommand::SaveState);
             },
-            ConsoleCommand::LoadState(index) => {
+            ConsoleCommand::LoadState(_index) => {
                 persister.push_command(PersisterCommand::LoadState);
             },
         }

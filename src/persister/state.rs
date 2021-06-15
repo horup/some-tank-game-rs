@@ -10,13 +10,13 @@ pub struct State {
 }
 
 impl State {
-    pub fn serialize(world:&mut World) -> State {
+    pub fn _serialize(_world:&mut World) -> State {
         State {
             bots:HashMap::default()
         }
     }
 
-    pub fn overwrite(world:&mut World) {
+    pub fn _overwrite(_world:&mut World) {
         
     }
 }

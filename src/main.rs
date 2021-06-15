@@ -104,7 +104,7 @@ fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>) {
 
 }
 
-fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>, asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
+fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>, _asset_server:Res<AssetServer>, _audio:Res<Audio>, _audio_source:Res<Assets<AudioSource>>) {
     // cameras
     commands.spawn_bundle(UiCameraBundle::default());
     commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GameCamera::default());

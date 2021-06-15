@@ -4,7 +4,7 @@ use crate::{AppState, DelayState, Hud};
 
 pub struct SplashPlugin;
 
-fn show_splash(mut hud:ResMut<Hud>, audio:Res<Audio>, asset_server:Res<AssetServer>) {
+fn show_splash(mut hud:ResMut<Hud>) {
     hud.center_text = "Some Tank Game!\nBy Horup".into();
     hud.top_right_text = "build date 2021-10-10".into();
     hud.top_left_text = "v1.0".into();
