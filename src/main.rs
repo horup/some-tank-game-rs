@@ -131,7 +131,6 @@ fn main() {
             max_width: f32::MAX,
             max_height: f32::MAX,
         },
-        //scale_factor_override:Some(2.0),
         ..Default::default()
     };
 
