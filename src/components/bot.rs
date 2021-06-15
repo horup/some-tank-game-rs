@@ -21,8 +21,10 @@ pub struct Bot {
 
 #[derive(Default, Clone, Serialize, Deserialize, Debug)]
 pub struct BotSensors {
-    // sensed distance to front obstacle
+    // sensed distance to front, left and right obsticles
     pub obstacle_distance_front:f32,
+    pub obstacle_distance_left:f32,
+    pub obstacle_distance_right:f32,
     pub known_enemies:Vec<Enemy>,
     pub visible_enemies:Vec<Enemy>
 }

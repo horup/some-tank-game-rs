@@ -121,7 +121,7 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
 fn main() {
     let mut builder = App::build();
     let window = WindowDescriptor {
-        title: "Blueprint 3.0".to_string(),
+        title: "Some Tank Game!".to_string(),
         width: 1024.0,
         height: 768.0,
         vsync: true,

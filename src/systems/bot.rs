@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::*;
 use bevy_rapier2d::{physics::{RigidBodyHandleComponent}, rapier::{dynamics::{RigidBodySet}, geometry::{ColliderSet, InteractionGroups, Ray}, math::Real, pipeline::QueryPipeline}};
 use rand::random;
@@ -9,7 +11,9 @@ pub fn bot_sensor_system(tanks:Query<(Entity, &Tank, &Faction)>, bots:Query<(Ent
         if let Ok(bot_body) = rigid_bodies.get_component::<RigidBodyHandleComponent>(bot_entity) {
             if let Some(bot_body) = rigid_body_set.get(bot_body.handle()) {
                 // measure distance to front
-                bot.sensors.obstacle_distance_front = raycast_front_distance(bot_body, &query_pipeline, &collider_set);
+                bot.sensors.obstacle_distance_front = raycast_front_distance(bot_body, &query_pipeline, &collider_set, 0.0);
+                bot.sensors.obstacle_distance_left = raycast_front_distance(bot_body, &query_pipeline, &collider_set, PI / 2.0);
+                bot.sensors.obstacle_distance_right = raycast_front_distance(bot_body, &query_pipeline, &collider_set, -PI / 2.0);
 
                 // collect know enemies
                 tanks.for_each(|(tank_entity, _tank, faction)| {
@@ -78,25 +82,27 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
                         }
                         BotState::RandomRotate => {
                             if bot.mem[0] == 0.0 {
-                                let r = random::<f32>() - 0.5;
-                                if r > 0.0 {
-                                    tank.tracks = [1.0, -1.0].into();
-                                } 
-                                else {
+                                if bot.sensors.obstacle_distance_front < 1.0 {
                                     tank.tracks = [-1.0, 1.0].into();
+                                }
+                                else if bot.sensors.obstacle_distance_left < bot.sensors.obstacle_distance_right {
+                                    tank.tracks = [-1.0, 1.0].into();
+                                } else {
+                                    tank.tracks = [1.0, -1.0].into();
                                 }
                             }
 
                             bot.mem[0] += 1.0;
-                            if bot.mem[0] > 2.0 {
+                            if bot.mem[0] > 3.0 {
                                 bot.state = BotState::Exploring;  
 
                             }
                         }
                         BotState::Exploring => {
                             tank.tracks = [1.0, 1.0].into();
-                            if bot.sensors.obstacle_distance_front < 2.0 {
-                                // front of tank hit something
+                            let front = 1.5;
+                            let sides = 0.1;
+                            if bot.sensors.obstacle_distance_front < front || bot.sensors.obstacle_distance_left < sides || bot.sensors.obstacle_distance_right < sides {
                                 bot.state = BotState::RandomRotate;
                                 bot.mem[0] = 0.0;
                             }
@@ -121,10 +127,12 @@ pub fn bot_system(mut turrets:Query<(Entity, &mut Turret)>, bots:Query<(Entity, 
     });
 }
 
-fn raycast_front_distance(body: &bevy_rapier2d::rapier::dynamics::RigidBody, query_pipeline: &Res<QueryPipeline>, collider_set: &Res<ColliderSet>) -> f32 {
+fn raycast_front_distance(body: &bevy_rapier2d::rapier::dynamics::RigidBody, query_pipeline: &Res<QueryPipeline>, collider_set: &Res<ColliderSet>, angle:f32) -> f32 {
     let o:Vec2 = [body.position().translation.x, body.position().translation.y].into();
     let dir:Vec2 = [body.position().rotation.re, body.position().rotation.im].into();
-    let o = o + dir;
+    let a = angle;
+    let dir = Vec2::new(dir.x * f32::cos(a) - dir.y * f32::sin(a), dir.x * f32::sin(a) + dir.y * f32::cos(a));
+    let o = o + dir * 1.01;
     let ray = Ray { 
         origin:[o.x, o.y].into(),
         dir:[dir.x, dir.y].into()
