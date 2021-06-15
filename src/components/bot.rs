@@ -16,7 +16,8 @@ pub struct Bot {
     pub state:BotState,
     pub mem:[f32;4],
     pub sensors:BotSensors,
-    pub attack_timer:f32
+    pub attack_timer:f32,
+    pub trigger_timer:f32
 }
 
 #[derive(Default, Clone, Serialize, Deserialize, Debug)]
@@ -61,7 +62,8 @@ impl Default for Bot {
             state:BotState::Idle,
             mem:Default::default(),
             sensors:Default::default(),
-            attack_timer:10.0
+            attack_timer:0.0,
+            trigger_timer:0.0
         }
     }
 }

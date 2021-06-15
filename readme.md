@@ -1,5 +1,5 @@
 ## Devlog
-- 2021-06-15  60m worked on instructions, added resize constraint, improved bot navigation
+- 2021-06-15  60m worked on instructions, added resize constraint, improved bot navigation, tweaked ai attack behavior
 - 2021-06-14  100m looked into persistance and state restoring
 - 2021-06-13  40m looked into persistance and state restoring
 - 2021-06-12  125m reimplemented game director into director + worked on audio playback, improved ai a bit
