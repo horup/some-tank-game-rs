@@ -1,6 +1,6 @@
 use std::{collections::HashMap};
 
-use bevy::{diagnostic::{LogDiagnosticsPlugin}};
+use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::WindowResizeConstraints};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
@@ -125,6 +125,13 @@ fn main() {
         width: 1024.0,
         height: 768.0,
         vsync: true,
+        resize_constraints:WindowResizeConstraints {
+            min_width: 1024.0,
+            min_height: 768.0,
+            max_width: f32::MAX,
+            max_height: f32::MAX,
+        },
+        //scale_factor_override:Some(2.0),
         ..Default::default()
     };
 

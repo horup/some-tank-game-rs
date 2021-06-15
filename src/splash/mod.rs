@@ -8,9 +8,7 @@ fn show_splash(mut hud:ResMut<Hud>, audio:Res<Audio>, asset_server:Res<AssetServ
     hud.center_text = "Some Tank Game!\nBy Horup".into();
     hud.top_right_text = "build date 2021-10-10".into();
     hud.top_left_text = "v1.0".into();
-
-    //let music = asset_server.load("music/test.mp3");
-    //audio.play(music);
+    hud.bottom_center_text = "Use W,A,S,D to drive your tank.\nUse the mouse to point and shoot!".into();
 }
 
 fn hide_splash(mut hud:ResMut<Hud>) {
