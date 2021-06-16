@@ -1,10 +1,11 @@
 
 use bevy::prelude::*;
+use rand::random;
 
-use crate::{ThingBuilder, Turret};
+use crate::{PlayAudioEvent, ThingBuilder, Turret};
 
 
-pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>) {
+pub fn turret_system(mut play_audio:EventWriter<PlayAudioEvent>, mut commands:Commands, turrets:Query<(Entity, &mut Turret, &Parent)>, mut transforms:Query<(&mut Transform,)>, time:Res<Time>) {
     turrets.for_each_mut(|(turret_entity, turret, parent_entity), | {
         let mut parent_translation = Vec3::default();
         let mut parent_rotation = Quat::default();
@@ -37,6 +38,7 @@ pub fn turret_system(mut commands:Commands, turrets:Query<(Entity, &mut Turret, 
                     let mut e = commands.spawn();
                     let v = Vec3::new(1.0, 0.0, 0.0) * 0.5;
                     let v =  rot_global * v;
+                    play_audio.send(format!("sfx/shoot_{}.mp3", 1 + random::<u8>() % 3).into());
                     e.insert(ThingBuilder {
                         translation:parent_translation + v,
                         rotation:rot_global,

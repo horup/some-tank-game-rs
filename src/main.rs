@@ -41,6 +41,9 @@ pub use delay_state::*;
 mod persister;
 pub use persister::*;
 
+mod audio;
+pub use audio::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
@@ -104,7 +107,7 @@ fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>) {
 
 }
 
-fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>, _asset_server:Res<AssetServer>, _audio:Res<Audio>, _audio_source:Res<Assets<AudioSource>>) {
+fn startup_system(mut play_audio:EventWriter<PlayAudioEvent>, mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>) {
     // cameras
     commands.spawn_bundle(UiCameraBundle::default());
     commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GameCamera::default());
@@ -154,7 +157,8 @@ fn main() {
     .add_plugin(MapLoaderPlugin)
     .add_plugin(SplashPlugin)
     .add_plugin(DelayPlugin::<AppState>::default())
-    .add_plugin(PersisterPlugin);
+    .add_plugin(PersisterPlugin)
+    .add_plugin(AudioPlugin);
 
     
     // add resources
