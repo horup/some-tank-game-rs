@@ -75,7 +75,7 @@ fn update(
             director.transition(DirectorState::GetReady, 0.0);
         },
         DirectorState::GetReady => {
-            play_audio.send("sfx/get_ready.mp3".into());
+            play_audio.send("sfx/get_ready.ogg".into());
             hud.center_text = "Get Ready!!!".into();
             hud.top_left_text = "Level ".to_string() + director.level.to_string().as_str() + " of " + &director.levels.to_string();
             director.transition(DirectorState::Go, 1.5);

@@ -17,7 +17,7 @@ pub fn projectile_system(mut play_audio:EventWriter<PlayAudioEvent>, mut command
                 
                 let mut e = commands.spawn();
 
-                play_audio.send(format!("sfx/boom_{}.mp3", 1 + random::<u8>() % 1).into());
+                play_audio.send(format!("sfx/boom_{}.mp3", 1 + random::<u8>() % 3).into());
                 e.insert(ThingBuilder {
                     translation:hit_event.location,
                     thing_type:ThingType::Effect(EffectType::BulletHit),
