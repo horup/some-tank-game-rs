@@ -1,9 +1,10 @@
 use bevy::prelude::*;
+use rand::random;
 
 
-use crate::{ApplyDamageEvent, EffectType, Owner, ProjectileHitEvent, ThingBuilder, ThingType};
+use crate::{ApplyDamageEvent, EffectType, Owner, PlayAudioEvent, ProjectileHitEvent, ThingBuilder, ThingType};
 
-pub fn projectile_system(mut commands:Commands, mut projectile_hit_events:EventReader<ProjectileHitEvent>, owners:Query<&Owner>, mut apply_damage_writer:EventWriter<ApplyDamageEvent>) {
+pub fn projectile_system(mut play_audio:EventWriter<PlayAudioEvent>, mut commands:Commands, mut projectile_hit_events:EventReader<ProjectileHitEvent>, owners:Query<&Owner>, mut apply_damage_writer:EventWriter<ApplyDamageEvent>) {
     for hit_event in projectile_hit_events.iter() {
         if let Ok(owner) = owners.get_component::<Owner>(hit_event.projectile) {
             if owner.owner != hit_event.target {
@@ -16,6 +17,7 @@ pub fn projectile_system(mut commands:Commands, mut projectile_hit_events:EventR
                 
                 let mut e = commands.spawn();
 
+                play_audio.send(format!("sfx/boom_{}.mp3", 1 + random::<u8>() % 3).into());
                 e.insert(ThingBuilder {
                     translation:hit_event.location,
                     thing_type:ThingType::Effect(EffectType::BulletHit),

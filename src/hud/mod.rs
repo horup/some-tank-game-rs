@@ -40,6 +40,7 @@ impl FadeInOut {
 pub struct Hud {
     pub top_left_text:String,
     pub top_right_text:String,
+    pub bottom_center_text:String,
     pub center_text:String,
     pub foreground:Color,
     pub fade_in_out:Option<FadeInOut>
@@ -50,6 +51,7 @@ impl Hud {
         self.top_left_text = "".into();
         self.top_right_text = "".into();
         self.center_text = "".into();
+        self.bottom_center_text = "".into();
     }
 
     pub fn fade(&mut self, time_in_sec:f32, time_out_sec:f32, base_color:Color) {
@@ -69,6 +71,7 @@ impl Default for Hud {
             top_left_text:"".into(),
             top_right_text:"".into(),
             center_text:"".into(),
+            bottom_center_text:"".into(),
             foreground:Color::rgba(1.0,1.0,1.0,0.0),
             fade_in_out:None
         }
@@ -80,7 +83,8 @@ pub enum HudElement {
     TopLeft,
     Center, 
     TopRight,
-    Foreground
+    Foreground,
+    BottomCenter
 }
 
 fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
@@ -121,7 +125,7 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                     "",
                     TextStyle {
                         font: asset_server.load("fonts/default.ttf"),
-                        font_size:font_size * 2.0,
+                        font_size:font_size * 3.0,
                         color: Color::WHITE,
                     },
                     // Note: You can use `Default::default()` in place of the `TextAlignment`
@@ -133,6 +137,33 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                 ),
                 ..Default::default()
             }).insert(HudElement::Center);
+
+            parent.spawn_bundle(TextBundle {
+                style: Style {
+                    align_self: AlignSelf::Center,
+                    position_type: PositionType::Absolute,
+                    position: Rect {
+                        bottom: Val::Percent(25.0),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                },
+                text: Text::with_section(
+                    "",
+                    TextStyle {
+                        font: asset_server.load("fonts/default.ttf"),
+                        font_size:font_size * 2.0,
+                        color: Color::WHITE,
+                    },
+                    // Note: You can use `Default::default()` in place of the `TextAlignment`
+                    TextAlignment {
+                        horizontal: HorizontalAlign::Center,
+                        vertical: VerticalAlign::Bottom,
+                        ..Default::default()
+                    },
+                ),
+                ..Default::default()
+            }).insert(HudElement::BottomCenter);
         });
 
         // top-left text
@@ -141,8 +172,8 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                 align_self: AlignSelf::FlexEnd,
                 position_type: PositionType::Absolute,
                 position: Rect {
-                    top: Val::Px(0.0),
-                    left: Val::Px(0.0),
+                    top: Val::Px(16.0),
+                    left: Val::Px(16.0),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -171,8 +202,8 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
                 align_self: AlignSelf::FlexEnd,
                 position_type: PositionType::Absolute,
                 position: Rect {
-                    top: Val::Px(0.0),
-                    right: Val::Px(0.0),
+                    top: Val::Px(16.0),
+                    right: Val::Px(16.0),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -232,6 +263,9 @@ fn update_text(hud:ResMut<Hud>, query:Query<(&mut Text, &HudElement)>) {
             }
             HudElement::TopRight => {
                 set_text(&mut text, &hud.top_right_text);
+            }
+            HudElement::BottomCenter => {
+                set_text(&mut text, &hud.bottom_center_text);
             }
             _=>{}
         }

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{AppState, Bot, Console, GameState, Hud, Player};
+use crate::{AppState, Bot, Console, GameState, Hud, PlayAudioEvent, Player};
 
 
 enum DirectorState {
@@ -52,7 +52,8 @@ fn update(
     mut game_state:ResMut<State<GameState>>,
     mut console:ResMut<Console>,
     mut hud:ResMut<Hud>,
-    mouse_button_input:Res<Input<MouseButton>>) {
+    mouse_button_input:Res<Input<MouseButton>>,
+    mut play_audio:EventWriter<PlayAudioEvent>) {
 
     if director.timer > 0.0 {
         director.timer -= time.delta_seconds();
@@ -74,11 +75,13 @@ fn update(
             director.transition(DirectorState::GetReady, 0.0);
         },
         DirectorState::GetReady => {
+            play_audio.send("sfx/get_ready.ogg".into());
             hud.center_text = "Get Ready!!!".into();
             hud.top_left_text = "Level ".to_string() + director.level.to_string().as_str() + " of " + &director.levels.to_string();
             director.transition(DirectorState::Go, 1.5);
         },
         DirectorState::Go => {
+            play_audio.send("sfx/go.mp3".into());
             hud.center_text = "Go!!!".into();
             let _ = game_state.overwrite_set(GameState::Running);
 
@@ -97,17 +100,20 @@ fn update(
             hud.center_text = "".into();
         },
         DirectorState::Died => {
+            play_audio.send("sfx/too_bad.mp3".into());
             hud.center_text = "You died! Restarting level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonLevel => {
+            play_audio.send("sfx/great.mp3".into());
             hud.center_text = "All Enemies are dead!\nStarting next level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.level += 1;
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonGame => {
+            play_audio.send("sfx/won.mp3".into());
             hud.center_text = "You Won the Game!\nCongratulations!\nClick to restart the game...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.transition(DirectorState::AwaitRestartGameInput, 0.5);

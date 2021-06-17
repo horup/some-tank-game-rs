@@ -16,13 +16,16 @@ pub struct Bot {
     pub state:BotState,
     pub mem:[f32;4],
     pub sensors:BotSensors,
-    pub attack_timer:f32
+    pub attack_timer:f32,
+    pub trigger_timer:f32
 }
 
 #[derive(Default, Clone, Serialize, Deserialize, Debug)]
 pub struct BotSensors {
-    // sensed distance to front obstacle
+    // sensed distance to front, left and right obsticles
     pub obstacle_distance_front:f32,
+    pub obstacle_distance_left:f32,
+    pub obstacle_distance_right:f32,
     pub known_enemies:Vec<Enemy>,
     pub visible_enemies:Vec<Enemy>
 }
@@ -59,7 +62,8 @@ impl Default for Bot {
             state:BotState::Idle,
             mem:Default::default(),
             sensors:Default::default(),
-            attack_timer:10.0
+            attack_timer:0.0,
+            trigger_timer:0.0
         }
     }
 }

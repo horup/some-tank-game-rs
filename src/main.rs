@@ -1,6 +1,6 @@
 use std::{collections::HashMap};
 
-use bevy::{diagnostic::{LogDiagnosticsPlugin}};
+use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::WindowResizeConstraints};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
@@ -40,6 +40,9 @@ pub use delay_state::*;
 
 mod persister;
 pub use persister::*;
+
+mod audio;
+pub use audio::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
@@ -104,7 +107,7 @@ fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>) {
 
 }
 
-fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>, asset_server:Res<AssetServer>, audio:Res<Audio>, audio_source:Res<Assets<AudioSource>>) {
+fn startup_system(mut play_audio:EventWriter<PlayAudioEvent>, mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>) {
     // cameras
     commands.spawn_bundle(UiCameraBundle::default());
     commands.spawn_bundle(OrthographicCameraBundle::new_2d()).insert(GameCamera::default());
@@ -121,10 +124,16 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
 fn main() {
     let mut builder = App::build();
     let window = WindowDescriptor {
-        title: "Blueprint 3.0".to_string(),
+        title: "Some Tank Game!".to_string(),
         width: 1024.0,
         height: 768.0,
         vsync: true,
+        resize_constraints:WindowResizeConstraints {
+            min_width: 1024.0,
+            min_height: 768.0,
+            max_width: f32::MAX,
+            max_height: f32::MAX,
+        },
         ..Default::default()
     };
 
@@ -148,7 +157,8 @@ fn main() {
     .add_plugin(MapLoaderPlugin)
     .add_plugin(SplashPlugin)
     .add_plugin(DelayPlugin::<AppState>::default())
-    .add_plugin(PersisterPlugin);
+    .add_plugin(PersisterPlugin)
+    .add_plugin(AudioPlugin);
 
     
     // add resources
