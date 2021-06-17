@@ -23,7 +23,7 @@ jobs:
     - name: Create Release
       run: ./release.bat
     - name: Archive production artifacts
-      uses: action/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
         name: dist
         path: |
