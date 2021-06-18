@@ -1,5 +1,5 @@
 
-- 2021-06-18  75m added githash and build date to splash, converted mp3 to ogg, found better sound effects, added package versioning to splash
+- 2021-06-18  85m added githash and build date to splash, converted mp3 to ogg, found better sound effects, added package versioning to splash, started working on music support
 - 2021-06-17  45m worked on release build automation
 - 2021-06-16  75m worked on adding sounds
 - 2021-06-15  75m worked on instructions, added resize constraint, improved bot navigation, fixed some warningstweaked ai attack behavior

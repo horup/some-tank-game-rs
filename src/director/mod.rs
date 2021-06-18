@@ -86,6 +86,7 @@ fn update(
             let _ = game_state.overwrite_set(GameState::Running);
 
             director.transition(DirectorState::InProgress, 1.0);
+            play_audio.send("music/Zander Noriega - Fight Them Until We Cant.ogg".into());
         },
         DirectorState::InProgress => {
             if is_player_alive == false {
