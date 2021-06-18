@@ -875,6 +875,7 @@ dependencies = [
  "bevy_kira_audio",
  "bevy_rapier2d",
  "bevy_webgl2",
+ "chrono",
  "integer_scaling",
  "rand",
  "ron",
@@ -975,6 +976,7 @@ dependencies = [
  "libc",
  "num-integer",
  "num-traits",
+ "time 0.1.43",
  "winapi 0.3.9",
 ]
 
@@ -2022,7 +2024,7 @@ checksum = "61124eeebbd69b8190558df225adf7e4caafce0d743919e5d6b19652314ec5ec"
 dependencies = [
  "cfg-if 1.0.0",
  "js-sys",
- "time",
+ "time 0.2.26",
  "wasm-bindgen",
  "web-sys",
 ]
@@ -3558,6 +3560,16 @@ dependencies = [
  "libflate",
  "xml-rs",
  "zstd",
+]
+
+[[package]]
+name = "time"
+version = "0.1.43"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"
+dependencies = [
+ "libc",
+ "winapi 0.3.9",
 ]
 
 [[package]]

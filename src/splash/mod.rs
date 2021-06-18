@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use bevy::{prelude::*};
 
 use crate::{AppState, DelayState, Hud};
@@ -6,8 +8,8 @@ pub struct SplashPlugin;
 
 fn show_splash(mut hud:ResMut<Hud>) {
     hud.center_text = "Some Tank Game!\nBy Horup".into();
-    hud.top_right_text = "build date 2021-10-10".into();
-    hud.top_left_text = "v1.0".into();
+    hud.top_right_text = format!("Build Date\n{}", env!("BUILD_DATE"));
+    hud.top_left_text = format!("Git Hash\n{}", env!("GIT_HASH"));
     hud.bottom_center_text = "Use W,A,S,D to drive your tank.\nUse the mouse to point and shoot!".into();
 }
 

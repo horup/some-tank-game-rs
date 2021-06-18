@@ -26,6 +26,9 @@ serde_json = "1.0"
 ron = "0.6.4"
 bevy_kira_audio = {version = "0.5.0", features = ["ogg"]}
 
+[build-dependencies]
+chrono = "0.4"
+
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 bevy = {version = "0.5"}
 
