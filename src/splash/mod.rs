@@ -5,9 +5,9 @@ use crate::{AppState, DelayState, Hud};
 pub struct SplashPlugin;
 
 fn show_splash(mut hud:ResMut<Hud>) {
-    hud.center_text = "Some Tank Game!\nBy Horup".into();
+    hud.center_text = "Some Tank Game!".into();
     hud.top_right_text = format!("Build Date\n{}", env!("BUILD_DATE"));
-    hud.top_left_text = format!("Git Hash\n{}", env!("GIT_HASH"));
+    hud.top_left_text = format!("Version\nV{} ({})", env!("CARGO_PKG_VERSION"), env!("GIT_HASH"));
     hud.bottom_center_text = "Use W,A,S,D to drive your tank.\nUse the mouse to point and shoot!".into();
 }
 
