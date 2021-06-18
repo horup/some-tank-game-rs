@@ -38,7 +38,7 @@ pub fn turret_system(mut play_audio:EventWriter<PlayAudioEvent>, mut commands:Co
                     let mut e = commands.spawn();
                     let v = Vec3::new(1.0, 0.0, 0.0) * 0.5;
                     let v =  rot_global * v;
-                    play_audio.send(format!("sfx/shoot_{}.mp3", 1 + random::<u8>() % 3).into());
+                    play_audio.send(format!("sfx/shoot_{}.ogg", 1 + random::<u8>() % 3).into());
                     e.insert(ThingBuilder {
                         translation:parent_translation + v,
                         rotation:rot_global,

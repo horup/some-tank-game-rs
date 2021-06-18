@@ -81,7 +81,7 @@ fn update(
             director.transition(DirectorState::Go, 1.5);
         },
         DirectorState::Go => {
-            play_audio.send("sfx/go.mp3".into());
+            play_audio.send("sfx/go.ogg".into());
             hud.center_text = "Go!!!".into();
             let _ = game_state.overwrite_set(GameState::Running);
 
@@ -100,20 +100,20 @@ fn update(
             hud.center_text = "".into();
         },
         DirectorState::Died => {
-            play_audio.send("sfx/too_bad.mp3".into());
+            play_audio.send("sfx/too_bad.ogg".into());
             hud.center_text = "You died! Restarting level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonLevel => {
-            play_audio.send("sfx/great.mp3".into());
+            play_audio.send("sfx/great.ogg".into());
             hud.center_text = "All Enemies are dead!\nStarting next level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.level += 1;
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonGame => {
-            play_audio.send("sfx/won.mp3".into());
+            play_audio.send("sfx/won.ogg".into());
             hud.center_text = "You Won the Game!\nCongratulations!\nClick to restart the game...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.transition(DirectorState::AwaitRestartGameInput, 0.5);
