@@ -32,7 +32,8 @@ fn player(asset_server:Res<AssetServer>, mut reader:EventReader<PlayAudioEvent>,
     for e in reader.iter() {
         let res = asset_server.load(e.path.as_str());
         audio.play(res);
-        //audio.play(res);
+        audio.set_playback_rate(0.5);
+        audio.get
     }
 }
 

@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use bevy::{prelude::*};
 
 use crate::{AppState, DelayState, Hud};
