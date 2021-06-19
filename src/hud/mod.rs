@@ -38,12 +38,14 @@ impl FadeInOut {
 }
 
 pub struct Hud {
+    pub console_text:String,
     pub top_left_text:String,
     pub top_right_text:String,
     pub bottom_center_text:String,
     pub center_text:String,
     pub foreground:Color,
-    pub fade_in_out:Option<FadeInOut>
+    pub fade_in_out:Option<FadeInOut>,
+    pub show_console:bool
 }
 
 impl Hud {
@@ -68,12 +70,14 @@ impl Hud {
 impl Default for Hud {
     fn default() -> Self {
         Self {
+            console_text:"hahaha\nhhehehe\nheheiheihei\nheheaheahe\n".into(),
             top_left_text:"".into(),
             top_right_text:"".into(),
             center_text:"".into(),
             bottom_center_text:"".into(),
             foreground:Color::rgba(1.0,1.0,1.0,0.0),
-            fade_in_out:None
+            fade_in_out:None,
+            show_console:false
         }
     }
 }
@@ -84,7 +88,8 @@ pub enum HudElement {
     Center, 
     TopRight,
     Foreground,
-    BottomCenter
+    BottomCenter,
+    Console
 }
 
 fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
@@ -99,7 +104,6 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
         material: materials.add(Color::NONE.into()),
         ..Default::default()
     }).with_children(|parent| {
-
         // center text
         parent.spawn_bundle(NodeBundle {
             style:Style {
@@ -196,6 +200,7 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             ..Default::default()
         }).insert(HudElement::TopLeft);
 
+       
         // right text
         parent.spawn_bundle(TextBundle {
             style: Style {
@@ -226,7 +231,7 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             ..Default::default()
         }).insert(HudElement::TopRight);
 
-        // foreground color ontop of all text
+        // foreground color ontop of all, except for console
         parent.spawn_bundle(NodeBundle {
             style:Style {
                 size:Size {
@@ -239,6 +244,60 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             material:materials.add(Color::rgba(1.0, 0.0, 0.0, 0.5).into()),
             ..Default::default()
         }).insert(HudElement::Foreground);
+        
+        
+        // console
+        parent.spawn_bundle(NodeBundle {
+            style:Style {
+                position_type:PositionType::Absolute,
+                size:Size {
+                    height:Val::Percent(50.0),
+                    width:Val::Percent(100.0),
+                },
+                position: Rect {
+                    left: Val::Px(0.0),
+                    right: Val::Percent(100.0),
+                    top: Val::Px(0.0),
+                    bottom: Val::Percent(50.0),
+                },
+                ..Default::default()
+            },
+            material:materials.add((Color::rgba(0.0, 0.0, 0.0, 0.95)).into()),
+            visible:Visible {
+                is_visible: false,
+                is_transparent: true,
+            },
+            ..Default::default()
+        }).with_children(|parent| {
+            parent.spawn_bundle(TextBundle {
+                style: Style {
+                    align_self: AlignSelf::FlexEnd,
+                    position_type: PositionType::Absolute,
+                    position: Rect {
+                        left: Val::Px(8.0),
+                        bottom: Val::Px(8.0),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                },
+                // Use the `Text::with_section` constructor
+                text: Text::with_section(
+                    // Accepts a `String` or any type that converts into a `String`, such as `&str`
+                    "",
+                    TextStyle {
+                        font: asset_server.load("fonts/default.ttf"),
+                        font_size,
+                        color: Color::WHITE,
+                    },
+                    // Note: You can use `Default::default()` in place of the `TextAlignment`
+                    TextAlignment {
+                        horizontal: HorizontalAlign::Left,
+                        ..Default::default()
+                    },
+                ),
+                ..Default::default()
+            }).insert(HudElement::Console);
+        }).insert(HudElement::Console);
     });
 }
 
@@ -267,6 +326,9 @@ fn update_text(hud:ResMut<Hud>, query:Query<(&mut Text, &HudElement)>) {
             HudElement::BottomCenter => {
                 set_text(&mut text, &hud.bottom_center_text);
             }
+            HudElement::Console => {
+                set_text(&mut text, &hud.console_text);
+            }
             _=>{}
         }
     });
@@ -287,6 +349,16 @@ fn update_foreground(hud:ResMut<Hud>, query:Query<(&mut Handle<ColorMaterial>, &
             _ => {}
         }
     });
+}
+
+fn update_console(hud:ResMut<Hud>, query:Query<(&mut Visible, &HudElement)>) {
+    if hud.is_changed() {
+        query.for_each_mut(|(mut visible, element)| {
+            if *element == HudElement::Console {
+                visible.is_visible = hud.show_console;
+            }
+        });
+    }
 }
 
 
@@ -334,6 +406,7 @@ impl Plugin for HudPlugin {
         app.insert_resource(Hud::default());
         app.add_startup_system(hud_initialization_system.system());
         app.add_system(update_text.system());
+        app.add_system(update_console.system());
         app.add_system(fade_out_in_out.system().before("update_foreground"));
         app.add_system(update_foreground.system().label("update_foreground"));
         

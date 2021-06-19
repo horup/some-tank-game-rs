@@ -80,13 +80,13 @@ fn debug(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMu
     }
 }
 
-fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>) {
+fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>, mut hud:ResMut<Hud>) {
     let mut save = false;
     if input.pressed(KeyCode::LShift) || input.pressed(KeyCode::RShift) {
         save = true;
     }
 
-    let mut map:HashMap<KeyCode, u8> = HashMap::default();
+ /*   let mut map:HashMap<KeyCode, u8> = HashMap::default();
     map.insert(KeyCode::F1, 0);
     map.insert(KeyCode::F2, 1);
     map.insert(KeyCode::F3, 2);
@@ -105,10 +105,19 @@ fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>) {
             }
             return;
         }
-    }
+    }*/
 
     if input.pressed(KeyCode::Escape) {
         std::process::exit(0);
+    }
+
+    if input.just_pressed(KeyCode::F1) || input.just_pressed(KeyCode::Grave) {
+        hud.show_console = !hud.show_console;
+    }
+
+
+    for e in input.get_just_pressed() {
+        println!("{:?}", e);
     }
 
 }
