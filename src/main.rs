@@ -1,6 +1,7 @@
-#![windows_subsystem = "windows"]
-
-use std::{collections::HashMap};
+#![cfg_attr(
+    not(debug_assertions),
+    windows_subsystem = "windows"
+)]
 
 use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::WindowResizeConstraints};
 
@@ -134,6 +135,10 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
     app_state.push(AppState::Splash.into()).unwrap();
 }
 
+#[derive(Default)]
+struct Logger {
+
+}
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() {

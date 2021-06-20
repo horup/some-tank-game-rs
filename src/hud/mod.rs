@@ -1,5 +1,7 @@
 use bevy::{prelude::*};
 
+use crate::Console;
+
 
 #[derive(Clone, Copy, Debug)]
 pub enum FadeDirection {
@@ -351,7 +353,11 @@ fn update_foreground(hud:ResMut<Hud>, query:Query<(&mut Handle<ColorMaterial>, &
     });
 }
 
-fn update_console(hud:ResMut<Hud>, query:Query<(&mut Visible, &HudElement)>) {
+fn update_console(mut hud:ResMut<Hud>, query:Query<(&mut Visible, &HudElement)>, mut console:ResMut<Console>) {
+    if console.log != hud.console_text {
+        hud.console_text = console.log.clone();
+    }
+
     if hud.is_changed() {
         query.for_each_mut(|(mut visible, element)| {
             if *element == HudElement::Console {

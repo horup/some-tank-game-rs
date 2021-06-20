@@ -7,10 +7,10 @@ pub use console_command::*;
 
 use crate::{MapLoader, Persister, PersisterCommand};
 
-
 #[derive(Default)]
 pub struct Console {
-    pub(in self) command_queue:VecDeque<ConsoleCommand>
+    pub(in self) command_queue:VecDeque<ConsoleCommand>,
+    pub log:String
 }
 
 impl Console {
@@ -18,8 +18,13 @@ impl Console {
         self.command_queue.pop_front()
     }
 
+    pub fn logln(&mut self, str:String) {
+        self.log.push_str(&str);
+        self.log.push_str("\n");
+    }
+
     pub fn push_command(&mut self, cmd:ConsoleCommand) {
-        println!("> {:?}", cmd);
+        self.logln(format!("> {:?}", cmd));
         self.command_queue.push_back(cmd);
     }
     pub fn load_map(&mut self, map_name:&str) {
@@ -50,11 +55,25 @@ pub fn command_interpreter(mut persister:ResMut<Persister>, mut console:ResMut<C
     }
 }
 
+pub fn truncate_log(mut console:ResMut<Console>) {
+    let max = 64;
+    let lines = console.log.lines();
+    let count = lines.clone().count();
+    if count > max {
+        let mut new_log = String::default();
+        for line in console.log.lines().into_iter().skip(count - max) {
+            new_log.push_str(line);
+            new_log.push_str("\n");
+        }
 
+        console.log = new_log;
+    }
+}
 pub struct ConsolePlugin;
 impl Plugin for ConsolePlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.insert_resource(Console::default());
+        app.add_system(truncate_log.system());
         app.add_system(command_interpreter.system());
     }
 }
