@@ -353,7 +353,7 @@ fn update_foreground(hud:ResMut<Hud>, query:Query<(&mut Handle<ColorMaterial>, &
     });
 }
 
-fn update_console(mut hud:ResMut<Hud>, query:Query<(&mut Visible, &HudElement)>, mut console:ResMut<Console>) {
+fn update_console(mut hud:ResMut<Hud>, query:Query<(&mut Visible, &HudElement)>, console:Res<Console>) {
     if console.log != hud.console_text {
         hud.console_text = console.log.clone();
     }

@@ -47,6 +47,9 @@ pub use persister::*;
 mod audio;
 pub use audio::*;
 
+mod json_loader;
+pub use json_loader::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
@@ -172,7 +175,8 @@ fn main() {
     .add_plugin(SplashPlugin)
     .add_plugin(DelayPlugin::<AppState>::default())
     .add_plugin(PersisterPlugin)
-    .add_plugin(AudioPlugin);
+    .add_plugin(AudioPlugin)
+    .add_plugin(JsonLoaderPlugin);
 
     
     // add resources

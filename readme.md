@@ -1,4 +1,4 @@
-- 2021-06-21  15 added music channel
+- 2021-06-21  75m added music channel, worked on levels json, worked on json loader since bevy does not support loading raw json out of the box
 - 2021-06-20  55m worked on console support
 - 2021-06-19  45m worked on console support
 - 2021-06-18  85m added githash and build date to splash, converted mp3 to ogg, found better sound effects, added package versioning to splash, started working on music support

@@ -1,6 +1,8 @@
-use bevy::prelude::*;
+use bevy::{asset::Asset, prelude::*};
 use crate::{AppState, Bot, Console, GameState, Hud, PlayAudioEvent, Player};
 
+mod levels;
+pub use levels::*;
 
 enum DirectorState {
     StartLoadLevel,
@@ -16,8 +18,8 @@ enum DirectorState {
 
 struct Director {
     pub quick:bool,
-    pub level:i32,
-    pub levels:i32, 
+    pub current_level:u32,
+    pub levels:Levels, 
     pub timer:f32,
     pub state:DirectorState
 }
@@ -36,8 +38,8 @@ impl Default for Director {
     fn default() -> Self {
         Self {
             quick:false,
-            level:1,
-            levels:4,
+            current_level:1,
+            levels:Levels::default(),
             timer:0.0,
             state:DirectorState::LoadLevel
         }
@@ -71,13 +73,13 @@ fn update(
         }
         DirectorState::LoadLevel => {
             hud.clear_texts();
-            console.load_map(director.level.to_string().as_str());
+            console.load_map(&director.levels.get_map(director.current_level));
             director.transition(DirectorState::GetReady, 0.0);
         },
         DirectorState::GetReady => {
             play_audio.send("sfx/get_ready.ogg".into());
             hud.center_text = "Get Ready!!!".into();
-            hud.top_left_text = "Level ".to_string() + director.level.to_string().as_str() + " of " + &director.levels.to_string();
+            hud.top_left_text = "Level ".to_string() + director.current_level.to_string().as_str() + " of " + &director.levels.count().to_string();
             director.transition(DirectorState::Go, 1.5);
         },
         DirectorState::Go => {
@@ -92,7 +94,7 @@ fn update(
             if is_player_alive == false {
                 director.transition(DirectorState::Died, 1.0);
             } else if some_enemies_left == false {
-                if director.level == director.levels {
+                if director.current_level == director.levels.count() {
                     director.transition(DirectorState::WonGame, 1.0);
                 } else {
                     director.transition(DirectorState::WonLevel, 1.0);
@@ -112,7 +114,7 @@ fn update(
             play_audio.send("sfx/great.ogg".into());
             hud.center_text = "All Enemies are dead!\nStarting next level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
-            director.level += 1;
+            director.current_level += 1;
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonGame => {
@@ -133,12 +135,17 @@ fn update(
     
 }
 
+fn startup(mut director:ResMut<Director>, asset_server:Res<AssetServer>) {
+    asset_server.load_untyped("levels.json");
+}
+
 pub struct DirectorPlugin;
 
 impl Plugin for DirectorPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app
         .insert_resource(Director::default())
+        .add_startup_system(startup.system())
         .add_system_set(SystemSet::on_update(AppState::InGame).with_system(update.system()));
     }
 }
