@@ -115,12 +115,6 @@ fn state_input(mut console:ResMut<Console>, input:Res<Input<KeyCode>>, mut hud:R
     if input.just_pressed(KeyCode::F1) || input.just_pressed(KeyCode::Grave) {
         hud.show_console = !hud.show_console;
     }
-
-
-    for e in input.get_just_pressed() {
-        println!("{:?}", e);
-    }
-
 }
 
 fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>, mut app_state:ResMut<State<AppState>>) {

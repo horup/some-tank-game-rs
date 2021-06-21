@@ -86,7 +86,7 @@ fn update(
             let _ = game_state.overwrite_set(GameState::Running);
 
             director.transition(DirectorState::InProgress, 1.0);
-            play_audio.send("music/Zander Noriega - Fight Them Until We Cant.ogg".into());
+            play_audio.send(PlayAudioEvent::new("music/Zander Noriega - Fight Them Until We Cant.ogg").with_music(true));
         },
         DirectorState::InProgress => {
             if is_player_alive == false {
@@ -101,12 +101,14 @@ fn update(
             hud.center_text = "".into();
         },
         DirectorState::Died => {
+            play_audio.send(PlayAudioEvent::new("").with_music(true));
             play_audio.send("sfx/too_bad.ogg".into());
             hud.center_text = "You died! Restarting level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonLevel => {
+            play_audio.send(PlayAudioEvent::new("").with_music(true));
             play_audio.send("sfx/great.ogg".into());
             hud.center_text = "All Enemies are dead!\nStarting next level...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
@@ -114,6 +116,7 @@ fn update(
             director.transition(DirectorState::StartLoadLevel, 1.0);
         },
         DirectorState::WonGame => {
+            play_audio.send(PlayAudioEvent::new("").with_music(true));
             play_audio.send("sfx/won.ogg".into());
             hud.center_text = "You Won the Game!\nCongratulations!\nClick to restart the game...".into();
             let _ = game_state.overwrite_set(GameState::Paused);
