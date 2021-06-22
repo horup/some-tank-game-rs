@@ -1,5 +1,7 @@
+use std::time::Duration;
+
 use bevy::{asset::Asset, prelude::*};
-use crate::{AppState, Bot, Console, GameState, Hud, PlayAudioEvent, Player};
+use crate::{AppState, Bot, Console, GameState, Hud, Json, PlayAudioEvent, Player};
 
 mod levels;
 pub use levels::*;
@@ -135,8 +137,20 @@ fn update(
     
 }
 
-fn startup(mut director:ResMut<Director>, asset_server:Res<AssetServer>) {
-    asset_server.load_untyped("levels.json");
+fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>) {
+    let handle:Handle<Json> = asset_server.load("levels.json");
+    if let Some(json) = json.get(handle) {
+        if let Some(maps) = json.as_object().and_then(|o|o.get("maps").and_then(|v| v.as_array())) {
+            director.levels.maps.clear();
+            for map in maps {
+                if let Some(name) = map.as_str() {
+                    director.levels.maps.push(name.into());
+                }
+            }
+        }
+    } else {
+        println!("not done!");
+    }
 }
 
 pub struct DirectorPlugin;
@@ -145,7 +159,7 @@ impl Plugin for DirectorPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app
         .insert_resource(Director::default())
-        .add_startup_system(startup.system())
+        .add_system(load_levels.system())
         .add_system_set(SystemSet::on_update(AppState::InGame).with_system(update.system()));
     }
 }

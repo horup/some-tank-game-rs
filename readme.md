@@ -1,3 +1,4 @@
+- 2021-06-22  25m added levels.json loading
 - 2021-06-21  75m added music channel, worked on levels json, worked on json loader since bevy does not support loading raw json out of the box
 - 2021-06-20  55m worked on console support
 - 2021-06-19  45m worked on console support
