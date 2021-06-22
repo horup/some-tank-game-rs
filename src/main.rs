@@ -50,6 +50,9 @@ pub use audio::*;
 mod json_loader;
 pub use json_loader::*;
 
+mod asset_cache;
+pub use asset_cache::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
@@ -176,7 +179,8 @@ fn main() {
     .add_plugin(DelayPlugin::<AppState>::default())
     .add_plugin(PersisterPlugin)
     .add_plugin(AudioPlugin)
-    .add_plugin(JsonLoaderPlugin);
+    .add_plugin(JsonLoaderPlugin)
+    .add_plugin(AssetCachePlugin);
 
     
     // add resources

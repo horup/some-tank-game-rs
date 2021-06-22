@@ -141,8 +141,6 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                         };
                 
                         e.insert_bundle(sprite_sheet_bundle);
-
-
                     }
                 }
 

@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use bevy::{asset::Asset, prelude::*};
-use crate::{AppState, Bot, Console, GameState, Hud, Json, PlayAudioEvent, Player};
+use crate::{AppState, AssetCache, Bot, Console, GameState, Hud, Json, PlayAudioEvent, Player};
 
 mod levels;
 pub use levels::*;
@@ -137,9 +137,14 @@ fn update(
     
 }
 
-fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>) {
+fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>, mut asset_cache:ResMut<AssetCache>) {
     let handle:Handle<Json> = asset_server.load("levels.json");
-    if let Some(json) = json.get(handle) {
+    if asset_cache.contains(&handle.clone()) {
+        return;
+    }
+
+    if let Some(json) = json.get(handle.clone()) {
+        asset_cache.cache(&handle.clone());
         if let Some(maps) = json.as_object().and_then(|o|o.get("maps").and_then(|v| v.as_array())) {
             director.levels.maps.clear();
             for map in maps {
@@ -148,8 +153,6 @@ fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, jso
                 }
             }
         }
-    } else {
-        println!("not done!");
     }
 }
 

@@ -25,9 +25,11 @@ impl AssetLoader for JsonLoader {
         load_context: &'a mut bevy::asset::LoadContext,
     ) -> bevy::asset::BoxedFuture<'a, anyhow::Result<(), anyhow::Error>> {
         Box::pin(async move {
+            println!("test");
             let value = serde_json::from_slice::<serde_json::Value>(bytes);
             match value {
                 Ok(value) => {
+                    println!("test");
                     load_context.set_default_asset(LoadedAsset::new(Json(value)));
                     return Ok(());
                 },
