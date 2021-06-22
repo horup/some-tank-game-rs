@@ -1,0 +1,1 @@
+mklink /D target\debug\assets ..\..\assets

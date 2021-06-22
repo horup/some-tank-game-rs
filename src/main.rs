@@ -141,7 +141,7 @@ struct Logger {
 }
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
-fn main() {
+fn main() { 
     let mut builder = App::build();
     let window = WindowDescriptor {
         title: "Some Tank Game!".to_string(),
@@ -156,7 +156,7 @@ fn main() {
         },
         ..Default::default()
     };
-
+ 
     builder.insert_resource(window);
     builder.add_state(AppState::default());
     builder.add_state(GameState::default());

@@ -1,4 +1,4 @@
-- 2021-06-22  75m added levels.json loading, added asset_cache, played with hot reloading, played with debugging support
+- 2021-06-22  90m added levels.json loading, added asset_cache, played with hot reloading, played with debugging support
 - 2021-06-21  75m added music channel, worked on levels json, worked on json loader since bevy does not support loading raw json out of the box
 - 2021-06-20  55m worked on console support
 - 2021-06-19  45m worked on console support
