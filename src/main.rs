@@ -53,6 +53,9 @@ pub use json_loader::*;
 mod asset_cache;
 pub use asset_cache::*;
 
+mod thing_builder;
+pub use thing_builder::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
