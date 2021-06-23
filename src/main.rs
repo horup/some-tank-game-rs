@@ -157,6 +157,10 @@ fn main() {
     .add_plugin(JsonLoaderPlugin)
     .add_plugin(AssetCachePlugin);
 
+    if config.diagnostics() {
+        builder.add_plugin(DiagnosticsPlugin);
+    }
+
     
     // add resources
     builder
