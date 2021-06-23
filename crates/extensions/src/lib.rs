@@ -7,3 +7,6 @@ pub use tiled;
 
 mod delay_state;
 pub use delay_state::*;
+
+mod tilemap;
+pub use tilemap::*;

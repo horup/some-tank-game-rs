@@ -47,9 +47,6 @@ pub use asset_cache::*;
 mod thing_builder;
 pub use thing_builder::*;
 
-mod tilemap;
-pub use tilemap::*;
-
 mod rapier;
 pub use rapier::*;
 
