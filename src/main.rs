@@ -47,6 +47,9 @@ pub use thing_builder::*;
 mod rapier;
 pub use rapier::*;
 
+mod config;
+pub use config::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Splash,
@@ -73,10 +76,12 @@ impl Default for GameState {
 
 
 
-fn debug(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMut<Console>) {
-    for e in char_input_reader.iter() {
-        if ['1', '2', '3', '4', '5', '6', '7', '8', '9'].contains(&e.char) {
-            console.load_map(e.char.to_string().as_str());
+fn debug(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMut<Console>, config:Res<Config>) {
+    if config.debug() {
+        for e in char_input_reader.iter() {
+            if ['1', '2', '3', '4', '5', '6', '7', '8', '9'].contains(&e.char) {
+                console.load_map(e.char.to_string().as_str());
+            }
         }
     }
 }
@@ -110,17 +115,14 @@ struct Logger {
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() { 
-    //let config = Ini::load_from_file("config.ini").unwrap_or_default();
-//let debug = config..get_from_or("debug", "enabled", "false");
- //   println!("debug={}", debug);
-
+    let config = Config::new("config.ini");
 
     let mut builder = App::build();
     let window = WindowDescriptor {
         title: "Some Tank Game!".to_string(),
         width: 1024.0,
         height: 768.0,
-        vsync: true,
+        vsync: config.vsync(),
         resize_constraints:WindowResizeConstraints {
             min_width: 1024.0,
             min_height: 768.0,
@@ -158,8 +160,8 @@ fn main() {
     
     // add resources
     builder
+    .insert_resource(config)
     .insert_resource(Mouse::default())
-
     .insert_resource(Hud::default());
 
     // add events
