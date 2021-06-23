@@ -24,8 +24,6 @@ pub use director::*;
 mod hud;
 pub use hud::*;
 
-mod tiled;
-
 mod console;
 pub use console::*;
 
@@ -35,17 +33,13 @@ pub use map_loader::*;
 mod splash;
 pub use splash::*;
 
-mod delay_state;
-pub use delay_state::*;
-
 mod persister;
 pub use persister::*;
 
 mod audio;
 pub use audio::*;
 
-mod json_loader;
-pub use json_loader::*;
+pub use extensions::*;
 
 mod asset_cache;
 pub use asset_cache::*;
@@ -147,7 +141,7 @@ fn main() {
     builder.add_plugins(DefaultPlugins)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
-    .add_plugin(crate::tiled::TiledPlugin)
+    .add_plugin(TiledLoaderPlugin)
     .add_plugin(TilemapPlugin::default())
     .add_plugin(SpriteBuilderPlugin::default())
     .add_plugin(EventsPlugin::default())
@@ -171,8 +165,6 @@ fn main() {
 
     // add events
     builder.add_event::<NewGameEvent>();
-    
-    
 
     // add startup systems
     builder

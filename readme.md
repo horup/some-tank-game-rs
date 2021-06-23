@@ -1,3 +1,4 @@
+- 2021-06-23  fixed several warnings, moved common/non-game specific mods to extensions crate
 - 2021-06-22  100m added levels.json loading, added asset_cache, played with hot reloading, played with debugging support, got debug to work
 - 2021-06-21  75m added music channel, worked on levels json, worked on json loader since bevy does not support loading raw json out of the box
 - 2021-06-20  55m worked on console support

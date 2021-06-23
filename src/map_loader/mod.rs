@@ -1,7 +1,8 @@
 use std::f32::consts::PI;
 
 pub use bevy::prelude::*;
-use crate::{GamePiece, Tile, Tilemap, tiled::TiledMap};
+use extensions::tiled;
+use crate::{GamePiece, Tile, Tilemap, TiledMap};
 
 mod spawner;
 use spawner::*;

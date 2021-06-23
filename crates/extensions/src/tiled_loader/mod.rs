@@ -5,7 +5,7 @@ use bevy::asset::{BoxedFuture, LoadContext, LoadedAsset};
 use bevy::{asset::AssetLoader, prelude::*};
 use bevy::reflect::{TypeUuid, Uuid};
 
-pub struct TiledPlugin;
+pub struct TiledLoaderPlugin;
 struct TiledMapLoader;
 impl AssetLoader for TiledMapLoader {
     fn load<'a>(
@@ -43,7 +43,7 @@ impl Deref for TiledMap {
     }
 }
 
-impl Plugin for TiledPlugin {
+impl Plugin for TiledLoaderPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.add_asset::<TiledMap>();
         app.add_asset_loader(TiledMapLoader);

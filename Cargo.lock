@@ -876,12 +876,12 @@ dependencies = [
  "bevy_rapier2d",
  "bevy_webgl2",
  "chrono",
+ "extensions",
  "integer_scaling",
  "rand",
  "ron",
  "serde",
  "serde_json",
- "tiled",
  "wasm-bindgen",
 ]
 
@@ -1441,6 +1441,17 @@ name = "event-listener"
 version = "2.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7531096570974c3a9dcf9e4b8e1cede1ec26cf5046219fb3b9d897503b9be59"
+
+[[package]]
+name = "extensions"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bevy",
+ "serde",
+ "serde_json",
+ "tiled",
+]
 
 [[package]]
 name = "fastrand"
