@@ -18,9 +18,6 @@ use systems::*;
 mod resources;
 use resources::*;
 
-mod plugins;
-pub use plugins::*;
-
 mod director;
 pub use director::*;
 
@@ -55,6 +52,12 @@ pub use asset_cache::*;
 
 mod thing_builder;
 pub use thing_builder::*;
+
+mod tilemap;
+pub use tilemap::*;
+
+mod rapier;
+pub use rapier::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
