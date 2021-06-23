@@ -13,3 +13,5 @@ pub use tilemap::*;
 
 mod audio;
 pub use audio::*;
+
+pub use ini::Ini;

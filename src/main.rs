@@ -110,6 +110,11 @@ struct Logger {
 
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() { 
+    //let config = Ini::load_from_file("config.ini").unwrap_or_default();
+//let debug = config..get_from_or("debug", "enabled", "false");
+ //   println!("debug={}", debug);
+
+
     let mut builder = App::build();
     let window = WindowDescriptor {
         title: "Some Tank Game!".to_string(),
