@@ -20,12 +20,10 @@ wasm-bindgen = "0.2"
 rand = "0.8.3"
 integer_scaling = "1.3.2"
 bevy_rapier2d = {version = "0.9.0", features = ["serde-serialize"]} 
-
 anyhow = "1.0"
 serde = "1.0.126"
 serde_json = "1.0"
 ron = "0.6.4"
-bevy_kira_audio = {version = "0.5.0", features = ["ogg"]}
 
 [build-dependencies]
 chrono = "0.4"

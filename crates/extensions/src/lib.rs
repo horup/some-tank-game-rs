@@ -10,3 +10,6 @@ pub use delay_state::*;
 
 mod tilemap;
 pub use tilemap::*;
+
+mod audio;
+pub use audio::*;

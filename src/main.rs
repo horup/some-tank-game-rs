@@ -36,9 +36,6 @@ pub use splash::*;
 mod persister;
 pub use persister::*;
 
-mod audio;
-pub use audio::*;
-
 pub use extensions::*;
 
 mod asset_cache;
