@@ -23,7 +23,7 @@ impl Config {
         self.key_bool_with_default("vsync", true)
     }
 
-    pub fn diagnostics(&self) -> bool {
-        self.key_bool_with_default("diagnostics", false)
+    pub fn show_fps(&self) -> bool {
+        self.key_bool_with_default("show_fps", false)
     }
 }

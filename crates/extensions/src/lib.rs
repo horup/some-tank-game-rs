@@ -16,8 +16,5 @@ pub use audio::*;
 
 pub use ini::Ini;
 
-mod diagnostics_ui;
-pub use diagnostics_ui::*;
-
 mod root_ui;
 pub use root_ui::*;

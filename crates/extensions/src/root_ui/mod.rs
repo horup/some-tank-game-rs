@@ -6,7 +6,7 @@ pub struct RootNode;
 // query does not work in run criteria systems due to a bug, use resource
 struct RootNodeSpawned(bool);
 
-fn spawn_root_node(mut commands:Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>, mut spawned:ResMut<RootNodeSpawned>) {
+fn spawn_root_node(mut commands:Commands, mut materials:ResMut<Assets<ColorMaterial>>, mut spawned:ResMut<RootNodeSpawned>) {
     commands.spawn_bundle(NodeBundle {
         style: Style {
             size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
