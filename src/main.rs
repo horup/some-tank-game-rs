@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::WindowResizeConstraints};
+use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::{WindowMode, WindowResizeConstraints}};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
@@ -116,7 +116,6 @@ struct Logger {
 // https://github.com/bevyengine/bevy/tree/v0.5.0/examples/2d
 fn main() { 
     let config = Config::new("config.ini");
-
     let mut builder = App::build();
     let window = WindowDescriptor {
         title: "Some Tank Game!".to_string(),
@@ -124,11 +123,13 @@ fn main() {
         height: 768.0,
         vsync: config.vsync(),
         resize_constraints:WindowResizeConstraints {
-            min_width: 1024.0,
-            min_height: 768.0,
+            min_width: config.width() as f32,
+            min_height: config.height() as f32,
             max_width: f32::MAX,
             max_height: f32::MAX,
         },
+        mode: (if config.fullscreen() { WindowMode::BorderlessFullscreen } else {WindowMode::Windowed}),
+        resizable:false,
         ..Default::default()
     };
  

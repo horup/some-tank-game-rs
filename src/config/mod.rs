@@ -15,6 +15,15 @@ impl Config {
         self.ini.get_from::<&str>(None, key).unwrap_or(if default {"true"} else {"false"}) == "true"
     }
 
+    fn key_u32_with_default(&self, key:&str, default:u32) -> u32 {
+        let v = self.ini.get_from::<&str>(None, key).unwrap_or("");
+        if v == "" {
+            return default;
+        }
+
+        v.parse::<u32>().unwrap_or(default)
+    }
+
     pub fn debug(&self) -> bool {
         self.key_bool_with_default("debug", false)
     }
@@ -25,5 +34,17 @@ impl Config {
 
     pub fn show_fps(&self) -> bool {
         self.key_bool_with_default("show_fps", false)
+    }
+
+    pub fn width(&self) -> u32 {
+        self.key_u32_with_default("width", 1024)
+    }
+
+    pub fn height(&self) -> u32 {
+        self.key_u32_with_default("height", 768)
+    }
+
+    pub fn fullscreen(&self) -> bool {
+        self.key_bool_with_default("fullscreen", false)
     }
 }
