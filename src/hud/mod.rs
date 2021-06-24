@@ -1,4 +1,5 @@
 use bevy::{prelude::*};
+use extensions::RootNode;
 
 use crate::Console;
 
@@ -94,18 +95,11 @@ pub enum HudElement {
     Console
 }
 
-fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
+fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>, root_node:Query<(Entity, &RootNode)>) {
     let font_size = 16.0;
-
-    commands.spawn_bundle(NodeBundle {
-        style: Style {
-            size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-            //justify_content: JustifyContent::SpaceBetween,
-            ..Default::default()
-        },
-        material: materials.add(Color::NONE.into()),
-        ..Default::default()
-    }).with_children(|parent| {
+    let root_node = root_node.single().expect("root node not found").0;
+    commands.entity(root_node)
+    .with_children(|parent| {
         // center text
         parent.spawn_bundle(NodeBundle {
             style:Style {
@@ -301,8 +295,6 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             }).insert(HudElement::Console);
         }).insert(HudElement::Console);
     });
-
-    println!("spawned hud");
 }
 
 pub fn set_text(text:&mut Text, value:&str) {

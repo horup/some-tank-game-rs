@@ -1,18 +1,13 @@
 use bevy::{core::FixedTimestep, prelude::*};
 
+use crate::RootNode;
+
 struct FPSText;
 pub struct DiagnosticsPlugin;
 
-fn startup(mut commands:Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>) {
-    commands.spawn_bundle(NodeBundle {
-        style: Style {
-            size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-            position_type:PositionType::Absolute,
-            ..Default::default()
-        },
-        material: materials.add(Color::NONE.into()),
-        ..Default::default()
-    }).with_children(|parent| {
+fn startup(mut commands:Commands, asset_server: Res<AssetServer>, mut materials:ResMut<Assets<ColorMaterial>>, root_node:Query<(Entity, &RootNode)>) {
+    let root_node = root_node.single().expect("root node not found").0;
+    commands.entity(root_node).with_children(|parent| {
         parent.spawn_bundle(TextBundle {
             style:Style {
                 position_type:PositionType::Absolute,

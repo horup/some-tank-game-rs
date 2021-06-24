@@ -140,6 +140,7 @@ fn main() {
 
     // add plugins
     builder.add_plugins(DefaultPlugins)
+    .add_plugin(RootUIPlugin)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(TiledLoaderPlugin)
