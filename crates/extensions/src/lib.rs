@@ -16,5 +16,5 @@ pub use audio::*;
 
 pub use ini::Ini;
 
-mod diagnostics;
-pub use diagnostics::*;
+mod diagnostics_ui;
+pub use diagnostics_ui::*;

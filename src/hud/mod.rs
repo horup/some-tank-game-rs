@@ -301,6 +301,8 @@ fn hud_initialization_system(mut commands: Commands, asset_server: Res<AssetServ
             }).insert(HudElement::Console);
         }).insert(HudElement::Console);
     });
+
+    println!("spawned hud");
 }
 
 pub fn set_text(text:&mut Text, value:&str) {

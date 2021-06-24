@@ -1,3 +1,4 @@
+- 2021-06-24  25m added diagnostics ui which shows fps
 - 2021-06-23  100m fixed several warnings, moved common/non-game specific mods to extensions crate, started working on integration of ini parsing, started working on FPS showing
 - 2021-06-22  100m added levels.json loading, added asset_cache, played with hot reloading, played with debugging support, got debug to work
 - 2021-06-21  75m added music channel, worked on levels json, worked on json loader since bevy does not support loading raw json out of the box
