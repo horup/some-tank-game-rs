@@ -11,14 +11,11 @@ env:
 
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v2
-    - name: Set the value
-      run: |
-        echo "date=0000-00-00" >> $GITHUB_ENV
+    - name: Set current date as env variable
+      run: echo "NOW::$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
     - name: Build
       run: cargo build --verbose --release
     - name: Run tests
@@ -28,6 +25,6 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Release-${env.date}
+        name: Release-${{env.NOW}}
         path: |
           dist
