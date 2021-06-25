@@ -29,7 +29,7 @@ impl Director {
     pub fn transition(&mut self, new_state:DirectorState, secs:f32) {
         self.timer = secs;
         if self.quick {
-            self.timer = 0.5;
+            self.timer = 0.25;
         }
         self.state = new_state;
     }
