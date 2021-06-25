@@ -1,6 +1,6 @@
 use bevy::{prelude::*};
 
-use crate::{AppState, DelayState, Hud};
+use crate::{AppState, Config, DelayState, Hud};
 
 pub struct SplashPlugin;
 
@@ -15,11 +15,14 @@ fn hide_splash(mut hud:ResMut<Hud>) {
     hud.clear_texts();
 }
 
-fn update(mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<DelayState<AppState>>, mut hud:ResMut<Hud>) {
+fn update(config:Res<Config>, mouse_input:Res<Input<MouseButton>>, mut app_state:ResMut<DelayState<AppState>>, mut hud:ResMut<Hud>) {
     if mouse_input.just_pressed(MouseButton::Left) {
-        let time = 0.5;
+        let time = if config.quick() == false { 0.5 } else { 0.0 };
         app_state.set(AppState::InGame, time);
-        hud.fade(time, time, Color::BLACK);
+
+        if config.quick() == false {
+            hud.fade(time, time, Color::BLACK);
+        }
     }
 }
 

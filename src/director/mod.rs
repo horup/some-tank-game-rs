@@ -69,7 +69,10 @@ fn update(
 
     match director.state {
         DirectorState::StartLoadLevel => {
-            hud.start_default_fade();
+            if director.quick == false {
+                hud.start_default_fade();
+            }
+            
             director.transition(DirectorState::LoadLevel, 0.5);
         }
         DirectorState::LoadLevel => {
