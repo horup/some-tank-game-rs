@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set current date as env variable
-      run: echo "NOW::$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      run: echo "NOW=0000-00-00" >> $env:GITHUB_ENV
     - name: Build
       run: cargo build --verbose --release
     - name: Run tests
