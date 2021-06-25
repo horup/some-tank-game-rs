@@ -33,6 +33,10 @@ impl Director {
         }
         self.state = new_state;
     }
+
+    pub fn reset(&mut self) {
+        self.current_level = 1;
+    }
 }
 
 impl Default for Director {
@@ -130,8 +134,8 @@ fn update(
         },
         DirectorState::AwaitRestartGameInput => {
             if mouse_button_input.just_pressed(MouseButton::Left) {
-                // clear director and start load level
-                *director = Director::default();
+                // reset game
+                director.reset();
                 director.transition(DirectorState::StartLoadLevel, 0.0);
             }
         },
