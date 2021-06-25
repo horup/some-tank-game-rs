@@ -1,6 +1,6 @@
 
 use bevy::{prelude::*};
-use crate::{AppState, AssetCache, Bot, Console, GameState, Hud, Json, PlayAudioEvent, Player};
+use crate::{AppState, AssetCache, Bot, Config, Console, GameState, Hud, Json, PlayAudioEvent, Player};
 
 mod levels;
 pub use levels::*;
@@ -136,6 +136,10 @@ fn update(
     
 }
 
+fn startup(mut director:ResMut<Director>, config:Res<Config>) {
+    director.quick = config.quick();
+}
+
 fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>, mut asset_cache:ResMut<AssetCache>) {
     let handle:Handle<Json> = asset_server.load("levels.json");
     if asset_cache.contains(&handle.clone()) {
@@ -161,6 +165,7 @@ impl Plugin for DirectorPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app
         .insert_resource(Director::default())
+        .add_startup_system(startup.system())
         .add_system(load_levels.system())
         .add_system_set(SystemSet::on_update(AppState::InGame).with_system(update.system()));
     }

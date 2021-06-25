@@ -47,4 +47,8 @@ impl Config {
     pub fn fullscreen(&self) -> bool {
         self.key_bool_with_default("fullscreen", false)
     }
+
+    pub fn quick(&self) -> bool {
+        self.key_bool_with_default("quick", false)
+    }
 }
