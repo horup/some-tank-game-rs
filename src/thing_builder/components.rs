@@ -2,7 +2,8 @@ use bevy::{math::{Quat, Vec3}, prelude::Entity};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum EffectType {
-    BulletHit
+    BulletHit,
+    Explosion
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]

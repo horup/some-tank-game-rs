@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::*;
 use bevy_rapier2d::rapier::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder};
 use crate::{Drag, Effect, GamePiece, Health, Owner, Projectile, Tank, Turret};
@@ -142,6 +144,24 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                 
                         e.insert_bundle(sprite_sheet_bundle);
                     }
+                    EffectType::Explosion => {
+                        transform.scale = transform.scale * 0.50;
+                        transform.translation.z = 1.1;
+                        e.insert(Effect::new(0.5, 4.0, true).with_start_fade(0.25));
+
+                        let sprite_sheet_bundle = SpriteSheetBundle {
+                            texture_atlas:texture_atlases.get_atlas(tb.thing_type),
+                            transform,
+                            sprite:TextureAtlasSprite {
+                                index:texture_atlases.get_index(tb.thing_type),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        };
+                
+                        e.insert_bundle(sprite_sheet_bundle);
+
+                    },
                 }
 
                 
