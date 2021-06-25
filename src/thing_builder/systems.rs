@@ -145,9 +145,9 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
                         e.insert_bundle(sprite_sheet_bundle);
                     }
                     EffectType::Explosion => {
-                        transform.scale = transform.scale * 0.50;
+                        transform.scale = transform.scale * 1.00;
                         transform.translation.z = 1.1;
-                        e.insert(Effect::new(0.5, 4.0, true).with_start_fade(0.25));
+                        e.insert(Effect::new(0.25, 2.0, true).with_start_fade(0.25));
 
                         let sprite_sheet_bundle = SpriteSheetBundle {
                             texture_atlas:texture_atlases.get_atlas(tb.thing_type),
@@ -175,4 +175,5 @@ pub fn thing_builder_added_system(mut commands:Commands, query:Query<(Entity, &T
 pub fn thing_builder_init_system(mut textures:ResMut<TextureAtlases>, asset_server:Res<AssetServer>, mut texture_atlases:ResMut<Assets<TextureAtlas>>) {
     textures.tanks = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("imgs/tanks.png"), Vec2::new(8.0, 8.0), 4, 4));
     textures.white = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("imgs/white.png"), Vec2::new(8.0, 8.0), 1, 1));
+    textures.explosion = texture_atlases.add(TextureAtlas::from_grid(asset_server.load("imgs/explosion.png"), Vec2::new(8.0, 8.0), 1, 1));
 }
