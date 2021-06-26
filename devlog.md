@@ -1,3 +1,4 @@
+- 2021-06-26  20m started working on installer using inno setup
 - 2021-06-25  60m added quick to ini, fixed quick race condition, renamed config default to config release, added tank explosion, updated bullet hit explosion
 - 2021-06-24  115m added show fps when true, added fullscreen, width and height support in config
 - 2021-06-23  100m fixed several warnings, moved common/non-game specific mods to extensions crate, started working on integration of ini parsing, started working on FPS showing
