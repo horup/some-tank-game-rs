@@ -22,9 +22,14 @@ jobs:
       run: cargo test --verbose
     - name: Create Release
       run: ./release.bat
-    - name: Archive production artifacts
+    - name: Archive non-installer release
       uses: actions/upload-artifact@v2
       with:
         name: Release-${{env.NOW}}
         path: |
           dist
+    - name: Archive installer release
+      uses: actions/upload-artifact@v2
+      with:
+        name: SomeTankGame
+        path: SomeTankGame.exe
