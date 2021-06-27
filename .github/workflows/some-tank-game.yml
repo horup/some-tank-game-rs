@@ -25,11 +25,11 @@ jobs:
     - name: Archive non-installer release
       uses: actions/upload-artifact@v2
       with:
-        name: Release-${{env.NOW}}
+        name: ${{env.GITHUB_WORKFLOW}}-${{env.GITHUB_SHA}}-${{env.NOW}}
         path: |
           dist
     - name: Archive installer release
       uses: actions/upload-artifact@v2
       with:
-        name: SomeTankGame
+        name: ${{env.GITHUB_WORKFLOW}}-installer-${{env.GITHUB_SHA}}-${{env.NOW}}
         path: SomeTankGame.exe
