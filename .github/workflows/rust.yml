@@ -25,7 +25,7 @@ jobs:
     - name: Archive non-installer release
       uses: actions/upload-artifact@v2
       with:
-        name: ${{env.NOW}}
+        name: ${GITHUB_SHA::8}-${{env.NOW}}
         path: |
           dist
     - name: Archive installer release
