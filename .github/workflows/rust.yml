@@ -1,4 +1,4 @@
-name: Rust
+name: some-tank-game
 
 on:
   push:
