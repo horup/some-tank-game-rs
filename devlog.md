@@ -1,3 +1,5 @@
+- 2021-06-28  60m added exit dialog, added background coloring of hud
+- 2021-06-27  15m added CI for installer, tweaked github actions
 - 2021-06-26  20m started working on installer using inno setup
 - 2021-06-25  60m added quick to ini, fixed quick race condition, renamed config default to config release, added tank explosion, updated bullet hit explosion
 - 2021-06-24  115m added show fps when true, added fullscreen, width and height support in config

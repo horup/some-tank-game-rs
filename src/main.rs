@@ -50,8 +50,12 @@ pub use rapier::*;
 mod config;
 pub use config::*;
 
+mod exit;
+pub use exit::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
+    ShowExit,
     Splash,
     InGame
 }
@@ -87,10 +91,7 @@ fn debug(mut char_input_reader:EventReader<ReceivedCharacter>, mut console:ResMu
 }
 
 fn state_input(input:Res<Input<KeyCode>>, mut hud:ResMut<Hud>) {
-    if input.pressed(KeyCode::Escape) {
-        std::process::exit(0);
-    }
-
+    
     if input.just_pressed(KeyCode::F1) || input.just_pressed(KeyCode::Grave) {
         hud.show_console = !hud.show_console;
     }
@@ -157,7 +158,8 @@ fn main() {
     .add_plugin(PersisterPlugin)
     .add_plugin(AudioPlugin)
     .add_plugin(JsonLoaderPlugin)
-    .add_plugin(AssetCachePlugin);
+    .add_plugin(AssetCachePlugin)
+    .add_plugin(ExitPlugin);
 
     
     // add resources

@@ -71,6 +71,7 @@ fn update(
     let is_player_alive = players.iter().len() > 0;
     let some_enemies_left = bots.iter().len() > 0;
 
+
     match director.state {
         DirectorState::StartLoadLevel => {
             if director.quick == false {

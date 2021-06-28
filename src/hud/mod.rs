@@ -44,6 +44,7 @@ impl FadeInOut {
     }
 }
 
+#[derive(Clone)]
 pub struct Hud {
     pub console_text: String,
     pub top_left_text: String,
@@ -51,9 +52,12 @@ pub struct Hud {
     pub bottom_center_text: String,
     pub center_text: String,
     pub foreground: Color,
+    pub background: Color,
     pub fade_in_out: Option<FadeInOut>,
     pub show_console: bool,
+    pub stack:Vec<Hud>
 }
+
 
 impl Hud {
     pub fn clear_texts(&mut self) {
@@ -61,6 +65,29 @@ impl Hud {
         self.top_right_text = "".into();
         self.center_text = "".into();
         self.bottom_center_text = "".into();
+    }
+
+    pub fn clear(&mut self) {
+        let stack = self.stack.clone();
+        *self = Hud::default();
+        self.stack = stack;
+    }
+
+    pub fn push(&mut self) {
+        let mut clone = self.clone();
+        clone.console_text.clear();
+        clone.stack.clear();
+        self.stack.push(clone);
+    }
+
+    pub fn pop(&mut self) {
+        let mut stack = self.stack.clone();
+        let console = self.console_text.clone();
+        if let Some(mut pop) = stack.pop() {
+            pop.stack = stack;
+            *self = pop;
+            self.console_text = console;
+        }
     }
 
     pub fn fade(&mut self, time_in_sec: f32, time_out_sec: f32, base_color: Color) {
@@ -82,14 +109,16 @@ impl Hud {
 impl Default for Hud {
     fn default() -> Self {
         Self {
-            console_text: "hahaha\nhhehehe\nheheiheihei\nheheaheahe\n".into(),
+            console_text: "".into(),
             top_left_text: "".into(),
             top_right_text: "".into(),
             center_text: "".into(),
             bottom_center_text: "".into(),
+            background: Color::rgba(1.0, 1.0, 1.0, 0.0),
             foreground: Color::rgba(1.0, 1.0, 1.0, 0.0),
             fade_in_out: None,
             show_console: false,
+            stack:Vec::new()
         }
     }
 }
@@ -100,6 +129,7 @@ pub enum HudElement {
     Center,
     TopRight,
     Foreground,
+    Background,
     BottomCenter,
     Console,
 }
@@ -115,6 +145,7 @@ fn hud_initialization_system(
 ) {
     let font_size = 16.0;
     let root_node = root_node.single().expect("root node not found").0;
+    
     commands.entity(root_node).with_children(|parent| {
         // center text
         parent
@@ -376,7 +407,7 @@ fn hud_initialization_system(
                         .insert(FPSText);
                 });
         }
-    });
+    }).insert(HudElement::Background);
 }
 
 pub fn set_text(text: &mut Text, value: &str) {
@@ -413,7 +444,7 @@ fn update_text(hud: ResMut<Hud>, query: Query<(&mut Text, &HudElement)>) {
     });
 }
 
-fn update_foreground(
+fn update_color(
     hud: ResMut<Hud>,
     query: Query<(&mut Handle<ColorMaterial>, &HudElement, &Node)>,
     mut materials: ResMut<Assets<ColorMaterial>>,
@@ -427,6 +458,11 @@ fn update_foreground(
             HudElement::Foreground => {
                 if let Some(material) = materials.get_mut(color_material_handle.clone()) {
                     material.color = hud.foreground;
+                }
+            },
+            HudElement::Background => {
+                if let Some(material) = materials.get_mut(color_material_handle.clone()) {
+                    material.color = hud.background;
                 }
             }
             _ => {}
@@ -504,7 +540,7 @@ impl Plugin for HudPlugin {
         app.add_system(update_text.system());
         app.add_system(update_console.system());
         app.add_system(fade_out_in_out.system().before("update_foreground"));
-        app.add_system(update_foreground.system().label("update_foreground"));
+        app.add_system(update_color.system().label("update_foreground"));
         app.add_system(
             update_fps
                 .system()
