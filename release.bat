@@ -1,3 +1,6 @@
+REM set icon of build
+tools\rcedit\rcedit-x64.exe "target\release\blueprint3.exe" --set-icon "assets\icon.ico"
+
 REM make non-installer version
 rmdir dist /s /q 2>nul
 rmdir dist /s /q 2>nul
