@@ -6,7 +6,7 @@ AppVersion=0.9.0
 WizardStyle=modern
 DefaultDirName={autopf}\Some Tank Game
 DefaultGroupName=Some Tank Game
-UninstallDisplayIcon={app}\blueprint3.exe
+UninstallDisplayIcon={app}\some-tank-game.exe
 Compression=lzma2
 SolidCompression=yes
 OutputDir="."
@@ -18,4 +18,4 @@ Source: "dist/config.ini"; DestDir: "{app}"
 Source: "dist/assets/*"; DestDir: "{app}/assets"; Flags: ignoreversion recursesubdirs
 
 [Icons]
-Name: "{userdesktop}\SomeTankGame"; Filename: "{app}\blueprint3.exe"
+Name: "{userdesktop}\Some Tank Game"; Filename: "{app}\some-tank-game.exe"
