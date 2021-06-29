@@ -1,4 +1,4 @@
-- 2021-06-29  20m added icon to .exe
+- 2021-06-29  45m added icon to .exe and icon to application.
 - 2021-06-28  60m added exit dialog, added background coloring of hud
 - 2021-06-27  15m added CI for installer, tweaked github actions
 - 2021-06-26  20m started working on installer using inno setup

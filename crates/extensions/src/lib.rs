@@ -18,3 +18,6 @@ pub use ini::Ini;
 
 mod root_ui;
 pub use root_ui::*;
+
+pub use winit::window::Icon;
+pub use ico::*;

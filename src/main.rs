@@ -3,7 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::{WindowMode, WindowResizeConstraints}};
+use std::io::Cursor;
+
+use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::{WindowMode, WindowResizeConstraints}, winit::WinitWindows};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
@@ -109,6 +111,27 @@ fn startup_system(mut commands:Commands, mut rapier:ResMut<RapierConfiguration>,
     app_state.push(AppState::Splash.into()).unwrap();
 }
 
+fn startup(world:&mut World) {
+    let world = world.cell();
+    let winit_windows = world.get_resource::<WinitWindows>().unwrap();
+    let mut windows = world.get_resource_mut::<Windows>().unwrap();
+
+    for bevy_window in windows.iter_mut() {
+        let id = bevy_window.id();
+        let window = winit_windows.get_window(id).unwrap();
+        //let icon = Icon::from_rgba(rgba, 0, 0).unwrap();
+        let icon = include_bytes!("../assets/icon.ico") as &[u8];
+        let icon = Cursor::new(icon);
+        let icon = IconDir::read(icon).unwrap();
+        let icon = icon.entries().first().unwrap();
+        let img = icon.decode().unwrap();
+        let icon = Icon::from_rgba(img.rgba_data().into(), icon.width() , icon.height()).unwrap();
+        window.set_window_icon(Some(icon));
+    }
+
+    println!("exclusive");
+}
+
 #[derive(Default)]
 struct Logger {
 
@@ -139,6 +162,7 @@ fn main() {
     builder.add_state(GameState::default());
     builder.add_system(debug.system());
     builder.add_system(state_input.system());
+    builder.add_startup_system(startup.exclusive_system());
 
     // add plugins
     builder.add_plugins(DefaultPlugins)
