@@ -13,7 +13,7 @@ OutputDir="."
 OutputBaseFilename="Some Tank Game Setup"
 
 [Files]
-Source: "dist/blueprint3.exe"; DestDir: "{app}"
+Source: "dist/some-tank-game.exe"; DestDir: "{app}"
 Source: "dist/config.ini"; DestDir: "{app}"
 Source: "dist/assets/*"; DestDir: "{app}/assets"; Flags: ignoreversion recursesubdirs
 
