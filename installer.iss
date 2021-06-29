@@ -10,7 +10,7 @@ UninstallDisplayIcon={app}\blueprint3.exe
 Compression=lzma2
 SolidCompression=yes
 OutputDir="."
-OutputBaseFilename="SomeTankGame"
+OutputBaseFilename="Some Tank Game Setup"
 
 [Files]
 Source: "dist/blueprint3.exe"; DestDir: "{app}"

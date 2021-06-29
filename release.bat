@@ -11,3 +11,6 @@ xcopy assets dist\assets /E /H /C /I
 
 REM make installer version
 tools\iscc\ISCC.exe "installer.iss"
+
+REM set icon of setup.exe
+tools\rcedit\rcedit-x64.exe "Some Tank Game Setup.exe" --set-icon "assets\icon.ico"
