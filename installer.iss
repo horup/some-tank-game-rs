@@ -21,7 +21,7 @@ OutputBaseFilename="{#AppName} v{#Version} Setup"
 SetupIconFile="assets/icon.ico"
 
 [Files]
-Source: "dist/some-tank-game.exe"; DestDir: "{app}"
+Source: "dist/{#Exe}"; DestDir: "{app}"
 Source: "dist/config.ini"; DestDir: "{app}"
 Source: "dist/assets/*"; DestDir: "{app}/assets"; Flags: ignoreversion recursesubdirs
 
