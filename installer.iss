@@ -1,16 +1,24 @@
 [Setup]
+#define Id "09EB7E1F-3E53-477C-A0C0-9D8B765A59BC"
+#define AppName "Some Tank Game"
+#define Version "0.9.0"
+#define Exe "some-tank-game.exe"
+
+
 PrivilegesRequired=none
-AppId=09EB7E1F-3E53-477C-A0C0-9D8B765A59BC
-AppName=Some Tank Game
-AppVersion=0.9.0
+AppId={#Id}
+AppName={#AppName}
+DefaultGroupName={#AppName}
+DefaultDirName={autopf}\{#AppName}
+UninstallDisplayIcon={app}\{#Exe}
+
+AppVersion={#Version}
 WizardStyle=modern
-DefaultDirName={autopf}\Some Tank Game
-DefaultGroupName=Some Tank Game
-UninstallDisplayIcon={app}\some-tank-game.exe
 Compression=lzma2
 SolidCompression=yes
 OutputDir="."
-OutputBaseFilename="Some Tank Game Setup"
+OutputBaseFilename="{#AppName} v{#Version} Setup"
+SetupIconFile="assets/icon.ico"
 
 [Files]
 Source: "dist/some-tank-game.exe"; DestDir: "{app}"
@@ -18,4 +26,4 @@ Source: "dist/config.ini"; DestDir: "{app}"
 Source: "dist/assets/*"; DestDir: "{app}/assets"; Flags: ignoreversion recursesubdirs
 
 [Icons]
-Name: "{userdesktop}\Some Tank Game"; Filename: "{app}\some-tank-game.exe"
+Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#exe}"
