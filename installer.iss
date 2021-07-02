@@ -16,7 +16,7 @@ AppVersion={#Version}
 WizardStyle=modern
 Compression=lzma2
 SolidCompression=yes
-OutputDir="."
+OutputDir="dist-installer"
 OutputBaseFilename="{#AppName} v{#Version} Setup"
 SetupIconFile="assets/icon.ico"
 
