@@ -1,3 +1,4 @@
+- 2021-07-02  20m updated some stuff related to installer and added credits to splash
 - 2021-07-01  30m fixed corrupted setup
 - 2021-06-29  45m added icon to .exe and icon to application.
 - 2021-06-28  60m added exit dialog, added background coloring of hud

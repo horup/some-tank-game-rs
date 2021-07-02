@@ -9,6 +9,7 @@ fn show_splash(mut hud:ResMut<Hud>) {
     hud.top_right_text = format!("Build Date\n{}", env!("BUILD_DATE"));
     hud.top_left_text = format!("Version\nV{} ({})", env!("CARGO_PKG_VERSION"), env!("GIT_HASH"));
     hud.bottom_center_text = "Use W,A,S,D to drive your tank.\nUse the mouse to point and shoot!".into();
+    hud.bottom_left_text = "Music by Zander Noriega".into();
 }
 
 fn hide_splash(mut hud:ResMut<Hud>) {

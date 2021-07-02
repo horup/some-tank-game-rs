@@ -50,6 +50,7 @@ pub struct Hud {
     pub top_left_text: String,
     pub top_right_text: String,
     pub bottom_center_text: String,
+    pub bottom_left_text: String,
     pub center_text: String,
     pub foreground: Color,
     pub background: Color,
@@ -65,6 +66,7 @@ impl Hud {
         self.top_right_text = "".into();
         self.center_text = "".into();
         self.bottom_center_text = "".into();
+        self.bottom_left_text = "".into();
     }
 
     pub fn clear(&mut self) {
@@ -110,6 +112,7 @@ impl Default for Hud {
     fn default() -> Self {
         Self {
             console_text: "".into(),
+            bottom_left_text: "".into(),
             top_left_text: "".into(),
             top_right_text: "".into(),
             center_text: "".into(),
@@ -132,6 +135,7 @@ pub enum HudElement {
     Background,
     BottomCenter,
     Console,
+    BottomLeft
 }
 
 pub struct FPSText;
@@ -249,6 +253,38 @@ fn hud_initialization_system(
                 ..Default::default()
             })
             .insert(HudElement::TopLeft);
+
+        // bottom-left text
+        parent
+        .spawn_bundle(TextBundle {
+            style: Style {
+                align_self: AlignSelf::FlexEnd,
+                position_type: PositionType::Absolute,
+                position: Rect {
+                    bottom: Val::Px(16.0),
+                    left: Val::Px(16.0),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+            // Use the `Text::with_section` constructor
+            text: Text::with_section(
+                // Accepts a `String` or any type that converts into a `String`, such as `&str`
+                "",
+                TextStyle {
+                    font: asset_server.load("fonts/default.ttf"),
+                    font_size,
+                    color: Color::WHITE,
+                },
+                // Note: You can use `Default::default()` in place of the `TextAlignment`
+                TextAlignment {
+                    horizontal: HorizontalAlign::Left,
+                    ..Default::default()
+                },
+            ),
+            ..Default::default()
+        })
+        .insert(HudElement::BottomLeft);
 
         // right text
         parent
@@ -428,6 +464,9 @@ fn update_text(hud: ResMut<Hud>, query: Query<(&mut Text, &HudElement)>) {
         HudElement::TopLeft => {
             set_text(&mut text, &hud.top_left_text);
         }
+        HudElement::BottomLeft => {
+            set_text(&mut text, &hud.bottom_left_text);
+        }
         HudElement::Center => {
             set_text(&mut text, &hud.center_text);
         }
@@ -440,6 +479,7 @@ fn update_text(hud: ResMut<Hud>, query: Query<(&mut Text, &HudElement)>) {
         HudElement::Console => {
             set_text(&mut text, &hud.console_text);
         }
+        
         _ => {}
     });
 }
