@@ -31,6 +31,6 @@ jobs:
     - name: Archive installer release
       uses: actions/upload-artifact@v2
       with:
-        name: ${{github.workflow}}-installer-${{env.NOW}}
+        name: ${{github.workflow}}-setup-${{env.NOW}}
         path: |
           dist-installer
