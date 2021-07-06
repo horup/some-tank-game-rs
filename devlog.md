@@ -1,3 +1,4 @@
+--- 3905m = 65h for v1 ---
 - 2021-07-02  20m updated some stuff related to installer and added credits to splash
 - 2021-07-01  30m fixed corrupted setup
 - 2021-06-29  45m added icon to .exe and icon to application.
