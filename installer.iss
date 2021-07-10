@@ -1,7 +1,7 @@
 [Setup]
 #define Id "09EB7E1F-3E53-477C-A0C0-9D8B765A59BC"
 #define AppName "Some Tank Game"
-#define Version "1.0.0"
+#define Version "1.1.0"
 #define Exe "some-tank-game.exe"
 
 

@@ -3404,7 +3404,7 @@ dependencies = [
 
 [[package]]
 name = "some-tank-game"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "anyhow",
  "bevy",
