@@ -5,9 +5,7 @@
 
 use wasm_bindgen::prelude::*;
 
-use std::io::Cursor;
-
-use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::{WindowMode, WindowResizeConstraints}, winit::WinitWindows};
+use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::{WindowMode, WindowResizeConstraints}};
 
 mod components;
 use bevy_rapier2d::physics::{RapierConfiguration};
