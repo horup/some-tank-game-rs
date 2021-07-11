@@ -35,6 +35,7 @@ bevy = {version = "0.5"}
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 bevy = {version = "0.5", default-features = false, features = ["bevy_winit", "render"]}
 bevy_webgl2 = "0.5.2"
+web-sys = {version = "0.3.36", features = ['Window']}
 
 # Enable optimizations for dependencies (incl. Bevy), but not for our code:
 [profile.dev.package."*"]

@@ -29,7 +29,7 @@
 		},
 		{
 			"command":"wasm-pack",
-			"args": ["build", "--target", "web"],
+			"args": ["build", "--target", "web", "--dev"],
 			"problemMatcher": [
 				"$rustc"
 			],

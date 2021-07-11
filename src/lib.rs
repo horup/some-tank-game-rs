@@ -126,6 +126,8 @@ struct Logger {
 pub fn start() { 
     let config = Config::new("config.ini");
     let mut builder = App::build();
+
+    builder.add_plugins(DefaultPlugins);
     let window = WindowDescriptor {
         title: "Some Tank Game!".to_string(),
         width: 1024.0,
@@ -141,25 +143,25 @@ pub fn start() {
         resizable:false,
         ..Default::default()
     };
+
+    builder.insert_resource(window);
     
     #[cfg(not(target_arch = "wasm32"))]
     builder.add_plugin(native::NativePlugin);
 
     #[cfg(target_arch = "wasm32")]
     builder.add_plugin(wasm::WASMPlugin);
+
  
-    builder.insert_resource(window);
     builder.add_state(AppState::default());
     builder.add_state(GameState::default());
+
+
     builder.add_system(debug.system());
     builder.add_system(state_input.system());
 
-
-
-
     // add plugins
-    builder.add_plugins(DefaultPlugins)
-    .add_plugin(RootUIPlugin)
+    builder.add_plugin(RootUIPlugin)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(TiledLoaderPlugin)
