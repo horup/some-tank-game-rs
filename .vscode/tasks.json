@@ -8,10 +8,7 @@
 			"problemMatcher": [
 				"$rustc"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"label": "rust: cargo run"
 		},
 		{
@@ -29,6 +26,18 @@
 			"command":"wasm-pack",
 			"args": ["build", "--target", "web", "--release"],
 			"problemMatcher":"$rustc"
-		}
+		},
+		{
+			"command":"wasm-pack",
+			"args": ["build", "--target", "web"],
+			"problemMatcher": [
+				"$rustc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"label": "wasm-pack build"
+		},
 	]
 }

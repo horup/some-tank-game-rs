@@ -3,6 +3,7 @@ name = "extensions"
 version = "0.1.0"
 authors = ["Horup <sah@sah.dk>"]
 edition = "2018"
+resolver = "2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -12,14 +13,18 @@ crate-type = ["dylib", "rlib"]
 [dependencies]
 serde = "1.0.126"
 serde_json = "1.0"
-bevy = {version = "0.5"}
 anyhow = "1.0"
-tiled = "0.9.3"
+tiled = {version = "0.9.3", default-features = false}
 bevy_rapier2d = {version = "0.9.0", features = ["serde-serialize"]} 
 bevy_kira_audio = {version = "0.5.0", features = ["ogg"]}
 rust-ini = "0.17.0"
 ico = "0.1.0"
+winit = {version = "0.24.0", default-features = false} 
 
-[dependencies.winit]
-version = "0.24.0"
-default-features = false
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+bevy = {version = "0.5"}
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+bevy = {version = "0.5", default-features = false, features = []}
+bevy_webgl2 = "0.5.2"
+web-sys = {version = "0.3.36", features = ['Window']}

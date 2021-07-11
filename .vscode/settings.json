@@ -1,3 +1,7 @@
 {
-    "debug.allowBreakpointsEverywhere": true
+    "debug.allowBreakpointsEverywhere": true,
+    "rust-analyzer.cargo.target": "wasm32-unknown-unknown",
+    "rust-analyzer.diagnostics.disabled": [
+        "missing-unsafe"
+    ]
 }
