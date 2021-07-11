@@ -1,5 +1,5 @@
 
-- 2021-07-11  60m a bit closer to targeting web
+- 2021-07-11  70m game now functions in the browser after embedded the tsx tilesets! 
 - 2021-07-10  10m started refactoring to allow web target, bumped version
 
 
