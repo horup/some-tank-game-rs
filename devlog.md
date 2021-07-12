@@ -1,6 +1,6 @@
 
 
-- 2021-07-12  worked on ci/cd
+- 2021-07-12  30m worked on ci/cd, got stuff to build for github pages, removed audio hack as it seems to be causing issues
 - 2021-07-11  70m game now functions in the browser after embedded the tsx tilesets! 
 - 2021-07-10  10m started refactoring to allow web target, bumped version
 

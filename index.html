@@ -42,7 +42,7 @@
   // the following function keeps track of all AudioContexts and resumes them on the first user
   // interaction with the page. If the function is called and all contexts are already running,
   // it will remove itself from all event listeners.
-  (function () {
+  /*(function () {
     // An array of all contexts to resume on the page
     const audioContextList = [];
 
@@ -97,7 +97,7 @@
     userInputEventNames.forEach((eventName) => {
       document.addEventListener(eventName, resumeAllContexts);
     });
-  })();
+  })();*/
 </script>
 
 
