@@ -10,4 +10,4 @@ xcopy pkg\*.wasm dist-web\pkg\
 xcopy pkg\*.d.ts dist-web\pkg\
 xcopy pkg\*.wasm.d.ts dist-web\pkg\
 
-xcopy assets\*.* dist-web\assets\
+xcopy assets dist\dist-we /E /H /C /I
