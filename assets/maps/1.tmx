@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="left-down" width="16" height="16" tilewidth="8" tileheight="8" infinite="0" nextlayerid="6" nextobjectid="13">
+ <tileset firstgid="1" name="tiles" tilewidth="8" tileheight="8" tilecount="16" columns="4">
+  <image source="../imgs/tiles.png" width="32" height="32"/>
+  <tile id="1">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="17" name="objects" tilewidth="8" tileheight="8" tilecount="4" columns="2">
+  <image source="../imgs/objects.png" width="16" height="16"/>
+  <tile id="0" type="player"/>
+  <tile id="1" type="bot"/>
+ </tileset>
+ <layer id="1" name="tiles" width="16" height="16">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,2,2,1,1,2,2,1,1,1,1,2,
+2,1,1,1,1,2,2,1,1,2,2,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,2,1,1,1,1,2,1,1,1,1,2,
+2,1,1,1,1,2,1,1,1,1,2,1,1,1,1,2,
+2,1,1,1,1,2,2,2,2,2,2,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <objectgroup id="5" name="objects">
+  <object id="7" gid="17" x="16.2441" y="117.715" width="8" height="8" rotation="312.272"/>
+  <object id="9" gid="18" x="111.644" y="10.8912" width="8" height="8" rotation="131.717"/>
+ </objectgroup>
+</map>
