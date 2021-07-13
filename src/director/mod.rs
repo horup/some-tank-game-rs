@@ -149,8 +149,13 @@ fn startup(mut director:ResMut<Director>, config:Res<Config>) {
 }
 
 fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>, mut asset_cache:ResMut<AssetCache>) {
-    let handle:Handle<Json> = asset_server.load("levels.json");
-    if asset_cache.contains(&handle.clone()) {
+    let handle:Handle<Json> = asset_server.get_handle("levels.json");
+    if asset_cache.contains(&handle) == false {
+        let handle:Handle<Json> = asset_server.load("levels.json");
+        asset_cache.track(&handle);
+    }
+    
+    if asset_cache.is_loaded(&handle.clone()) {
         return;
     }
 

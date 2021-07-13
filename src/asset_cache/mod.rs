@@ -3,24 +3,53 @@ use bevy::{asset::Asset, prelude::*};
 
 #[derive(Default)]
 pub struct AssetCache {
-    assets:HashSet<HandleUntyped>
+    loaded:HashSet<HandleUntyped>,
+    pub(self) not_loaded:HashSet<HandleUntyped>,
 }
 
 impl AssetCache {
     pub fn cache<T:Asset>(&mut self, handle:&Handle<T>) {
-        self.assets.insert(handle.clone_untyped());
+        self.loaded.insert(handle.clone_untyped());
     }
 
     pub fn clear(&mut self) {
-        self.assets.clear();
+        self.loaded.clear();
     }
 
-    pub fn contains<T:Asset>(&mut self, handle:&Handle<T>) -> bool {
-        self.assets.contains(&handle.clone_untyped())
+    pub fn contains<T:Asset>(&self, handle:&Handle<T>) -> bool {
+        let handle = handle.clone_untyped();
+        self.loaded.contains(&handle) || self.not_loaded.contains(&handle)
+    }
+
+    pub fn is_loaded<T:Asset>(&self, handle:&Handle<T>) -> bool {
+        self.loaded.contains(&handle.clone_untyped())
     }
 
     pub fn remove<T:Asset>(&mut self, handle:&Handle<T>) {
-        self.assets.remove(&handle.clone_untyped());
+        self.loaded.remove(&handle.clone_untyped());
+    }
+
+    pub fn track<T:Asset>(&mut self, handle:&Handle<T>) {
+        self.not_loaded.insert(handle.clone_untyped());
+    }
+}
+
+fn asset_loader(mut asset_cache:ResMut<AssetCache>, asset_server:Res<AssetServer>) {
+    let mut loaded = Vec::new();
+    for handle in asset_cache.not_loaded.iter() {
+        match asset_server.get_load_state(handle) {
+            bevy::asset::LoadState::NotLoaded => {},
+            bevy::asset::LoadState::Loading => {},
+            bevy::asset::LoadState::Loaded => {
+                loaded.push(handle.clone());
+            },
+            bevy::asset::LoadState::Failed => {},
+        }
+    }
+
+    for handle in loaded {
+        asset_cache.not_loaded.remove(&handle);
+        asset_cache.loaded.insert(handle);
     }
 }
 
@@ -28,6 +57,7 @@ pub struct AssetCachePlugin;
 impl Plugin for AssetCachePlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.insert_resource(AssetCache::default());
+        app.add_system(asset_loader.system());
     }
 }
 
