@@ -18,6 +18,7 @@ enum DirectorState {
 }
 
 struct Director {
+    pub ready:bool,
     pub quick:bool,
     pub current_level:u32,
     pub levels:Levels, 
@@ -42,6 +43,7 @@ impl Director {
 impl Default for Director {
     fn default() -> Self {
         Self {
+            ready:false,
             quick:false,
             current_level:1,
             levels:Levels::default(),
@@ -61,6 +63,10 @@ fn update(
     mut hud:ResMut<Hud>,
     mouse_button_input:Res<Input<MouseButton>>,
     mut play_audio:EventWriter<PlayAudioEvent>) {
+
+    if director.ready == false {
+        return;
+    }
 
     if director.timer > 0.0 {
         director.timer -= time.delta_seconds();
@@ -148,28 +154,28 @@ fn startup(mut director:ResMut<Director>, config:Res<Config>) {
     director.quick = config.quick();
 }
 
-fn load_levels(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>, mut asset_cache:ResMut<AssetCache>) {
-    let handle:Handle<Json> = asset_server.get_handle("levels.json");
-    if asset_cache.contains(&handle) == false {
-        let handle:Handle<Json> = asset_server.load("levels.json");
-        asset_cache.track(&handle);
-    }
+fn load_director(mut director:ResMut<Director>, asset_server:Res<AssetServer>, json:Res<Assets<Json>>, mut asset_cache:ResMut<AssetCache>) {
     
-    if asset_cache.is_loaded(&handle.clone()) {
-        return;
-    }
-
-    if let Some(json) = json.get(handle.clone()) {
-        asset_cache.cache(&handle.clone());
-        if let Some(maps) = json.as_object().and_then(|o|o.get("maps").and_then(|v| v.as_array())) {
-            director.levels.maps.clear();
-            for map in maps {
-                if let Some(name) = map.as_str() {
-                    director.levels.maps.push(name.into());
+    if director.ready == false {
+        let handle:Handle<Json> = asset_server.get_handle("levels.json");
+        if asset_cache.contains(&handle) == false {
+            let handle:Handle<Json> = asset_server.load("levels.json");
+            asset_cache.track(&handle);
+        } else if asset_cache.is_loaded(&handle) {
+            let json = json.get(handle).unwrap();
+            if let Some(maps) = json.as_object().and_then(|o|o.get("maps").and_then(|v| v.as_array())) {
+                director.levels.maps.clear();
+                for map in maps {
+                    if let Some(name) = map.as_str() {
+                        director.levels.maps.push(name.into());
+                    }
                 }
             }
+
+            director.ready = true;
         }
     }
+
 }
 
 pub struct DirectorPlugin;
@@ -179,7 +185,7 @@ impl Plugin for DirectorPlugin {
         app
         .insert_resource(Director::default())
         .add_startup_system(startup.system())
-        .add_system(load_levels.system())
+        .add_system(load_director.system())
         .add_system_set(SystemSet::on_update(AppState::InGame).with_system(update.system()));
     }
 }
