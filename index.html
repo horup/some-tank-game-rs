@@ -1,17 +1,10 @@
 <html>
+
 <head>
   <meta charset="UTF-8" />
   <style>
     body {
-      background: linear-gradient(135deg,
-          white 0%,
-          white 49%,
-          black 49%,
-          black 51%,
-          white 51%,
-          white 100%);
-      background-repeat: repeat;
-      background-size: 20px 20px;
+      background: black;
       margin: 0px;
       overflow: hidden;
     }
@@ -20,90 +13,128 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);  
+      transform: translate(-50%, -50%);
       background-color: white;
+    }
+
+    .lds-dual-ring {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      width: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    .lds-dual-ring:after {
+      content: " ";
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      border-color: #fff transparent #fff transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
-<script>
-  let resize_canvas = (width, height) => {
-    let canvas = document.getElementsByTagName("canvas")[0];
-    if (canvas != null) {
-      canvas.width = width;
-      canvas.height = height;
-      canvas.style = `width: ${canvas.width}; height: ${canvas.height}`;
-    }
-  }
-</script>
-<script>
-  // Insert hack to make sound autoplay on Chrome as soon as the user interacts with the tab:
-  // https://developers.google.com/web/updates/2018/11/web-audio-autoplay#moving-forward
 
-  // the following function keeps track of all AudioContexts and resumes them on the first user
-  // interaction with the page. If the function is called and all contexts are already running,
-  // it will remove itself from all event listeners.
-  (function () {
-    // An array of all contexts to resume on the page
-    const audioContextList = [];
-
-    // An array of various user interaction events we should listen for
-    const userInputEventNames = [
-      "click",
-      "contextmenu",
-      "auxclick",
-      "dblclick",
-      "mousedown",
-      "mouseup",
-      "pointerup",
-      "touchend",
-      "keydown",
-      "keyup",
-    ];
-
-    // A proxy object to intercept AudioContexts and
-    // add them to the array for tracking and resuming later
-    self.AudioContext = new Proxy(self.AudioContext, {
-      construct(target, args) {
-        const result = new target(...args);
-        audioContextList.push(result);
-        return result;
-      },
-    });
-
-    // To resume all AudioContexts being tracked
-    function resumeAllContexts(_event) {
-      let count = 0;
-
-      audioContextList.forEach((context) => {
-        if (context.state !== "running") {
-          context.resume();
-        } else {
-          count++;
-        }
-      });
-
-      // If all the AudioContexts have now resumed then we unbind all
-      // the event listeners from the page to prevent unnecessary resume attempts
-      // Checking count > 0 ensures that the user interaction happens AFTER the game started up
-      if (count > 0 && count === audioContextList.length) {
-        userInputEventNames.forEach((eventName) => {
-          document.removeEventListener(eventName, resumeAllContexts);
-        });
+<body>
+  <script>
+    let resize_canvas = (width, height) => {
+      let canvas = document.getElementsByTagName("canvas")[0];
+      if (canvas != null) {
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style = `width: ${canvas.width}; height: ${canvas.height}`;
       }
     }
+  </script>
+  <script>
+    // Insert hack to make sound autoplay on Chrome as soon as the user interacts with the tab:
+    // https://developers.google.com/web/updates/2018/11/web-audio-autoplay#moving-forward
 
-    // We bind the resume function for each user interaction
-    // event on the page
-    userInputEventNames.forEach((eventName) => {
-      document.addEventListener(eventName, resumeAllContexts);
-    });
-  })();
-</script>
+    // the following function keeps track of all AudioContexts and resumes them on the first user
+    // interaction with the page. If the function is called and all contexts are already running,
+    // it will remove itself from all event listeners.
+    (function () {
+      // An array of all contexts to resume on the page
+      const audioContextList = [];
 
+      // An array of various user interaction events we should listen for
+      const userInputEventNames = [
+        "click",
+        "contextmenu",
+        "auxclick",
+        "dblclick",
+        "mousedown",
+        "mouseup",
+        "pointerup",
+        "touchend",
+        "keydown",
+        "keyup",
+      ];
 
-<script type="module">
-  import init from './pkg/lib.js';
+      // A proxy object to intercept AudioContexts and
+      // add them to the array for tracking and resuming later
+      self.AudioContext = new Proxy(self.AudioContext, {
+        construct(target, args) {
+          const result = new target(...args);
+          audioContextList.push(result);
+          return result;
+        },
+      });
+
+      // To resume all AudioContexts being tracked
+      function resumeAllContexts(_event) {
+        let count = 0;
+
+        audioContextList.forEach((context) => {
+          if (context.state !== "running") {
+            context.resume();
+          } else {
+            count++;
+          }
+        });
+
+        // If all the AudioContexts have now resumed then we unbind all
+        // the event listeners from the page to prevent unnecessary resume attempts
+        // Checking count > 0 ensures that the user interaction happens AFTER the game started up
+        if (count > 0 && count === audioContextList.length) {
+          userInputEventNames.forEach((eventName) => {
+            document.removeEventListener(eventName, resumeAllContexts);
+          });
+        }
+      }
+
+      // We bind the resume function for each user interaction
+      // event on the page
+      userInputEventNames.forEach((eventName) => {
+        document.addEventListener(eventName, resumeAllContexts);
+      });
+    })();
+  </script>
+
+  <div class="lds-dual-ring"></div>
+
+  <script type="module">
+    import init from './pkg/lib.js';
     var res = await init();
     res.start();
-</script>
+    let el = document.getElementsByClassName("lds-dual-ring")[0];
+    el.parentNode.removeChild(el);
+  </script>
+</body>
 </html>

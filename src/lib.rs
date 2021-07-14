@@ -55,6 +55,8 @@ pub use config::*;
 mod exit;
 pub use exit::*;
 
+mod preload;
+
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
@@ -152,7 +154,6 @@ pub fn start() {
     #[cfg(target_arch = "wasm32")]
     builder.add_plugin(wasm::WASMPlugin);
 
- 
     builder.add_state(AppState::default());
     builder.add_state(GameState::default());
 
@@ -180,6 +181,7 @@ pub fn start() {
     .add_plugin(AssetCachePlugin)
     .add_plugin(ExitPlugin);
 
+
     
     // add resources
     builder
@@ -192,8 +194,8 @@ pub fn start() {
 
     // add startup systems
     builder
-    .add_startup_system(startup_system.system());
-    //.add_startup_system(load_textures_system.system());
+    .add_startup_system(startup_system.system())
+    .add_startup_system(preload::preload.system());
 
     // add always on systems
     builder

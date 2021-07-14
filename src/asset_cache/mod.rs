@@ -30,6 +30,10 @@ impl AssetCache {
         self.not_loaded.insert(handle.clone_untyped());
     }
 
+    pub fn track_untyped(&mut self, handle:&HandleUntyped) {
+        self.not_loaded.insert(handle.clone());
+    }
+
     pub fn count(&self) -> usize {
         self.not_loaded.len() + self.loaded.len()
     }
@@ -40,6 +44,10 @@ impl AssetCache {
 
     pub fn not_loaded_count(&self) -> usize {
         self.not_loaded.len()
+    }
+
+    pub fn all_is_loaded(&self) -> bool {
+        self.not_loaded.len() == 0
     }
 }
 

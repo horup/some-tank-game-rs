@@ -1,4 +1,4 @@
-
+- 2021-07-14  60m worked on preloading assets, added spinner to index.html
 - 2021-07-13  25m+25m tried to improve web loading
 - 2021-07-12  30m worked on ci/cd, got stuff to build for github pages, removed audio hack as it seems to be causing issues
 - 2021-07-11  70m game now functions in the browser after embedded the tsx tilesets! 
