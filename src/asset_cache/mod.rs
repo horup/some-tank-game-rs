@@ -8,12 +8,9 @@ pub struct AssetCache {
 }
 
 impl AssetCache {
-    pub fn cache<T:Asset>(&mut self, handle:&Handle<T>) {
-        self.loaded.insert(handle.clone_untyped());
-    }
-
     pub fn clear(&mut self) {
         self.loaded.clear();
+        self.not_loaded.clear();
     }
 
     pub fn contains<T:Asset>(&self, handle:&Handle<T>) -> bool {
@@ -31,6 +28,18 @@ impl AssetCache {
 
     pub fn track<T:Asset>(&mut self, handle:&Handle<T>) {
         self.not_loaded.insert(handle.clone_untyped());
+    }
+
+    pub fn count(&self) -> usize {
+        self.not_loaded.len() + self.loaded.len()
+    }
+
+    pub fn loaded_count(&self) -> usize {
+        self.loaded.len()
+    }
+
+    pub fn not_loaded_count(&self) -> usize {
+        self.not_loaded.len()
     }
 }
 
