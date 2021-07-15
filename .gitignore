@@ -2,3 +2,4 @@ target
 /dist
 /temp
 /*.exe
+/pkg
