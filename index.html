@@ -1,6 +1,7 @@
 <html>
 
 <head>
+  <link rel="icon" href="assets/icon.png">
   <meta charset="UTF-8" />
   <style>
     body {
@@ -126,15 +127,21 @@
       });
     })();
   </script>
-
-  <div class="lds-dual-ring"></div>
-
   <script type="module">
     import init from './pkg/lib.js';
-    var res = await init();
-    res.start();
-    let el = document.getElementsByClassName("lds-dual-ring")[0];
-    el.parentNode.removeChild(el);
+    let spinner = document.createElement('div');
+    spinner.className = "lds-dual-ring"
+    document.body.appendChild(spinner);
+    
+    try {
+      var res = await init();
+      res.start();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      document.body.removeChild(spinner);
+    }
+
   </script>
 </body>
 </html>
