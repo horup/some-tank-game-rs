@@ -136,8 +136,8 @@ pub fn start() {
         height: 768.0,
         vsync: config.vsync(),
         resize_constraints:WindowResizeConstraints {
-            min_width: config.width() as f32,
-            min_height: config.height() as f32,
+            min_width: config.width() as f32 / 2.0,
+            min_height: config.height() as f32 / 2.0,
             max_width: f32::MAX,
             max_height: f32::MAX,
         },
