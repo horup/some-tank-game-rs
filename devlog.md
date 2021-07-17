@@ -1,4 +1,4 @@
-- 2021-07-17  45m made a bit more dpi aware, refactored mouse system a bit
+- 2021-07-17  60m made a bit more dpi aware, refactored mouse system a bit, made hud scale factor aware
 - 2021-07-16  60m tested wasm in different mobile browsers
 - 2021-07-15  15m improved error handling a bit,
 - 2021-07-14  60m worked on preloading assets, added spinner to index.html
