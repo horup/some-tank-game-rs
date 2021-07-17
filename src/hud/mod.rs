@@ -145,9 +145,14 @@ fn hud_initialization_system(
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     root_node: Query<(Entity, &RootNode)>,
-    config: Res<Config>
+    config: Res<Config>,
+    windows: Res<Windows>
 ) {
-    let font_size = 16.0;
+    let scale_factor = windows.get_primary()
+    .and_then(|x| Some(x.scale_factor()))
+    .unwrap_or(1.0);
+    
+    let font_size = 16.0 / scale_factor as f32;
     let root_node = root_node.single().expect("root node not found").0;
     
     commands.entity(root_node).with_children(|parent| {
