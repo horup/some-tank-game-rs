@@ -11,7 +11,6 @@ pub fn mouse_input_system(mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Trans
     
     for e in mouse_moved_events.iter() {
         mouse.pos_screen = e.position;
-        info!("mouse {:?}", e.position);
     }
 
     update_position_world(&camera, &windows, &mut mouse);
