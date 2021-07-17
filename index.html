@@ -58,9 +58,9 @@
     let resize_canvas = (width, height) => {
       let canvas = document.getElementsByTagName("canvas")[0];
       if (canvas != null) {
-        canvas.width = width;
-        canvas.height = height;
-        canvas.style = `width: ${canvas.width}; height: ${canvas.height}`;
+        canvas.width = width * window.devicePixelRatio;
+        canvas.height = height * window.devicePixelRatio;
+        canvas.style = `width: ${width}; height: ${height}`;
       }
     }
   </script>
