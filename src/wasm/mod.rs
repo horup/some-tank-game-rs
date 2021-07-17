@@ -29,14 +29,17 @@ fn resizer(mut windows:ResMut<Windows>, mut window_resized_events: EventWriter<W
                 height = if height < wd.resize_constraints.min_height { wd.resize_constraints.min_height } else { height };
                 height = if height > wd.resize_constraints.max_height { wd.resize_constraints.max_height } else { height };
 
-                window.update_actual_size_from_backend(width as u32, height as u32);
+                let p_width = width * window.scale_factor() as f32;
+                let p_height = height * window.scale_factor() as f32;
+                window.update_actual_size_from_backend(p_width as u32, p_height as u32);
                 window_resized_events.send(WindowResized {
                     id:window.id(),
                     height:height,
                     width:width
                 });
+
                 resize_canvas(width, height);
-                info!("Resizing to {:?},{:?}", width, height);
+                info!("Resizing to {:?},{:?} with scale factor of {}", width, height, window.scale_factor());
             }
 
     }

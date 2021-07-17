@@ -1,5 +1,5 @@
 use bevy::{ prelude::*};
-use crate::{NewGameEvent, Player, Tank, Turret, resources::Mouse};
+use crate::{NewGameEvent, Player, Tank, Turret, mouse::Mouse};
 
 pub fn input_system(mouse_button_input:Res<Input<MouseButton>>, mouse:Res<Mouse>, keyboard_input:Res<Input<KeyCode>>, mut new_game:EventWriter<NewGameEvent>, mut player:Query<(&Player, &mut Tank, &Children)>, mut turrets:Query<&mut Turret>) {
     if keyboard_input.just_pressed(KeyCode::F5) {

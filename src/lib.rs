@@ -17,8 +17,8 @@ pub use events::*;
 mod systems;
 use systems::*;
 
-mod resources;
-use resources::*;
+mod mouse;
+use mouse::*;
 
 mod director;
 pub use director::*;
@@ -136,8 +136,8 @@ pub fn start() {
         height: 768.0,
         vsync: config.vsync(),
         resize_constraints:WindowResizeConstraints {
-            min_width: config.width() as f32 / 2.0,
-            min_height: config.height() as f32 / 2.0,
+            min_width: config.width() as f32 / 4.0,
+            min_height: config.height() as f32 / 4.0,
             max_width: f32::MAX,
             max_height: f32::MAX,
         },
@@ -179,15 +179,14 @@ pub fn start() {
     .add_plugin(AudioPlugin)
     .add_plugin(JsonLoaderPlugin)
     .add_plugin(AssetCachePlugin)
-    .add_plugin(ExitPlugin);
+    .add_plugin(ExitPlugin)
+    .add_plugin(MousePlugin);
 
 
     
     // add resources
     builder
-    .insert_resource(config)
-    .insert_resource(Mouse::default())
-    .insert_resource(Hud::default());
+    .insert_resource(config);
 
     // add events
     builder.add_event::<NewGameEvent>();
@@ -206,7 +205,6 @@ pub fn start() {
     builder.add_system_set_to_stage(CoreStage::Update, 
         SystemSet::on_update(AppState::InGame)
         .with_system(input_system.system())
-        .with_system(mouse_input_system.system())
     );
     builder
     .add_system_set(SystemSet::on_update(GameState::Running)
