@@ -20,3 +20,10 @@ pub struct Autopilot {
     pub waypoints:VecDeque<Waypoint>,
     pub planning:bool
 }
+
+impl Autopilot {
+    pub fn clear(&mut self) {
+        self.waypoints.clear();
+        self.planning = false;
+    }
+}

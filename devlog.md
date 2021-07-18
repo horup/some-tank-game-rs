@@ -1,4 +1,4 @@
-- 2021-07-18  65m worked on autopilot feature for keyboard less controls
+- 2021-07-18  90m worked on autopilot feature for keyboard less controls
 - 2021-07-17  60m made a bit more dpi aware, refactored mouse system a bit, made hud scale factor aware
 - 2021-07-16  60m tested wasm in different mobile browsers
 - 2021-07-15  15m improved error handling a bit,
