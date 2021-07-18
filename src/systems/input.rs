@@ -26,13 +26,23 @@ fn turret_subsystem(children: &Children, mut turrets: Query<&mut Turret>, mouse_
 
 fn autopilot_subsystem(tank:&mut Tank, autopilot:&mut Autopilot, mouse:&Res<Mouse>, mouse_button_input: &Res<Input<MouseButton>>, transform:&Transform) -> bool {
     if autopilot.planning == false {
+        
         if let Some(front) =  autopilot.waypoints.front() {
             // autopilot has points it needs to follow
             let goal_radius = 0.5;
             let p = transform.translation;
-            if p.distance(front.location) <= goal_radius {
+            let loc = front.location;
+            let rot = transform.rotation;
+            let f = Vec3::new(1.0, 0.0, 0.0);
+            let f  = rot * f;
+
+            if p.distance(loc) <= goal_radius {
                 info!("reached {:?}", front.location);
                 autopilot.waypoints.pop_front();
+            } else {
+                let v = (loc - p).normalize_or_zero();
+                let a = f.angle_between(v);
+                info!("{}", a);
             }
         } else {
             // no more points, stop tracks! 
