@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{Bot, Faction, Player, ThingBuilder, ThingType};
+use crate::{Autopilot, Bot, Faction, Player, ThingBuilder, ThingType};
 
 pub struct Spawn {
     pub x:f32,
@@ -22,6 +22,7 @@ pub fn spawn(commands:&mut Commands, spawn:Spawn) {
                 ..Default::default()
             })
             .insert(Player::default())
+            .insert(Autopilot::default())
             .insert(Faction::Greens);
         }
         "bot" => {

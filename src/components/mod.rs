@@ -33,3 +33,6 @@ pub use game_camera::*;
 
 mod faction;
 pub use faction::*;
+
+mod autopilot;
+pub use autopilot::*;

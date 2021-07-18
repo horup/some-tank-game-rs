@@ -1,7 +1,7 @@
 use bevy::{prelude::*, render::camera::Camera};
 use crate::{AppState, GameCamera};
 
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Mouse {
     pub pos_screen:Vec2,
     pub pos_world:Vec3,
