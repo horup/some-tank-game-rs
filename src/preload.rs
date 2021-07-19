@@ -18,6 +18,7 @@ pub fn preload(mut asset_cache:ResMut<AssetCache>, asset_server:Res<AssetServer>
     t("imgs/tanks.png");
     t("imgs/tiles.png");
     t("imgs/white.png");
+    t("imgs/waypoint.png");
 
     t("maps/1.tmx");
     t("maps/2.tmx");

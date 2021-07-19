@@ -2,9 +2,6 @@
 mod camera;
 pub use camera::*;
 
-mod input;
-pub use input::*;
-
 mod turret;
 pub use turret::*;
 

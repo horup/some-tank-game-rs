@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use bevy::prelude::*;
 
-#[derive(Default, Clone, Copy, PartialEq)]
+#[derive(Default, Clone, Copy, PartialEq, Debug)]
 pub struct Waypoint {
     pub location:Vec3
 }
@@ -25,5 +25,14 @@ impl Autopilot {
     pub fn clear(&mut self) {
         self.waypoints.clear();
         self.planning = false;
+    }
+
+    pub fn any_within_radius(&self, radius:f32, p:Vec3) -> bool {
+        for w in &self.waypoints {
+            if w.location.distance(p) <= radius {
+                return true;
+            }
+        }
+        false
     }
 }

@@ -55,6 +55,9 @@ pub use config::*;
 mod exit;
 pub use exit::*;
 
+mod input;
+pub use input::*;
+
 mod preload;
 
 #[cfg(target_arch = "wasm32")]
@@ -180,7 +183,8 @@ pub fn start() {
     .add_plugin(JsonLoaderPlugin)
     .add_plugin(AssetCachePlugin)
     .add_plugin(ExitPlugin)
-    .add_plugin(MousePlugin);
+    .add_plugin(MousePlugin)
+    .add_plugin(InputPlugin);
 
 
     
@@ -201,11 +205,6 @@ pub fn start() {
     .add_system(camera_system.system())
     .add_system(faction_system.system());
 
-    // add in game update systems
-    builder.add_system_set_to_stage(CoreStage::Update, 
-        SystemSet::on_update(AppState::InGame)
-        .with_system(input_system.system())
-    );
     builder
     .add_system_set(SystemSet::on_update(GameState::Running)
         .with_system(drag_system.system())

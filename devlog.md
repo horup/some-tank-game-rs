@@ -1,3 +1,4 @@
+- 2021-07-19  55m worked on rendering of waypoints
 - 2021-07-18  90m worked on autopilot feature for keyboard less controls
 - 2021-07-17  60m made a bit more dpi aware, refactored mouse system a bit, made hud scale factor aware
 - 2021-07-16  60m tested wasm in different mobile browsers
