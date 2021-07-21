@@ -1,3 +1,4 @@
+- 2021-07-21  75m worked on touch support, got something to partially work.
 - 2021-07-20  30m worked on touch events in the browser, but no luck since winit does not yet support touch events targeting canvas html5 :-(
 - 2021-07-19  55m worked on rendering of waypoints
 - 2021-07-18  90m worked on autopilot feature for keyboard less controls

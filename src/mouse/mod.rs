@@ -9,6 +9,9 @@ pub struct Mouse {
     pub right_button:bool
 }
 
+#[derive(Debug, Hash, Clone, Copy, PartialEq, Eq, SystemLabel)]
+pub struct MouseSystem;
+
 pub fn mouse_input_system(mouse_button_input:Res<Input<MouseButton>>, mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Transform, &GameCamera)>, mut mouse_moved_events:EventReader<CursorMoved>, windows:Res<Windows>) {
     
     for e in mouse_moved_events.iter() {
@@ -43,7 +46,7 @@ impl Plugin for MousePlugin {
         app.insert_resource(Mouse::default());
         app.add_system_set_to_stage(CoreStage::Update, 
             SystemSet::on_update(AppState::InGame)
-            .with_system(mouse_input_system.system())
+            .with_system(mouse_input_system.system().label(MouseSystem))
         );
     }
 }

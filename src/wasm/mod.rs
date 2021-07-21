@@ -1,11 +1,25 @@
-use bevy::prelude::*;
+use bevy::{input::InputSystem, prelude::*};
 use bevy::window::WindowResized;
 use wasm_bindgen::prelude::*;
+use web_sys::{TouchEvent, TouchList};
+
+use crate::mouse::{Mouse, MouseSystem};
 
 
 #[wasm_bindgen]
 extern "C" {
     fn resize_canvas(width:f32, height:f32);
+}
+
+
+#[wasm_bindgen]
+extern "C" {
+    fn has_touch() -> bool;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    fn pop_touch_event() -> Option<TouchEvent>;
 }
 
 struct LastSize {
@@ -45,6 +59,34 @@ fn resizer(mut windows:ResMut<Windows>, mut window_resized_events: EventWriter<W
     }
 }
 
+fn pool_touch_system(mut mouse:ResMut<Mouse>, windows:Res<Windows>, mut mouse_button_input: ResMut<Input<MouseButton>>,) {
+    if let Some(window) = windows.get_primary() {
+        while let Some(touch_event) = pop_touch_event() {
+            let t = touch_event.type_();
+            let touches:TouchList = touch_event.touches();
+
+            for i in 0..touches.length() {
+                if let Some(touch) = touches.get(i) {
+                    let _id = touch.identifier();
+                    let x = touch.client_x() as f32;
+                    let y = window.height() as f32 - touch.client_y() as f32;
+                    mouse.pos_screen = Vec2::new(x, y);
+                }
+            }
+
+            if t == "touchstart" {
+                mouse_button_input.press(MouseButton::Left);
+                info!("start");
+            } else if t ==  "touchend" {
+                mouse_button_input.release(MouseButton::Left);
+                info!("end");
+            } else if t ==  "touchmove" {
+               
+            }
+        }
+    }
+}
+
 
 pub struct WASMPlugin;
 
@@ -53,5 +95,9 @@ impl Plugin for WASMPlugin {
         app.add_plugin(bevy_webgl2::WebGL2Plugin);
         app.insert_resource(LastSize { width:0.0, height:0.0});
         app.add_system(resizer.system());
+
+        if has_touch() {
+            app.add_system_to_stage(CoreStage::PreUpdate, pool_touch_system.system().after(InputSystem).before(MouseSystem));
+        }
     }
 }

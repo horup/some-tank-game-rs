@@ -1,6 +1,6 @@
 use bevy::{prelude::*, utils::HashMap};
 
-use crate::{Autopilot, GamePiece, Player, Waypoint, WaypointEvent};
+use crate::{GamePiece, Waypoint, WaypointEvent};
 
 #[derive(Default)]
 pub struct WaypointMarkerSprites { 
