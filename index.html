@@ -55,6 +55,17 @@
 
 <body>
   <script>
+    let touch_added = false;
+    let touch_events = [];
+    let has_touch = () => {
+      return !!('ontouchstart' in window);
+    }
+
+    let pop_touch_event = () => {
+      let e = touch_events.shift();
+      return e;
+    }
+
     let resize_canvas = (width, height) => {
       let canvas = document.getElementsByTagName("canvas")[0];
       if (canvas != null) {
@@ -62,7 +73,23 @@
         canvas.height = height * window.devicePixelRatio;
         canvas.style = `width: ${width}; height: ${height}`;
       }
+
+      if (has_touch() == true && touch_added == false) {
+
+        canvas.addEventListener('touchstart', (ev) => {
+          touch_events.push(ev);
+        });
+        canvas.addEventListener('touchend', (ev) => {
+          touch_events.push(ev);
+        });
+        canvas.addEventListener('touchmove', (ev) => {
+          touch_events.push(ev);
+        });
+
+        touch_added = true;
+      }
     }
+    
   </script>
   <script>
     // Insert hack to make sound autoplay on Chrome as soon as the user interacts with the tab:
