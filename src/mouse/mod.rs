@@ -5,21 +5,16 @@ use crate::{AppState, GameCamera};
 pub struct Mouse {
     pub pos_screen:Vec2,
     pub pos_world:Vec3,
-    pub left_button:bool,
-    pub right_button:bool
+    pub has_touch:bool
 }
 
 #[derive(Debug, Hash, Clone, Copy, PartialEq, Eq, SystemLabel)]
 pub struct MouseSystem;
 
-pub fn mouse_input_system(mouse_button_input:Res<Input<MouseButton>>, mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Transform, &GameCamera)>, mut mouse_moved_events:EventReader<CursorMoved>, windows:Res<Windows>) {
-    
+pub fn mouse_input_system(mut mouse:ResMut<Mouse>, camera:Query<(&Camera, &Transform, &GameCamera)>, mut mouse_moved_events:EventReader<CursorMoved>, windows:Res<Windows>) {
     for e in mouse_moved_events.iter() {
         mouse.pos_screen = e.position;
     }
-
-    mouse.left_button = mouse_button_input.pressed(MouseButton::Left);
-    mouse.right_button = mouse_button_input.pressed(MouseButton::Right);
 
     update_position_world(&camera, &windows, &mut mouse);
 }

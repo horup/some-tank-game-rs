@@ -3,7 +3,7 @@ use bevy::window::WindowResized;
 use wasm_bindgen::prelude::*;
 use web_sys::{TouchEvent, TouchList};
 
-use crate::mouse::{Mouse, MouseSystem};
+use crate::mouse::{Mouse};
 
 
 #[wasm_bindgen]
@@ -71,15 +71,14 @@ fn pool_touch_system(mut mouse:ResMut<Mouse>, windows:Res<Windows>, mut mouse_bu
                     let x = touch.client_x() as f32;
                     let y = window.height() as f32 - touch.client_y() as f32;
                     mouse.pos_screen = Vec2::new(x, y);
+                    mouse.has_touch = true;
                 }
             }
 
             if t == "touchstart" {
                 mouse_button_input.press(MouseButton::Left);
-                info!("start");
             } else if t ==  "touchend" {
                 mouse_button_input.release(MouseButton::Left);
-                info!("end");
             } else if t ==  "touchmove" {
                
             }
@@ -97,7 +96,7 @@ impl Plugin for WASMPlugin {
         app.add_system(resizer.system());
 
         if has_touch() {
-            app.add_system_to_stage(CoreStage::PreUpdate, pool_touch_system.system().after(InputSystem).before(MouseSystem));
+            app.add_system_to_stage(CoreStage::PreUpdate, pool_touch_system.system().after(InputSystem));
         }
     }
 }

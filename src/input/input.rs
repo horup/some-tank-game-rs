@@ -81,12 +81,11 @@ fn autopilot_subsystem(tank:&mut Tank, autopilot:&mut Autopilot, mouse:&Res<Mous
         }
 
         if mouse_button_input.just_pressed(MouseButton::Left) {
-            info!("just pressed");
             let check_radius = 0.5;
             let mp = mouse.pos_world.truncate();
             let p = transform.translation.truncate();
-            if mp.distance(p) <= check_radius {
-                info!("planning");
+            let d = mp.distance(p);
+            if d <= check_radius {
                 autopilot.waypoints.clear();
                 waypoint_event_writer.send(WaypointEvent::Clear);
                 autopilot.planning = true;
@@ -104,7 +103,6 @@ fn autopilot_subsystem(tank:&mut Tank, autopilot:&mut Autopilot, mouse:&Res<Mous
             } 
 
         } else {
-            info!("no more planning");
             autopilot.planning = false;
         }
     }
