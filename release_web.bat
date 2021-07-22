@@ -1,4 +1,4 @@
-cargo install wasm-pack --version 0.9.1
+cargo install wasm-pack --no-default-features
 wasm-pack build --target web
 rmdir dist-web /s /q 2>nul
 mkdir dist-web
