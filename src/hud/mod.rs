@@ -1,4 +1,5 @@
 use bevy::{core::FixedTimestep, prelude::*};
+use bevy_egui::{EguiContext, egui::{self, Align, Color32, Direction, Label, Layout}};
 use extensions::RootNode;
 
 use crate::{Config, Console};
@@ -568,7 +569,35 @@ fn fade_out_in_out(mut hud: ResMut<Hud>, time: Res<Time>) {
     }
 }
 
-pub struct HudPlugin;
+
+fn egui_hud_system(egui_context: ResMut<EguiContext>, windows: Res<Windows>, hud:Res<Hud>) {
+    if let Some(primary) = windows.get_primary() {
+        let w = primary.width();
+        let h = primary.height();
+        let _scale_factor = primary.scale_factor();
+
+        let margin = 10.0;
+
+        egui::Area::new("HudCenter")
+        .fixed_pos([margin, margin])
+        .show(egui_context.ctx(), |ui| {
+            ui.set_width(w - margin * 2.0);
+            ui.add_space(h/2.0);
+            ui.vertical_centered(|ui| {
+                ui.heading(hud.center_text.clone());
+            });
+        });
+
+        egui::Area::new("HudLeft")
+        .fixed_pos([margin, margin])
+        .show(egui_context.ctx(), |ui| {
+            ui.set_width(w);
+            ui.label(hud.top_left_text.clone());
+        });
+    }
+}
+
+pub struct HudPlugin; 
 
 fn update_fps(query: Query<(&mut Text, &FPSText)>, time: Res<Time>) {
     query.for_each_mut(|(mut text, _)| {
@@ -581,11 +610,12 @@ fn update_fps(query: Query<(&mut Text, &FPSText)>, time: Res<Time>) {
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.insert_resource(Hud::default());
-        app.add_startup_system(hud_initialization_system.system());
-        app.add_system(update_text.system());
-        app.add_system(update_console.system());
-        app.add_system(fade_out_in_out.system().before("update_foreground"));
-        app.add_system(update_color.system().label("update_foreground"));
+       // app.add_startup_system(hud_initialization_system.system());
+       // app.add_system(update_text.system());
+        app.add_system(egui_hud_system.system());
+       // app.add_system(update_console.system());
+       // app.add_system(fade_out_in_out.system().before("update_foreground"));
+       // app.add_system(update_color.system().label("update_foreground"));
         app.add_system(
             update_fps
                 .system()

@@ -1,3 +1,7 @@
+- 2021-08-03  90m worked on egui integration by replacing Bevy  UI with egui
+
+
+--- for v1.1 ---
 - 2021-07-22  40m got touch support to work
 - 2021-07-21  75m worked on touch support, got something to partially work.
 - 2021-07-20  30m worked on touch events in the browser, but no luck since winit does not yet support touch events targeting canvas html5 :-(

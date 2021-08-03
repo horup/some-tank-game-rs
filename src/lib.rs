@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use bevy_egui::EguiPlugin;
 use wasm_bindgen::prelude::*;
 
 use bevy::{diagnostic::{LogDiagnosticsPlugin}, window::{WindowMode, WindowResizeConstraints}};
@@ -166,6 +167,7 @@ pub fn start() {
 
     // add plugins
     builder.add_plugin(RootUIPlugin)
+    .add_plugin(EguiPlugin)
     .add_plugin(RapierPhysicsPluginCustom)
     .add_plugin(LogDiagnosticsPlugin::default())
     .add_plugin(TiledLoaderPlugin)
