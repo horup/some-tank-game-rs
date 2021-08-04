@@ -1,5 +1,5 @@
 use bevy::{core::FixedTimestep, prelude::*};
-use bevy_egui::{EguiContext, egui::{self, Align, Color32, Direction, Label, Layout}};
+use bevy_egui::{EguiContext, egui::{self, Align, Color32, Direction, FontDefinitions, FontFamily, Label, Layout, TextStyle}};
 use extensions::RootNode;
 
 use crate::{Config, Console};
@@ -141,317 +141,6 @@ pub enum HudElement {
 
 pub struct FPSText;
 
-fn hud_initialization_system(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-    root_node: Query<(Entity, &RootNode)>,
-    config: Res<Config>,
-    windows: Res<Windows>
-) {
-    let scale_factor = windows.get_primary()
-    .and_then(|x| Some(x.scale_factor()))
-    .unwrap_or(1.0);
-    
-    let font_size = 16.0 / scale_factor as f32;
-    let root_node = root_node.single().expect("root node not found").0;
-    
-    commands.entity(root_node).with_children(|parent| {
-        // center text
-        parent
-            .spawn_bundle(NodeBundle {
-                style: Style {
-                    size: Size {
-                        height: Val::Percent(100.0),
-                        width: Val::Percent(100.0),
-                    },
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::FlexEnd,
-                    ..Default::default()
-                },
-                material: materials.add((Color::NONE).into()),
-                ..Default::default()
-            })
-            .with_children(|parent| {
-                parent
-                    .spawn_bundle(TextBundle {
-                        style: Style {
-                            align_self: AlignSelf::Center,
-                            position_type: PositionType::Absolute,
-                            ..Default::default()
-                        },
-                        text: Text::with_section(
-                            "",
-                            TextStyle {
-                                font: asset_server.load("fonts/default.ttf"),
-                                font_size: font_size * 3.0,
-                                color: Color::WHITE,
-                            },
-                            // Note: You can use `Default::default()` in place of the `TextAlignment`
-                            TextAlignment {
-                                horizontal: HorizontalAlign::Center,
-                                vertical: VerticalAlign::Center,
-                                ..Default::default()
-                            },
-                        ),
-                        ..Default::default()
-                    })
-                    .insert(HudElement::Center);
-
-                parent
-                    .spawn_bundle(TextBundle {
-                        style: Style {
-                            align_self: AlignSelf::Center,
-                            position_type: PositionType::Absolute,
-                            position: Rect {
-                                bottom: Val::Percent(25.0),
-                                ..Default::default()
-                            },
-                            ..Default::default()
-                        },
-                        text: Text::with_section(
-                            "",
-                            TextStyle {
-                                font: asset_server.load("fonts/default.ttf"),
-                                font_size: font_size * 2.0,
-                                color: Color::WHITE,
-                            },
-                            // Note: You can use `Default::default()` in place of the `TextAlignment`
-                            TextAlignment {
-                                horizontal: HorizontalAlign::Center,
-                                vertical: VerticalAlign::Bottom,
-                                ..Default::default()
-                            },
-                        ),
-                        ..Default::default()
-                    })
-                    .insert(HudElement::BottomCenter);
-            });
-
-        // top-left text
-        parent
-            .spawn_bundle(TextBundle {
-                style: Style {
-                    align_self: AlignSelf::FlexEnd,
-                    position_type: PositionType::Absolute,
-                    position: Rect {
-                        top: Val::Px(16.0),
-                        left: Val::Px(16.0),
-                        ..Default::default()
-                    },
-                    ..Default::default()
-                },
-                // Use the `Text::with_section` constructor
-                text: Text::with_section(
-                    // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                    "",
-                    TextStyle {
-                        font: asset_server.load("fonts/default.ttf"),
-                        font_size,
-                        color: Color::WHITE,
-                    },
-                    // Note: You can use `Default::default()` in place of the `TextAlignment`
-                    TextAlignment {
-                        horizontal: HorizontalAlign::Left,
-                        ..Default::default()
-                    },
-                ),
-                ..Default::default()
-            })
-            .insert(HudElement::TopLeft);
-
-        // bottom-left text
-        parent
-        .spawn_bundle(TextBundle {
-            style: Style {
-                align_self: AlignSelf::FlexEnd,
-                position_type: PositionType::Absolute,
-                position: Rect {
-                    bottom: Val::Px(16.0),
-                    left: Val::Px(16.0),
-                    ..Default::default()
-                },
-                ..Default::default()
-            },
-            // Use the `Text::with_section` constructor
-            text: Text::with_section(
-                // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                "",
-                TextStyle {
-                    font: asset_server.load("fonts/default.ttf"),
-                    font_size,
-                    color: Color::WHITE,
-                },
-                // Note: You can use `Default::default()` in place of the `TextAlignment`
-                TextAlignment {
-                    horizontal: HorizontalAlign::Left,
-                    ..Default::default()
-                },
-            ),
-            ..Default::default()
-        })
-        .insert(HudElement::BottomLeft);
-
-        // right text
-        parent
-            .spawn_bundle(TextBundle {
-                style: Style {
-                    align_self: AlignSelf::FlexEnd,
-                    position_type: PositionType::Absolute,
-                    position: Rect {
-                        top: Val::Px(16.0),
-                        right: Val::Px(16.0),
-                        ..Default::default()
-                    },
-                    ..Default::default()
-                },
-                // Use the `Text::with_section` constructor
-                text: Text::with_section(
-                    // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                    "",
-                    TextStyle {
-                        font: asset_server.load("fonts/default.ttf"),
-                        font_size,
-                        color: Color::WHITE,
-                    },
-                    // Note: You can use `Default::default()` in place of the `TextAlignment`
-                    TextAlignment {
-                        horizontal: HorizontalAlign::Right,
-                        ..Default::default()
-                    },
-                ),
-                ..Default::default()
-            })
-            .insert(HudElement::TopRight);
-
-        // foreground color ontop of all, except for console and fps
-        parent
-            .spawn_bundle(NodeBundle {
-                style: Style {
-                    size: Size {
-                        height: Val::Percent(100.0),
-                        width: Val::Percent(100.0),
-                    },
-                    position_type: PositionType::Absolute,
-                    ..Default::default()
-                },
-                material: materials.add(Color::rgba(1.0, 0.0, 0.0, 0.5).into()),
-                ..Default::default()
-            })
-            .insert(HudElement::Foreground);
-
-        // console
-        parent
-            .spawn_bundle(NodeBundle {
-                style: Style {
-                    position_type: PositionType::Absolute,
-                    size: Size {
-                        height: Val::Percent(50.0),
-                        width: Val::Percent(100.0),
-                    },
-                    position: Rect {
-                        left: Val::Px(0.0),
-                        right: Val::Percent(100.0),
-                        top: Val::Px(0.0),
-                        bottom: Val::Percent(50.0),
-                    },
-                    ..Default::default()
-                },
-                material: materials.add((Color::rgba(0.0, 0.0, 0.0, 0.95)).into()),
-                visible: Visible {
-                    is_visible: false,
-                    is_transparent: true,
-                },
-                ..Default::default()
-            })
-            .with_children(|parent| {
-                parent
-                    .spawn_bundle(TextBundle {
-                        style: Style {
-                            align_self: AlignSelf::FlexEnd,
-                            position_type: PositionType::Absolute,
-                            position: Rect {
-                                left: Val::Px(8.0),
-                                bottom: Val::Px(8.0),
-                                ..Default::default()
-                            },
-                            ..Default::default()
-                        },
-                        // Use the `Text::with_section` constructor
-                        text: Text::with_section(
-                            // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                            "",
-                            TextStyle {
-                                font: asset_server.load("fonts/default.ttf"),
-                                font_size,
-                                color: Color::WHITE,
-                            },
-                            // Note: You can use `Default::default()` in place of the `TextAlignment`
-                            TextAlignment {
-                                horizontal: HorizontalAlign::Left,
-                                ..Default::default()
-                            },
-                        ),
-                        ..Default::default()
-                    })
-                    .insert(HudElement::Console);
-            })
-            .insert(HudElement::Console);
-
-            
-        if config.show_fps() {
-            // fps text
-            parent
-                .spawn_bundle(NodeBundle {
-                    style: Style {
-                        size: Size::new(Val::Px(64.0), Val::Px(32.0)),
-                        position: Rect {
-                            right: Val::Px(0.0),
-                            top: Val::Px(0.0),
-                            ..Default::default()
-                        },
-                        position_type: PositionType::Absolute,
-                        ..Default::default()
-                    },
-                    visible:Visible {
-                        is_visible: true,
-                        is_transparent: true,
-                    },
-                    material: materials.add(Color::rgba(0.0, 0.0, 0.0, 0.75).into()),
-                    ..Default::default()
-                })
-                .with_children(|parent| {
-                    parent
-                        .spawn_bundle(TextBundle {
-                            style: Style {
-                                position_type: PositionType::Absolute,
-                                position: Rect {
-                                    top: Val::Px(8.0),
-                                    right: Val::Px(8.0),
-                                    ..Default::default()
-                                },
-                                ..Default::default()
-                            },
-                            text: Text::with_section(
-                                "0",
-                                TextStyle {
-                                    font: asset_server.load("fonts/default.ttf"),
-                                    color: Color::RED,
-                                    font_size: 16.0,
-                                    ..Default::default()
-                                },
-                                TextAlignment {
-                                    ..Default::default()
-                                },
-                            ),
-                            ..Default::default()
-                        })
-                        .insert(FPSText);
-                });
-        }
-    }).insert(HudElement::Background);
-}
-
 pub fn set_text(text: &mut Text, value: &str) {
     let section = text
         .sections
@@ -569,22 +258,26 @@ fn fade_out_in_out(mut hud: ResMut<Hud>, time: Res<Time>) {
     }
 }
 
-
 fn egui_hud_system(egui_context: ResMut<EguiContext>, windows: Res<Windows>, hud:Res<Hud>) {
     if let Some(primary) = windows.get_primary() {
-        let w = primary.width();
-        let h = primary.height();
-        let _scale_factor = primary.scale_factor();
-
+        let scale_factor = primary.scale_factor();
         let margin = 10.0;
+        let w = primary.width() - margin * 2.0;
+        let h = primary.height() - margin * 2.0;
+
+        let s = update_fonts(scale_factor, &egui_context);
+
+
+        let color = Color32::WHITE;
 
         egui::Area::new("HudCenter")
         .fixed_pos([margin, margin])
         .show(egui_context.ctx(), |ui| {
-            ui.set_width(w - margin * 2.0);
-            ui.add_space(h/2.0);
+            ui.set_width(w);
+            ui.add_space(h/2.0 - s);
             ui.vertical_centered(|ui| {
-                ui.heading(hud.center_text.clone());
+                ui.add(Label::new(hud.center_text.clone()).text_color(color).heading());
+                ui.add(Label::new(hud.bottom_center_text.clone()).text_color(color).text_style(TextStyle::Button));
             });
         });
 
@@ -592,9 +285,60 @@ fn egui_hud_system(egui_context: ResMut<EguiContext>, windows: Res<Windows>, hud
         .fixed_pos([margin, margin])
         .show(egui_context.ctx(), |ui| {
             ui.set_width(w);
-            ui.label(hud.top_left_text.clone());
+            ui.colored_label(color, hud.top_left_text.clone());
+        });
+
+        egui::Area::new("HudBottomLeft")
+        .fixed_pos([margin, margin])
+        .show(egui_context.ctx(), |ui| {
+            ui.set_width(w);
+            ui.set_height(h);
+            ui.with_layout(Layout::bottom_up(Align::Min), |ui| {
+                ui.colored_label(color, hud.bottom_left_text.clone());
+            });
+        });
+
+        egui::Area::new("HudRight")
+        .fixed_pos([margin, margin])
+        .show(egui_context.ctx(), |ui| {
+            ui.set_width(w);
+            ui.with_layout(Layout::with_cross_align(*ui.layout(), Align::Max), |ui| {
+                ui.colored_label(color, hud.top_right_text.clone());
+            });
+        });
+
+        egui::Area::new("Fader")
+        .fixed_pos([0.0, 0.0])
+        .show(egui_context.ctx(), |ui| {
+            ui.set_width(primary.width());
+            ui.set_height(primary.height());
+          /*  ui.painter().rect_filled(Rect {
+                left: 0.0,
+                right: 100.0,
+                top: 0.0,
+                bottom: 100.0,
+            }, 0.0, Color32::BLACK);*/
         });
     }
+}
+
+fn update_fonts(scale_factor: f64, egui_context: &ResMut<EguiContext>) -> f32 {
+    let font_size = 16.0 / scale_factor as f32;
+    let mut fonts = FontDefinitions::default();
+    fonts.family_and_size.insert(
+        TextStyle::Body,
+        (FontFamily::Proportional, font_size)
+    );
+    fonts.family_and_size.insert(
+        TextStyle::Heading,
+        (FontFamily::Proportional, font_size * 2.0)
+    );
+    fonts.family_and_size.insert(
+        TextStyle::Button,
+        (FontFamily::Proportional, font_size * 1.5)
+    );
+    egui_context.ctx().set_fonts(fonts);
+    font_size
 }
 
 pub struct HudPlugin; 
@@ -610,12 +354,12 @@ fn update_fps(query: Query<(&mut Text, &FPSText)>, time: Res<Time>) {
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.insert_resource(Hud::default());
-       // app.add_startup_system(hud_initialization_system.system());
-       // app.add_system(update_text.system());
+        // app.add_startup_system(hud_initialization_system.system());
+        // app.add_system(update_text.system());
         app.add_system(egui_hud_system.system());
-       // app.add_system(update_console.system());
-       // app.add_system(fade_out_in_out.system().before("update_foreground"));
-       // app.add_system(update_color.system().label("update_foreground"));
+        // app.add_system(update_console.system());
+        // app.add_system(fade_out_in_out.system().before("update_foreground"));
+        // app.add_system(update_color.system().label("update_foreground"));
         app.add_system(
             update_fps
                 .system()

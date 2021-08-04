@@ -1,3 +1,4 @@
+- 2021-08-04  70m worked on egui integration, got text rendering to work, worked on fading using egui painter
 - 2021-08-03  90m worked on egui integration by replacing Bevy  UI with egui
 
 
