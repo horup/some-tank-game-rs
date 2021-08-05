@@ -1,3 +1,5 @@
+--- for v1.2 ---
+- 2021-08-05  45m replaced bevy_ui with egui in the hud system, removed console impl as this needs rework
 - 2021-08-04  70m worked on egui integration, got text rendering to work, worked on fading using egui painter
 - 2021-08-03  90m worked on egui integration by replacing Bevy  UI with egui
 

@@ -1,8 +1,8 @@
 use bevy::{core::FixedTimestep, prelude::*};
-use bevy_egui::{EguiContext, egui::{self, Align, Color32, Direction, FontDefinitions, FontFamily, Label, Layout, TextStyle}};
-use extensions::RootNode;
+use bevy_egui::{EguiContext, egui::{self, Align, Color32, FontDefinitions, FontFamily, Label, Layout, Order, Pos2, Rgba, TextStyle}};
+use bevy_egui::egui::Rect;
 
-use crate::{Config, Console};
+use crate::{Config};
 
 #[derive(Clone, Copy, Debug)]
 pub enum FadeDirection {
@@ -57,7 +57,9 @@ pub struct Hud {
     pub background: Color,
     pub fade_in_out: Option<FadeInOut>,
     pub show_console: bool,
-    pub stack:Vec<Hud>
+    pub stack:Vec<Hud>,
+    pub fps_text:String,
+    pub font_size:f32
 }
 
 
@@ -122,152 +124,22 @@ impl Default for Hud {
             foreground: Color::rgba(1.0, 1.0, 1.0, 0.0),
             fade_in_out: None,
             show_console: false,
-            stack:Vec::new()
+            stack:Vec::new(),
+            fps_text:"".into(),
+            font_size:0.0
         }
     }
 }
 
-#[derive(Copy, Clone, PartialEq)]
-pub enum HudElement {
-    TopLeft,
-    Center,
-    TopRight,
-    Foreground,
-    Background,
-    BottomCenter,
-    Console,
-    BottomLeft
-}
-
-pub struct FPSText;
-
-pub fn set_text(text: &mut Text, value: &str) {
-    let section = text
-        .sections
-        .first_mut()
-        .expect("atleast one section in hud text was expected!");
-    if section.value != value {
-        section.value = value.into();
-    }
-}
-
-fn update_text(hud: ResMut<Hud>, query: Query<(&mut Text, &HudElement)>) {
-    if hud.is_changed() == false {
-        return;
-    }
-    query.for_each_mut(|(mut text, element)| match *element {
-        HudElement::TopLeft => {
-            set_text(&mut text, &hud.top_left_text);
-        }
-        HudElement::BottomLeft => {
-            set_text(&mut text, &hud.bottom_left_text);
-        }
-        HudElement::Center => {
-            set_text(&mut text, &hud.center_text);
-        }
-        HudElement::TopRight => {
-            set_text(&mut text, &hud.top_right_text);
-        }
-        HudElement::BottomCenter => {
-            set_text(&mut text, &hud.bottom_center_text);
-        }
-        HudElement::Console => {
-            set_text(&mut text, &hud.console_text);
-        }
-        
-        _ => {}
-    });
-}
-
-fn update_color(
-    hud: ResMut<Hud>,
-    query: Query<(&mut Handle<ColorMaterial>, &HudElement, &Node)>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
-    query.for_each_mut(|(color_material_handle, element, _)| {
-        if hud.is_changed() == false {
-            return;
-        }
-
-        match *element {
-            HudElement::Foreground => {
-                if let Some(material) = materials.get_mut(color_material_handle.clone()) {
-                    material.color = hud.foreground;
-                }
-            },
-            HudElement::Background => {
-                if let Some(material) = materials.get_mut(color_material_handle.clone()) {
-                    material.color = hud.background;
-                }
-            }
-            _ => {}
-        }
-    });
-}
-
-fn update_console(
-    mut hud: ResMut<Hud>,
-    query: Query<(&mut Visible, &HudElement)>,
-    console: Res<Console>,
-) {
-    if console.log != hud.console_text {
-        hud.console_text = console.log.clone();
-    }
-
-    if hud.is_changed() {
-        query.for_each_mut(|(mut visible, element)| {
-            if *element == HudElement::Console {
-                visible.is_visible = hud.show_console;
-            }
-        });
-    }
-}
-
-fn fade_out_in_out(mut hud: ResMut<Hud>, time: Res<Time>) {
-    if let Some(mut fade_in_out) = hud.fade_in_out {
-        fade_in_out.elapsed_sec += time.delta_seconds();
-        match fade_in_out.direction {
-            FadeDirection::In => {
-                if fade_in_out.elapsed_sec >= fade_in_out.time_in_sec {
-                    fade_in_out.elapsed_sec = 0.0;
-                    fade_in_out.direction = FadeDirection::InBetween;
-                }
-
-                hud.fade_in_out = Some(fade_in_out);
-            }
-            FadeDirection::Out => {
-                if fade_in_out.elapsed_sec >= fade_in_out.time_out_sec {
-                    fade_in_out.elapsed_sec = fade_in_out.time_out_sec;
-                    hud.fade_in_out = None;
-                } else {
-                    hud.fade_in_out = Some(fade_in_out);
-                }
-            }
-            FadeDirection::InBetween => {
-                if fade_in_out.elapsed_sec >= fade_in_out.time_in_between_sec {
-                    fade_in_out.elapsed_sec = 0.0;
-                    fade_in_out.direction = FadeDirection::Out;
-                }
-
-                hud.fade_in_out = Some(fade_in_out);
-            }
-        }
-
-        hud.foreground = fade_in_out.base_color;
-        hud.foreground.set_a(fade_in_out.alpha());
-    }
-}
-
-fn egui_hud_system(egui_context: ResMut<EguiContext>, windows: Res<Windows>, hud:Res<Hud>) {
+fn egui_hud_system(config:Res<Config>, egui_context: ResMut<EguiContext>, windows: Res<Windows>, mut hud:ResMut<Hud>, time: Res<Time>) {
     if let Some(primary) = windows.get_primary() {
         let scale_factor = primary.scale_factor();
         let margin = 10.0;
         let w = primary.width() - margin * 2.0;
         let h = primary.height() - margin * 2.0;
 
-        let s = update_fonts(scale_factor, &egui_context);
-
-
+        update_fonts(scale_factor, &egui_context, &mut hud);
+        let s = hud.font_size;
         let color = Color32::WHITE;
 
         egui::Area::new("HudCenter")
@@ -307,59 +179,97 @@ fn egui_hud_system(egui_context: ResMut<EguiContext>, windows: Res<Windows>, hud
             });
         });
 
-        egui::Area::new("Fader")
-        .fixed_pos([0.0, 0.0])
-        .show(egui_context.ctx(), |ui| {
-            ui.set_width(primary.width());
-            ui.set_height(primary.height());
-          /*  ui.painter().rect_filled(Rect {
-                left: 0.0,
-                right: 100.0,
-                top: 0.0,
-                bottom: 100.0,
-            }, 0.0, Color32::BLACK);*/
-        });
+        if let Some(mut fade_in_out) = hud.fade_in_out {
+            fade_in_out.elapsed_sec += time.delta_seconds();
+            match fade_in_out.direction {
+                FadeDirection::In => {
+                    if fade_in_out.elapsed_sec >= fade_in_out.time_in_sec {
+                        fade_in_out.elapsed_sec = 0.0;
+                        fade_in_out.direction = FadeDirection::InBetween;
+                    }
+    
+                    hud.fade_in_out = Some(fade_in_out);
+                }
+                FadeDirection::Out => {
+                    if fade_in_out.elapsed_sec >= fade_in_out.time_out_sec {
+                        fade_in_out.elapsed_sec = fade_in_out.time_out_sec;
+                        hud.fade_in_out = None;
+                    } else {
+                        hud.fade_in_out = Some(fade_in_out);
+                    }
+                }
+                FadeDirection::InBetween => {
+                    if fade_in_out.elapsed_sec >= fade_in_out.time_in_between_sec {
+                        fade_in_out.elapsed_sec = 0.0;
+                        fade_in_out.direction = FadeDirection::Out;
+                    }
+    
+                    hud.fade_in_out = Some(fade_in_out);
+                }
+            }
+    
+            hud.foreground = fade_in_out.base_color;
+            hud.foreground.set_a(fade_in_out.alpha());
+            
+            egui::Area::new("Foreground")
+            .fixed_pos([0.0, 0.0])
+            .order(Order::Foreground)
+            .show(egui_context.ctx(), |ui| {
+                ui.set_width(primary.width());
+                ui.set_height(primary.height());
+                let c = hud.foreground.as_rgba_f32();
+                ui.painter().rect_filled(Rect {
+                    min:Pos2::new(0.0, 0.0),
+                    max:Pos2::new(primary.width(), primary.height())
+                }, 0.0, Rgba::from_rgba_premultiplied(c[0], c[1], c[2], c[3]));
+            });
+        }
+        
+        if config.show_fps() {
+            egui::Area::new("FPS")
+            .fixed_pos([margin, margin])
+            .order(Order::Tooltip)
+            .show(egui_context.ctx(), |ui| {
+                ui.set_width(w);
+                ui.with_layout(Layout::with_cross_align(*ui.layout(), Align::Max), |ui| {
+                    ui.add(Label::new(hud.fps_text.clone()).text_color(Color32::RED).monospace());
+                });
+            });
+        }
     }
 }
 
-fn update_fonts(scale_factor: f64, egui_context: &ResMut<EguiContext>) -> f32 {
+fn update_fonts(scale_factor: f64, egui_context: &ResMut<EguiContext>, hud:&mut Hud) {
     let font_size = 16.0 / scale_factor as f32;
-    let mut fonts = FontDefinitions::default();
-    fonts.family_and_size.insert(
-        TextStyle::Body,
-        (FontFamily::Proportional, font_size)
-    );
-    fonts.family_and_size.insert(
-        TextStyle::Heading,
-        (FontFamily::Proportional, font_size * 2.0)
-    );
-    fonts.family_and_size.insert(
-        TextStyle::Button,
-        (FontFamily::Proportional, font_size * 1.5)
-    );
-    egui_context.ctx().set_fonts(fonts);
-    font_size
+    if hud.font_size != font_size {
+        let mut fonts = FontDefinitions::default();
+        fonts.family_and_size.insert(
+            TextStyle::Body,
+            (FontFamily::Proportional, font_size)
+        );
+        fonts.family_and_size.insert(
+            TextStyle::Heading,
+            (FontFamily::Proportional, font_size * 2.0)
+        );
+        fonts.family_and_size.insert(
+            TextStyle::Button,
+            (FontFamily::Proportional, font_size * 1.5)
+        );
+        egui_context.ctx().set_fonts(fonts);
+        hud.font_size = font_size;
+    }
 }
 
 pub struct HudPlugin; 
 
-fn update_fps(query: Query<(&mut Text, &FPSText)>, time: Res<Time>) {
-    query.for_each_mut(|(mut text, _)| {
-        if let Some(section) = text.sections.get_mut(0) {
-            section.value = format!("{}", (1.0 / time.delta_seconds()) as u32);
-        }
-    });
+fn update_fps(mut hud:ResMut<Hud>, time: Res<Time>) {
+    hud.fps_text = format!("{}", (1.0 / time.delta_seconds()) as u32);
 }
 
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut AppBuilder) {
         app.insert_resource(Hud::default());
-        // app.add_startup_system(hud_initialization_system.system());
-        // app.add_system(update_text.system());
         app.add_system(egui_hud_system.system());
-        // app.add_system(update_console.system());
-        // app.add_system(fade_out_in_out.system().before("update_foreground"));
-        // app.add_system(update_color.system().label("update_foreground"));
         app.add_system(
             update_fps
                 .system()
