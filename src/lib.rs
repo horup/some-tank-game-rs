@@ -127,8 +127,6 @@ struct Logger {
 pub fn start() { 
     let config = Config::new("config.ini");
     let mut builder = App::build();
-
-    builder.add_plugins(DefaultPlugins);
     let window = WindowDescriptor {
         title: "Some Tank Game!".to_string(),
         width: 1024.0,
@@ -146,6 +144,7 @@ pub fn start() {
     };
 
     builder.insert_resource(window);
+    builder.add_plugins(DefaultPlugins);
     
     #[cfg(not(target_arch = "wasm32"))]
     builder.add_plugin(native::NativePlugin);
